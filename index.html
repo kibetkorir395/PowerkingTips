@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" crossorigin="*"/>  
+    <link rel="shortcut icon" type="image/x-icon" href="/logo512.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#00ae58">
+    <meta name="description" content="Get all the latest ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world."/>
+    <meta name="keywords" content="Football Predictions, Betting Odds, Live Scores, Football Predictions, Live Sports, Football Results, Football Fixtures, Football Today, Premier League, Championship, Super Sports, Laliga, Bundesliga, Serie A">
+    <meta name="author" content="Powerkingtips">
+    <link rel="canonical" href="/" />
+    <title>Powerking Tips</title>
+    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+           navigator.serviceWorker.register('./service-worker.js')
+              .then(registration => {
+              }).catch(error => {
+                  console.error('Service Worker registration failed:', error);
+             });
+       }
+   </script>
+   <script type="text/jsx" src='https://code.jquery.com/jquery-3.2.1.min.js' ></script>
+   <script type="text/jsx" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+   <script type="text/jsx" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  </body>
+</html>

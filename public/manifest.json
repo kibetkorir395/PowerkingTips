@@ -1,0 +1,73 @@
+{
+  "short_name": "POWERKING TIPS",
+  "name": "POWERKING TIPS",
+  "homepage": "https://powerkingtips.com",
+  "version": "0.1.0",
+  "description": "Get all the latest ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "maskable_icon.png",
+      "sizes": "196x196",
+      "type": "image/png"
+    },
+    {
+      "src": "logo32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "logo48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "logo64.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "logo96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "logo128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "author": "Powerkintips",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kkibe/powerking-tips"
+  },
+  "license": "ISC/MIT",
+  "keywords": [
+    "Football Predictions", "Betting Odds", "Live Scores", "Football Predictions", 
+    "Live Sports", "Football Results", "Football Fixtures", "Football Today", "Online Betting",
+    "Premier League", "Championship", "Super Sports", "Laliga", "Bundesliga", "Serie A", "Live Bet"
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#00ae58",
+  "background_color": "#ebf4fc",
+ "orientation": "portrait",
+  "categories": ["Utilities", "Finance", "Business", "Productivity", "Social", "News", "Tools"]
+}
