@@ -14,7 +14,7 @@
             max-width: 800px;
             display: grid;
             grid-gap: 1rem;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             padding: 5px 5px;
 
             fieldset{
@@ -54,7 +54,7 @@
                       box-shadow: 0 0.2em 0.45em 0.1em rgba(0,0,0, 0.4);
                       transform: scale(1.05);
                       animation: checked 200ms 1;
-                      border: 1px solid darken(#56b056, 10%);
+                      border: 1px solid var(--dark-blue);
                       position: relative;
                       z-index: 5;
                     }
@@ -163,7 +163,7 @@
                       box-shadow: 0 0.2em 0.45em 0.1em rgba(0,0,0, 0.4);
                       transform: scale(1.01);
                       animation: checked 200ms 1;
-                      border: 1px solid darken(#56b056, 10%);
+                      border: 1px solid var(--dark-blue);
                       position: relative;
                       z-index: 5;
                     }

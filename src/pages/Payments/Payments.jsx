@@ -3,6 +3,7 @@ import CryptoPayments from "./CryptoPayments";
 import './Payments.scss'
 import AppHelmet from "../../components/AppHelmet";
 import Ticket from "./Ticket";
+import CardPayment from "./CardPayment";
 export default function Payments() {
     const [paymentType, setPaymentType] = useState("mpesa")
     const renderPaymentType = () => {
@@ -13,10 +14,10 @@ export default function Payments() {
               break;
             /*case "paypal":
                 item = <PaypalPayment />
-              break;
-            case "other":
-                item = <CryptoPayments />
-                break;*/
+              break;*/
+            case "card":
+                item = <CardPayment />
+                break;
             default:
                 item = <Ticket/>
         }
@@ -36,6 +37,10 @@ export default function Payments() {
                     <fieldset>
                         <input name="payment-method" type="radio" value={"crypto"} id="crypto" checked={paymentType === "crypto"}  onChange={(e) => setPaymentType(e.target.value)}/>
                         <label htmlFor="crypto">crypto</label>
+                    </fieldset>
+                    <fieldset>
+                        <input name="payment-method" type="radio" value={"card"} id="card" checked={paymentType === "card"}   onChange={(e) => setPaymentType(e.target.value)}/>
+                        <label htmlFor="card">card/other</label>
                     </fieldset>
                     {/*<fieldset>
                         <input name="payment-method" type="radio" value={"paypal"} id="paypal" checked={paymentType === "paypal"} onChange={(e) => setPaymentType(e.target.value)}/>

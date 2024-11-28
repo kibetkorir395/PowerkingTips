@@ -6,7 +6,7 @@ export default function AppHelmet({title, location}) {
     <Helmet>
         <meta charSet="utf-8" />
         <title>{title} - Free and Premium VIP Football Tips and News.</title>
-        <link rel="canonical" href={`${window.location.hostname + location}`} />
+        <link rel="canonical" href={`${window.location.hostname}`} />
         <base href={window.location.hostname}></base>
         <meta name="description" content={"Get all the latest ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world."}/>
     </Helmet>

@@ -649,58 +649,6 @@
 }
 
 
-.paid-page{
-    width: 100%;
-    height: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column; 
-    padding: 10px 10px;
-    form{
-        width:100%;
-        font-weight: 400;
-        max-width: 600px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-
-        label{
-            width: 100%;
-            text-align: left;
-            max-width: 350px;
-        }
-        input,.input{
-            height: 35px;
-            position: relative;
-            border: none;
-            width: 100%;
-            max-width: 350px;
-            border-radius: 5px;
-            appearance: none;
-            box-shadow: var(--shadow);
-            transition: all 0.4s;
-            outline: none;
-            &:disabled{
-                background: var(--light-blue);
-            }
-        }
-        .error{
-            color: var(--even);
-        }
-
-        .success{
-            color: var(--even);
-        }
-    }
-
-    &.active{
-        top: 0;
-    }
-}
-
 table{
     color: var(--lite);
     font-size: 15px;

@@ -7,7 +7,7 @@ const npApi = new NowPaymentsApi({ apiKey: 'D7YT1YV-PCAM4ZN-HX9W5M1-H02KFCV' })
 
 export default function CryptoPayments() {
     const [currenciesArr, setCurrenciesArr] = useState(null);
-    const [selectedCurrency, setSelectedCurrency] = useState("BTC");
+    const [selectedCurrency, setSelectedCurrency] = useState("TUSD");
     const addressRef = useRef();
     const [copied, setCopied] = useState(false);
     const [payAmount, setPayAmount] = useState("");
@@ -44,6 +44,7 @@ export default function CryptoPayments() {
       setCopied(true);
     }
 
+
     useEffect(() => {
         async function fetchCurrencies() {
           await fetch("https://api.nowpayments.io/v1/merchant/coins", {
@@ -59,7 +60,6 @@ export default function CryptoPayments() {
           })
         }
         fetchCurrencies()
-
         getAddress()
     }, [])
 
@@ -87,7 +87,7 @@ export default function CryptoPayments() {
         <label htmlFor="crypto">SELECT CRYPTO:</label>
         <select name="crypto" id="crypto" value={selectedCurrency} onChange={(e) => setSelectedCurrency(e.target.value)} ref={selectRef}>
             { currenciesArr && currenciesArr.map((currency) => (
-              <option value={currency} key={currency} selected={currency.toLowerCase() === selectedCurrency.toLowerCase()}>{currency}</option>
+              <option value={currency} key={currency} defaultValue={currency.toLowerCase() === selectedCurrency.toLowerCase()}>{currency}</option>
             ))}
         </select>
         <p>Deposit Amount: <span>{payAmount && payAmount}  {payCurrecy && payCurrecy.toLocaleUpperCase()}</span></p>

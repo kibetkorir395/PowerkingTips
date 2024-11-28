@@ -73,10 +73,11 @@ export default function Ticket() {
         <span className="price">KSH 7500</span>
       </fieldset>
     </form>
+    <h4>GET {returnPeriod().toUpperCase()} VIP FOR {price}</h4>
     <span 
           className="btn" id="donate-button"
           onClick={handleClick}//document.querySelector('.mpesa-modal').classList.toggle('active')}
-        >GET {returnPeriod().toLocaleUpperCase()} VIP</span>
+        >PAY NOW</span>
     </div>
   )
 }

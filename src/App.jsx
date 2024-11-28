@@ -24,8 +24,6 @@ import Error from './pages/Error';
 import Payments from "./pages/Payments/Payments";
 
 
-
-
 function App() {
   const [loading, setLoading] = useState(false);
   const { currentUser} = useContext(AuthContext);
