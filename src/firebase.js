@@ -79,6 +79,22 @@ export const getUser = async (userId, setUserData) => {
   return;
 };
 
+export const getAllusers= async (setUsers, setLoading) => {
+  setLoading(true);
+  const usersCollectionRef = collection(db, "users");
+
+
+  const users = [];
+  await getDocs(usersCollectionRef).then((data) => {
+    data.forEach((doc) => {
+      users.push({id: doc.id,...doc.data()});
+    });
+  }).then(() => {
+    setUsers(users);
+    setLoading(false);
+  }).catch(err => setLoading(false));
+};
+
 export const getNews= async (pagination, category, setNews, setLoading) => {
   setLoading(true);
   const newsCollectionRef = collection(db, "news");
@@ -170,6 +186,29 @@ export  const addTip = async (data, setError, setLoading) => {
   }).then(async (docRef) => {
     alert("tip added")
     window.location.replace(`/tips`);
+  }).catch(async (error) => {
+    setError(error.message);
+    setLoading(false);
+  });
+  setLoading(false)
+};
+
+export  const updateTip = async (id, data, setError, setLoading, setData) => {
+  setLoading(true);
+  const tipsDocRef = doc(db, "tips", id);
+  await updateDoc(tipsDocRef, {
+    ...data
+  }).then(async (docRef) => {
+    alert("Tip updated successfully!");
+
+    const docSnap = await getDoc(tipsDocRef); // Fetch the document
+
+    if (docSnap.exists()) {
+      setData(docSnap.data());
+      return docSnap.data();
+    } else {
+      return null;
+    }
   }).catch(async (error) => {
     setError(error.message);
     setLoading(false);

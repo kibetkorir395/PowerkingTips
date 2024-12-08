@@ -22,6 +22,9 @@ import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 import Error from './pages/Error';
 import Payments from "./pages/Payments/Payments";
+import EditTip from "./pages/EditTip";
+import UserProfile from "./pages/userProfile/UserProfile";
+import ListUsers from "./pages/ListUsers";
 
 
 function App() {
@@ -43,13 +46,53 @@ function App() {
     currentUser && getUser(currentUser.email, setUserData)
   }, [currentUser])
 
-  /*useEffect(() => {
-    if(userData){
-      if(userData.subDate === (new Date().toLocaleDateString())){
-        updateUser(currentUser.email, false, null, null) 
+  useEffect(() => {
+    if (userData && userData.isPremium) {
+      const currentTime = new Date(); // Current time
+      const previousTime = new Date(userData.subDate); // Assuming userData.subDate is the subscription start date
+      const { subscription } = userData; // Get subscription type
+  
+      const timeDifference = currentTime - previousTime;
+  
+      // Helper function to update user if time limit has passed
+      const checkTimeAndUpdate = (timeLimitInMs) => {
+        if (timeDifference >= timeLimitInMs) {
+          updateUser(currentUser.email, false, null, null);
+        }
+      };
+  
+      switch (subscription) {
+        case "Daily":
+          checkTimeAndUpdate(24 * 60 * 60 * 1000); // 24 hours in milliseconds
+          break;
+  
+        case "Weekly":
+          checkTimeAndUpdate(7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
+          break;
+  
+        case "Monthly":
+          // Check if a month has passed
+          if (currentTime.getFullYear() > previousTime.getFullYear() || 
+              (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() > previousTime.getMonth())) {
+            updateUser(currentUser.email, false, null, null);
+          }
+          break;
+  
+        case "Yearly":
+          // Check if a year has passed
+          if (currentTime.getFullYear() > previousTime.getFullYear() || 
+              (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() > previousTime.getMonth()) || 
+              (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() === previousTime.getMonth() && currentTime.getDate() > previousTime.getDate())) {
+            updateUser(currentUser.email, false, null, null);
+          }
+          break;
+  
+        default:
+          return;
       }
     }
-  }, [userData])*/
+  }, [userData]);
+  
   return (
     <HelmetProvider>
     <div className="App">
@@ -68,6 +111,9 @@ function App() {
           <Route path='blogs/:id' element={<SingleNews />} />
           <Route path='admin' element={currentUser ? <Admin /> : <Login />}  />
           <Route path='admin/tips' element={currentUser ? <AdminTips /> : <Login />}  />
+          <Route path='edit' element={currentUser ? <EditTip /> : <Login />}  />
+          <Route path='users' element={currentUser ? <ListUsers /> : <Login />}  />
+          <Route path='users/:id' element={currentUser ? <UserProfile data={userData}/> : <Login />}  />
           <Route path='about' element={<About />} />
           <Route path='*' element={<Error />} />
           <Route path='login' element={<Login />} />

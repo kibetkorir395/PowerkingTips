@@ -40,7 +40,6 @@ export default function Ticket() {
         const accessCode = result.data.access_code;
         const popup = new PaystackPop()
         const data = popup.resumeTransaction(accessCode)
-        console.log(data)
       }).catch(error => {
         return;
       });

@@ -35,11 +35,7 @@ const Footer = ({user}) => {
                         <NavLink to="/tips" title='books'>GET TIPS</NavLink>
                         <NavLink to="/blogs" title='contact'>READ BLOGS</NavLink> 
                         <NavLink to="/about" title='contact'>ABOUT US</NavLink>
-                        <Link to={socialLinks.affliateLink} title='contact' target='_blank'>GET FREE BET</Link>
-                        {
-                            isAdmin && <NavLink to="/admin/tips" title='contact'>ADD TIP</NavLink>
-                        }
-                        
+
                     </div>
                 </section>
                 <section>
@@ -48,12 +44,18 @@ const Footer = ({user}) => {
                         <NavLink to="/login" title='login'>LOGIN</NavLink>
                         <NavLink to="/register" title='register'>REGISTER</NavLink>
                         <NavLink to="/pay" title='get vip'>UPGRADE TO VIP</NavLink>
-                        {
-                            isAdmin && <NavLink to="/admin" title='contact'>ADD NEWS</NavLink>
-                        }
-                        <NavLink to="https://web.telegram.org/k/#@Power_predict" title='inbox admin' target='_blank'>CONTACT ADMIN</NavLink>
+                        <Link to={socialLinks.affliateLink} title='contact' target='_blank'>SPIN & WIN</Link>
                     </div>
                 </section>
+                {
+                isAdmin &&<section>
+                    <h3>ADMIN</h3>
+                    <div className="container">
+                        <NavLink to="/admin/tips" title='contact'>ADD TIP</NavLink>
+                        <NavLink to="/admin" title='contact'>ADD NEWS</NavLink>
+                        <NavLink to="/users" title='contact'>ALL USERS</NavLink>
+                    </div>
+                </section>}
                 </div>
                 <section>
                     <Newsletter />

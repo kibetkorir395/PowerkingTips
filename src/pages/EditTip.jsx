@@ -1,29 +1,38 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../AuthContext';
 import Loader from '../components/Loader/Loader';
-import { addTip } from '../firebase';
+import {updateTip } from '../firebase';
 import AppHelmet from '../components/AppHelmet';
+import { useLocation } from 'react-router-dom';
 
-export default function AdminTips() {
+export default function EditTip() {
     const [home, setHome] = useState('');
     const [away, setAway] = useState('');
     const [odd, setOdd] = useState('');
     const [pick, setPick] = useState('');
     const [status, setStatus] = useState('');
-    const [time, setTime] = useState('');
+    //const [time, setTime] = useState('');
     const [won, setWon] = useState('');
     const [premium, setPremium] = useState(false);
     const [results, setResults] = useState('');
     const {currentUser} = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [data, setData] = useState(null);
+
+
+    const location = useLocation();
+
+    useEffect(() => {
+        setData(location.state);
+    }, [location]);
 
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const d = new Date(time)
-        let date = d.toLocaleString().split(',')[0]
-        addTip({home, away, date, odd, pick, status, time:time.split("T")[1], won, premium, results}, setError, setLoading);
+        //const d = new Date(time)
+        //let date = d.toLocaleString().split(',')[0]
+        updateTip(data.id, {home, away, odd, pick, status, won, premium, results}, setError, setLoading, setData);
     }
 
     useEffect(() => {
@@ -36,10 +45,43 @@ export default function AdminTips() {
         !currentUser && window.history.back();
     }, [currentUser]);
 
+
+
+    // Assuming `date` is "12/5/2024" and `time` is "22:00"
+const formatDateTimeForInput = (date, time) => {
+    // Parse the date string into a Date object
+    const [month, day, year] = date.split('/').map((part) => parseInt(part, 10));
+    const formattedDate = new Date(year, month - 1, day); // Note: Month is 0-indexed in JS
+  
+    // Format the date as YYYY-MM-DD
+    const yearStr = formattedDate.getFullYear();
+    const monthStr = String(formattedDate.getMonth() + 1).padStart(2, '0');
+    const dayStr = String(formattedDate.getDate()).padStart(2, '0');
+  
+    // Combine with the time in HH:mm format
+    return `${yearStr}-${monthStr}-${dayStr}T${time}`;
+  };
+
+    useEffect(() => {
+        if (data){
+            setHome(data.home);
+            setAway(data.away);
+            setOdd(data.odd);
+            setPick(data.pick);
+            setStatus(data.status);
+            setResults(data.results)
+
+            //const datetimeLocal = formatDateTimeForInput(data.date, data.time);
+            //setTime(datetimeLocal);
+            setWon(data.won);
+            setPremium(data.premium);
+        } //else window.history.back()
+    }, [data]);
+
   return (
     <div className='admin-tips'>
         <AppHelmet title={"Add Tip"} location={'/admin/tips'}/>
-        <h1>Add Tip</h1>
+        <h1>Update Tip</h1>
         {!loading && <form onSubmit={handleSubmit}>
             <div className="input-container vertical">
                 <label htmlFor="home">Home Team</label>
@@ -61,10 +103,10 @@ export default function AdminTips() {
                 <label htmlFor="status">Status: </label>
                 <input type="text" placeholder='Finish/Pending/Live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required/>
             </div>
-            <div className="input-container">
+            {/*<div className="input-container">
                 <label htmlFor="time">Date/Time: </label>
                 <input type="datetime-local" id='time' value={time} onChange={(e) => setTime(e.target.value)} required/>
-            </div>
+            </div>*/}
             <div className="input-container">
                 <label htmlFor="results">Results</label>
                 <input type="text" placeholder='results' id='results' value={results} onChange={(e) => setResults(e.target.value)}/>
@@ -77,9 +119,17 @@ export default function AdminTips() {
                 <label htmlFor="premium">Is premium</label>
                 <input type="checkbox" placeholder='premium' id='premium' onChange={(e) => setPremium(e.target.checked)} checked={premium}/>
             </div>
-            <button type="submit" className='btn' title='Submit' aria-label="add">Add</button>
+            
+            <span style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "items",
+                justifyContent: "space-evenly"
+            }}>
+                <button type="submit" className='btn' title='Submit' aria-label="add">Update</button>
+                <span className="btn" onClick={() => window.history.back()}>DONE</span>
+            </span>
         </form>}
-
         {
           loading && <Loader />
         }

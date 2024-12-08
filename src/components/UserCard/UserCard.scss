@@ -1,0 +1,59 @@
+.card {
+    margin: 70px auto;
+    width: 320px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  
+    .cover-bg {
+      height: 120px;
+      background: #b4e2d6 url('https://images.pexels.com/photos/131683/pexels-photo-131683.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260') center no-repeat;
+      background-size: 260%;
+      border-radius: 5px 5px 0 0;
+    }
+  
+    .user-info-wrap {
+      display: flex;
+      padding: 0 20px;
+      margin-top: -35px;
+  
+      .user-photo {
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        background: #fff url('https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260') center no-repeat;
+        background-size: cover;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+      }
+  
+      .user-info {
+        padding-left: 16px;
+        padding-top: 10px;
+  
+        .user-name {
+          font-size: 20px;
+          font-weight: 400;
+          color: #fff;
+        }
+  
+        .user-title {
+          font-size: 16px;
+          font-weight: 200;
+          color: #8b8784;
+          margin-top: 10px;
+        }
+      }
+    }
+  
+    .user-bio {
+      padding: 20px;
+  
+      p {
+        font-size: 14px;
+        font-weight: 300;
+        margin-bottom: 40px;
+      }
+    }
+  }
+  

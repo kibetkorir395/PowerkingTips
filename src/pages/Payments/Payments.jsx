@@ -2,8 +2,9 @@ import { useState } from "react";
 import CryptoPayments from "./CryptoPayments";
 import './Payments.scss'
 import AppHelmet from "../../components/AppHelmet";
-import Ticket from "./Ticket";
+//import Ticket from "./Ticket";
 import CardPayment from "./CardPayment";
+import PaystackPayments from "./PaystackPayments";
 export default function Payments() {
     const [paymentType, setPaymentType] = useState("mpesa")
     const renderPaymentType = () => {
@@ -19,7 +20,7 @@ export default function Payments() {
                 item = <CardPayment />
                 break;
             default:
-                item = <Ticket/>
+                item = <PaystackPayments/>
         }
 
         return item;
