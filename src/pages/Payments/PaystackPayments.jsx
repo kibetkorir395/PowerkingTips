@@ -10,6 +10,19 @@ export default function PaystackPayments({setUserData}) {
   const {price, setPrice} = useContext(PriceContext)
   const {currentUser} = useContext(AuthContext);
 
+  const handleUpgrade = async () => {
+    try {
+      const currentDate = new Date().toISOString();
+      await updateUser(currentUser.email, true, returnPeriod(), currentDate);
+      alert('You Have Upgraded To ' + returnPeriod() + " VIP");
+      await getUser(currentUser.email, setUserData);
+      window.location.pathname = '/tips';
+    } catch (error) {
+      console.error("Error upgrading user:", error.message);
+    }
+  };
+  
+
   const returnPeriod = () => {
     if(price === 200){
       return 'Daily'
@@ -33,11 +46,7 @@ export default function PaystackPayments({setUserData}) {
     },
     text: 'Pay Now',
     onSuccess: (response) => {
-      const currentDate = new Date().toISOString();
-      updateUser(currentUser.email, true, returnPeriod(), currentDate)
-      alert('You Have Upgraded To ' + returnPeriod() + " VIP")
-      getUser(currentUser.email, setUserData)
-      window.location.pathname = '/tips';
+      handleUpgrade();
     },
     onClose: () => {
       //console.log('Payment dialog closed');

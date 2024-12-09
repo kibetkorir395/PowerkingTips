@@ -53,8 +53,6 @@ export default function EditUser({setUserData }) {
             setIsPremium(user.isPremium)
             user.subscription ? setSubscription(user.subscription) : setSubscription("Free")
             user.subDate && setSubDate(toDateTimeLocal(user.subDate))
-
-            console.log(user)
         }
     }, [user]);
 
@@ -74,7 +72,6 @@ export default function EditUser({setUserData }) {
               subDate           
             } ).then(response => {
                 getUser(user.email, setUserData)
-                console.log(userData)
             }).catch(error =>{
               alert(error.message)
             })
