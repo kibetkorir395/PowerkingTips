@@ -6,7 +6,7 @@ import AppHelmet from '../components/AppHelmet';
 import { useLocation } from 'react-router-dom';
 import { doc, updateDoc } from 'firebase/firestore';
 
-export default function EditUser({ userData, setUserData }) {
+export default function EditUser({setUserData }) {
     const location = useLocation();
     const [user, setUser] = useState(null);
     const {currentUser} = useContext(AuthContext);
@@ -60,16 +60,8 @@ export default function EditUser({ userData, setUserData }) {
 
 
     useEffect(() => {
-        if(!isAdmin) {
-            setUser(userData)
-        } else {
-            if(location.state) {
-                setUser(location.state)
-            } else {
-                setUser(userData)
-            }
-        }
-    }, [location, userData]);
+        setUser(location.state)
+    }, [location]);
 
     const handleSubmit = (e) => {
         e.preventDefault()
