@@ -43,19 +43,15 @@ const Footer = ({user}) => {
                     <div className="container">
                         <NavLink to="/login" title='login'>LOGIN</NavLink>
                         <NavLink to="/register" title='register'>REGISTER</NavLink>
-                        <NavLink to="/pay" title='get vip'>UPGRADE TO VIP</NavLink>
+                        <NavLink to="/pay" title='get vip'>GET VIP</NavLink>
                         <Link to={socialLinks.affliateLink} title='contact' target='_blank'>SPIN & WIN</Link>
+                        {isAdmin && <>
+                            <NavLink to="/admin/tips" title='contact'>ADD TIP</NavLink>
+                            <NavLink to="/admin" title='contact'>ADD NEWS</NavLink>
+                            <NavLink to="/users" title='contact'>ALL USERS</NavLink>
+                        </>}
                     </div>
                 </section>
-                {
-                isAdmin &&<section>
-                    <h3>ADMIN</h3>
-                    <div className="container">
-                        <NavLink to="/admin/tips" title='contact'>ADD TIP</NavLink>
-                        <NavLink to="/admin" title='contact'>ADD NEWS</NavLink>
-                        <NavLink to="/users" title='contact'>ALL USERS</NavLink>
-                    </div>
-                </section>}
                 </div>
                 <section>
                     <Newsletter />

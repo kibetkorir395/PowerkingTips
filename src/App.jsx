@@ -25,6 +25,7 @@ import Payments from "./pages/Payments/Payments";
 import EditTip from "./pages/EditTip";
 import UserProfile from "./pages/userProfile/UserProfile";
 import ListUsers from "./pages/ListUsers";
+import EditUser from "./pages/EditUser";
 
 
 function App() {
@@ -106,14 +107,15 @@ function App() {
       <Routes>
           <Route path='/' element={<Home />} />
           <Route path='tips' element={<Tips userData={userData}/>} />
-          <Route path='pay' element={currentUser ? <Payments /> : <Login />}  />
+          <Route path='pay' element={currentUser ? <Payments setUserData={setUserData}/> : <Login />}  />
           <Route path='blogs' element={<News />} />
           <Route path='blogs/:id' element={<SingleNews />} />
           <Route path='admin' element={currentUser ? <Admin /> : <Login />}  />
           <Route path='admin/tips' element={currentUser ? <AdminTips /> : <Login />}  />
           <Route path='edit' element={currentUser ? <EditTip /> : <Login />}  />
           <Route path='users' element={currentUser ? <ListUsers /> : <Login />}  />
-          <Route path='users/:id' element={currentUser ? <UserProfile data={userData}/> : <Login />}  />
+          <Route path='users/:id' element={currentUser ? <UserProfile data={userData} /> : <Login />}  />
+          <Route path='users-edit' element={currentUser ? <EditUser userData={userData} setUserData={setUserData}/> : <Login />}  />
           <Route path='about' element={<About />} />
           <Route path='*' element={<Error />} />
           <Route path='login' element={<Login />} />

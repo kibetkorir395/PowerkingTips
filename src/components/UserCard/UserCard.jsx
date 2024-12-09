@@ -1,5 +1,10 @@
 import React from "react";
 import "./UserCard.scss";
+import backgroundImage from '../../assets/l1.jpg';
+import backgroundImage2 from '../../assets/l3.jpg';
+import backgroundImage3 from '../../assets/l4.jpg';
+import { NavLink } from "react-router-dom";
+import { Email, EmailOutlined } from "@mui/icons-material";
 
 const UserCard = ({user}) => {
 
@@ -22,22 +27,25 @@ const UserCard = ({user}) => {
     return formattedDate;
 }
   return (  
-  <div className="card">
-    <div className="cover-bg"></div>
+  <NavLink className="card"  to={`/users/${user.username ? "@" + user.username : user.email}`} state={user}>
+    <div className="cover-bg"  style={{
+      background: `#fff url(${user.isPremium ? backgroundImage3 : backgroundImage2}) center no-repeat`,
+    }}></div>
     <div className="user-info-wrap">
-      <div className="user-photo"></div>
+      <img src={user.isPremium ? backgroundImage : backgroundImage2} alt="" className="user-photo" />
       <div className="user-info">
         <div className="user-name">{user.subscription ? user.subscription : " Free"} Plan</div>
-        <div className="user-title">@{user.username}</div>
+        <p className="user-title">@{user.username}</p>
       </div>
     </div>
     <div className="user-bio">
-      <p>
-        {user.subDate && `subscribed to ${user.subscription} VIP on: ${formatDate(user.subDate)}`}
-      </p>
-      <a href="/users/id" className="btn">Edit</a>
-    </div>
-  </div>
+      <div className="data"><EmailOutlined className="mail"/> {user.email}</div>
+      {user.subDate && <>
+        <div className="data">{user.subscription}</div>
+        <div className="data">{formatDate(user.subDate)}</div>
+      </>}
+      </div>
+  </NavLink>
 )};
 
 export default UserCard;

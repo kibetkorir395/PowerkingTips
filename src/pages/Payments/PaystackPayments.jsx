@@ -4,9 +4,9 @@ import { PriceContext } from '../../PriceContext';
 import AppHelmet from '../../components/AppHelmet';
 import { PaystackButton } from 'react-paystack';
 import { AuthContext } from '../../AuthContext';
-import { updateUser } from '../../firebase';
+import { getUser, updateUser } from '../../firebase';
 
-export default function PaystackPayments() {
+export default function PaystackPayments({setUserData}) {
   const {price, setPrice} = useContext(PriceContext)
   const {currentUser} = useContext(AuthContext);
 
@@ -33,45 +33,11 @@ export default function PaystackPayments() {
     },
     text: 'Pay Now',
     onSuccess: (response) => {
-      fetch(`https://api.paystack.co/transaction/verify/${response.reference}`, {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer sk_live_0b8e33c9b4be8d9af4ce5169cffa29e58ba3c590',
-          'Content-Type': 'application/json'
-        }
-      }).then(res => {
-
-        
-        const body = res.json()
-        body.then(result => {
-
-          if(result.data.status === "success") {
-            let subscription;
-            switch (result.data.requested_amount) {
-              case 60000:
-                subscription = "Weekly"
-                break;
-              case 300000:
-                subscription = "Monthly"
-                break;
-              case 750000:
-                subscription = "Yearly"
-                break;
-              default:
-                subscription = "Daily"
-            }
-            updateUser(currentUser.email, true, subscription, result.data.paidAt)
-            alert('You Have Upgraded To ' + returnPeriod() + " VIP")
-            window.location.pathname = '/tips';
-          } else {
-            return;
-          }
-        }).catch(error => {
-          return;
-        });
-      }).catch(err =>{
-        return err
-      })
+      const currentDate = new Date().toISOString();
+      updateUser(currentUser.email, true, returnPeriod(), currentDate)
+      alert('You Have Upgraded To ' + returnPeriod() + " VIP")
+      getUser(currentUser.email, setUserData)
+      window.location.pathname = '/tips';
     },
     onClose: () => {
       //console.log('Payment dialog closed');

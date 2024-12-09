@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import './Flyer.scss'
-import { Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import { PriceContext } from '../../PriceContext';
 import { getWonTips } from '../../firebase';
 import { ErrorTwoTone, TimelapseOutlined, Verified } from '@mui/icons-material';
@@ -28,7 +28,7 @@ export default function Flyer() {
     <div className='flyer'>
           <h1 className='title'>Expert Football Predictions!</h1>
           <h2 className='title'>Unlock the secret of winning high today!</h2>
-          <Link to={'pay'} className='btn' onClick={() => setPrice(3000)}>GET STARTED</Link>
+          <NavLink to={'pay'} className='btn' onClick={() => setPrice(3000)}>GET STARTED</NavLink>
           <div className="scroll">
             <div className="scroll-track">
             {

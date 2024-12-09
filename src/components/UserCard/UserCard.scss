@@ -1,58 +1,85 @@
 .card {
-    margin: 70px auto;
     width: 320px;
+    min-height: 200px;
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-decoration: none;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: 448px){
+      &{
+        width: 100%;
+      }
+    }
   
     .cover-bg {
-      height: 120px;
-      background: #b4e2d6 url('https://images.pexels.com/photos/131683/pexels-photo-131683.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260') center no-repeat;
-      background-size: 260%;
+      height: 80px;
       border-radius: 5px 5px 0 0;
+      background-size: contain;
+      background-position: center;
     }
   
     .user-info-wrap {
       display: flex;
-      padding: 0 20px;
+      padding: 0 5px;
       margin-top: -35px;
   
       .user-photo {
-        height: 60px;
-        width: 60px;
+        height: 50px;
+        width: 50px;
         border-radius: 50%;
-        border: 4px solid #fff;
-        background: #fff url('https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260') center no-repeat;
-        background-size: cover;
+        border: 2px solid #fff;
+        object-fit: fill;
+        object-position: center;
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
       }
   
       .user-info {
-        padding-left: 16px;
-        padding-top: 10px;
+        padding-left: 10px;
+        padding-top: 5px;
+        flex-wrap: wrap;
+        
   
         .user-name {
           font-size: 20px;
           font-weight: 400;
-          color: #fff;
+          color: var(--lite);
+          word-wrap: break-word; /* Break long words */
+          word-break: break-word; /* Break long words for compatibility */
         }
   
         .user-title {
           font-size: 16px;
           font-weight: 200;
-          color: #8b8784;
+          color: var(--grey);
           margin-top: 10px;
+          text-overflow: ellipsis;
+          width: 100%;
+          word-wrap: break-word; /* Break long words */
+          word-break: break-word; /* Break long words for compatibility */
         }
       }
     }
-  
     .user-bio {
-      padding: 20px;
-  
-      p {
-        font-size: 14px;
-        font-weight: 300;
-        margin-bottom: 40px;
+      padding: 10px 5px;
+      gap: 10px;
+      >*{
+        font-size: 16px;
+        color: var(--grey);
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        width: 100%;
+        word-wrap: break-word; /* Break long words */
+        word-break: break-word; /* Break long words for compatibility */
+      }
+
+      .mail{
+        font-size: 18px;
+        margin: 0 10px;
       }
     }
   }

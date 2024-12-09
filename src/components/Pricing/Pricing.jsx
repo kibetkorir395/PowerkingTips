@@ -50,14 +50,14 @@ export default function Pricing() {
     ]
     const Item = ({data}) => {
         return (
-        <div className="item">
-            <h1>{data.title} {data.slogan && <><br/><h6>{data.slogan}</h6></>} </h1>
+        <div className="item" key={data.duration}>
+            <h1>{data.title} {data.slogan && <><br/><div className='slogan'>{data.slogan}</div></>} </h1>
             
             <p><span>KSH</span><span>{data.price}</span><span>{data.duration}</span></p>
             <ul>
                 {
                     data.features.map(item => {
-                        return <li key={data.features[item]}>{item}</li>
+                        return <li key={item}>{item}</li>
                     })
                 }
             </ul>

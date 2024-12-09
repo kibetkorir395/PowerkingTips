@@ -16,6 +16,7 @@ export default function ListUsers() {
             setIsAdmin(true)
         } else {
             setIsAdmin(false)
+            window.history.back()
         }
     }
   }, [currentUser])
@@ -50,7 +51,7 @@ export default function ListUsers() {
       
       {
         users.length > 0 && users.map(user => {
-          return <UserCard key={user[user]} user={user}/>
+          return <UserCard key={user.email} user={user}/>
         })
       }
     </div>

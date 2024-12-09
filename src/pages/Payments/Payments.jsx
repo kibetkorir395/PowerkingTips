@@ -5,13 +5,13 @@ import AppHelmet from "../../components/AppHelmet";
 //import Ticket from "./Ticket";
 import CardPayment from "./CardPayment";
 import PaystackPayments from "./PaystackPayments";
-export default function Payments() {
+export default function Payments({setUserData}) {
     const [paymentType, setPaymentType] = useState("mpesa")
     const renderPaymentType = () => {
         let item;
         switch(paymentType) {
             case "crypto":
-                item = <CryptoPayments />
+                item = <CryptoPayments setUserData={setUserData}/>
               break;
             /*case "paypal":
                 item = <PaypalPayment />
@@ -20,7 +20,7 @@ export default function Payments() {
                 item = <CardPayment />
                 break;
             default:
-                item = <PaystackPayments/>
+                item = <PaystackPayments  setUserData={setUserData}/>
         }
 
         return item;

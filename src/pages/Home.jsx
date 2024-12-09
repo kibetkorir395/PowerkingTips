@@ -86,7 +86,7 @@ export default function Home() {
         {
         filteredTips && filteredTips.map(filteredTip => {
           return (<>
-            {filteredTip.items && filteredTip.items.filter((tip) => (tip.status === 'finished') && (tip.premium === status)).length !== 0 && (<h2>
+            {filteredTip.items && filteredTip.items.filter((tip) => (tip.status === 'finished') && (tip.premium === status)).length !== 0 && (<h2 key={filteredTip.date}>
               {filteredTip.date}
             </h2>)}
             <table className='wrapper' >

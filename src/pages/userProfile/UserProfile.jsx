@@ -1,6 +1,19 @@
+import { useEffect, useState } from 'react';
 import './UserProfile.scss';
+import { NavLink, useLocation} from 'react-router-dom';
 
-export default function UserProfile() {
+export default function UserProfile({data}) {
+  const location = useLocation();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if(location.state) {
+      setUser(location.state)
+    } else {
+      setUser(data)
+    }
+  }, [location]);
+
   const transactions = [
     {
       id: 1,
@@ -44,7 +57,7 @@ export default function UserProfile() {
 
   return (
     <div className="user-profile">
-      <div className="user-header">
+      {user && <div className="user-header">
         <div className="uh-left">
           <div className="uh-image">
             <img src="https://i.imgur.com/Qv1WDJq.jpg" alt="Profile" />
@@ -52,14 +65,16 @@ export default function UserProfile() {
           </div>
         </div>
         <div className="user-links">
-            <a>
-                @areal_alien
-            </a>
-            <a className="btn"  href='/pay'>
-                GET VIP
-            </a>
+            <span><a>@{user.username}</a></span>
+            <span>
+              {
+                user.isPremium ? <a>VIP</a> : <NavLink className="btn"  to='/pay'>GET VIP</NavLink>
+              }
+              <NavLink to="/users-edit" className="btn" state={user}>Edit</NavLink>
+            </span>
+
         </div>
-      </div>
+      </div>}
       <section>
       <h2>Transaction History</h2>
         
@@ -98,7 +113,7 @@ export default function UserProfile() {
         <h1>COMING SOON</h1>
         
       </section>
-      <div className="explore"><a href="/tips" className="btn">EXPLORE</a></div>
+      <div className="explore"><NavLink to="/tips" className="btn">EXPLORE</NavLink></div>
       
       
     </div>
