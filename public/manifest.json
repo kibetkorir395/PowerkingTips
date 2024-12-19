@@ -16,6 +16,11 @@
       "type": "image/png"
     },
     {
+      "src": "logo16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
       "src": "logo32.png",
       "type": "image/png",
       "sizes": "32x32"
@@ -36,9 +41,24 @@
       "type": "image/png"
     },
     {
+      "src": "logo120.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    },
+    {
       "src": "logo128.png",
       "type": "image/png",
       "sizes": "128x128"
+    },
+    {
+      "src": "logo152.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "logo180.png",
+      "type": "image/png",
+      "sizes": "180x180"
     },
     {
       "src": "logo192.png",
@@ -52,22 +72,74 @@
       "purpose": "maskable"
     }
   ],
-  "author": "Powerkintips",
+  "shortcuts": [
+    {
+      "name": "View Latest Tips",
+      "short_name": "Latest Tips",
+      "description": "Access the latest fixed VIP tips and predictions.",
+      "url": "/tips",
+      "icons": [
+        {
+          "src": "icons/logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Today's Predictions",
+      "short_name": "Today's Tips",
+      "description": "Check for toda's VIP Tips.",
+      "url": "/tips",
+      "icons": [
+        {
+          "src": "icons/logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "service_worker": {
+    "src": "/service-worker.js",
+    "scope": "/",
+    "type": "classic"
+  },
+  "developer": {
+    "name": "powerkingtips",
+    "url": "https://powerkingtips.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kkibe/powerking-tips"
   },
+
   "license": "ISC/MIT",
   "keywords": [
-    "Football Predictions", "Betting Odds", "Live Scores", "Football Predictions", 
-    "Live Sports", "Football Results", "Football Fixtures", "Football Today", "Online Betting",
-    "Premier League", "Championship", "Super Sports", "Laliga", "Bundesliga", "Serie A", "Live Bet"
+    "Football Predictions", "Betting Odds", "Live Scores", "Betika", "Sportpesa", "365Bet",
+    "Live Sports", "Football Results", "Football Fixtures", "Football Today", "Online Betting", "Sports", "Odibets",
+    "Premier League", "Championship", "Super Sports", "Laliga", "Bundesliga", "Serie A", "Live Bet", "Casino"
   ],
+  "dir": "ltr",
+  "lang": "en",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "theme_color": "#00ae58",
   "background_color": "#ebf4fc",
- "orientation": "portrait",
-  "categories": ["Utilities", "Finance", "Business", "Productivity", "Social", "News", "Tools"]
+  "orientation": "portrait",
+  "categories": ["Utilities", "Sports", "Betting", "Productivity", "Social", "News", "Tools", "Gambling"],
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.powerking", 
+      "url": "https://play.google.com/store/apps/details?id=com.powerking"
+    },
+    {
+      "platform": "amazon",
+      "id": "com.powerking",
+      "url": "https://www.amazon.com/gp/mas/dl/android?p=com.powerking"
+    }
+  ],
+  "prefer_related_applications": false
 }
