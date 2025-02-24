@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     loading && setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   }, [loading]);
 
 
@@ -39,25 +39,25 @@ export default function Home() {
       const groupedData = allTips.reduce((acc, item) => {
         // Use the date as the key for grouping
         const dateKey = item.date;
-    
+
         // If the date key doesn't exist in the accumulator, create a new array
         if (!acc[dateKey]) {
             acc[dateKey] = [];
         }
-    
+
         // Push the current item into the corresponding date group
         acc[dateKey].push(item);
-    
+
         return acc;
       }, {});
-    
+
     // Convert the result to an array of grouped objects
     const result = Object.keys(groupedData).map(date => ({
         date,
         items: groupedData[date]
     })).sort((a, b) => new Date(b.date) - new Date(a.date));;
     setFilteredTips(result);
-    } 
+    }
 
   }, [allTips]);
 
@@ -94,7 +94,7 @@ export default function Home() {
               {
               filteredTip.items && filteredTip.items.filter((tip) => (tip.status === 'finished') && (tip.premium === status)).length !== 0 && (
               <tr>
-                
+
                 <th>HOME</th>
                 <th>AWAY</th>
                 <th>PICK</th>
@@ -107,19 +107,19 @@ export default function Home() {
               {filteredTip.items && filteredTip.items.filter((tip) => (tip.status === 'finished') && (tip.premium === status)).map(tip => {
               return (
                 <tr key={filteredTip.items.indexOf(tip)}>
-                  
+
                   <td>{tip.home}</td>
                   <td>{tip.away}</td>
                   <td>{tip.pick}</td>
                   <td>{tip.odd}</td>
                   <td>
-                    {tip.won === 'won' ? 
+                    {tip.won === 'won' ?
                       <span className='won'>
-                        <p>Won</p> 
+                        <p>Won</p>
                         <Verified className='icon'/>
-                      </span>  : 
+                      </span>  :
                       <span className='lost'>
-                        <p>Lost</p> 
+                        <p>Lost</p>
                         <Error className='icon'/>
                       </span>
                     }
@@ -167,7 +167,7 @@ export default function Home() {
                       </tr>)
             })
           }
-  
+
         </table>)
       }
       </section>*/}
@@ -179,8 +179,8 @@ export default function Home() {
       <section>
         <div className="jobs-flyer" style={{width: '100%', padding: '5px'}}>
           <h1>Join The Winning Team</h1>
-          <h1>Get VIP memmbership for 1 month with as little as KSH 3000.</h1>
-          <NavLink to={"/pay"} className='btn' onClick={() => setPrice(3000)}>Subscribe Now</NavLink>
+          <h1>Get VIP memmbership for 1 month with as little as KSH 4000.</h1>
+          <NavLink to={"/pay"} className='btn' onClick={() => setPrice(4000)}>Subscribe Now</NavLink>
         </div>
       </section>
       <section>

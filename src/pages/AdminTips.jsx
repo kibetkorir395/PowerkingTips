@@ -29,7 +29,7 @@ export default function AdminTips() {
     useEffect(() => {
         error && setTimeout(() => {
           setError(null);
-        }, 3000);
+        }, 2000);
       }, [error]);
 
     useEffect(() => {

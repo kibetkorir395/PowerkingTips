@@ -34,14 +34,14 @@ export default function EditUser({setUserData }) {
 
       function toDateTimeLocal(dateString) {
         const date = new Date(dateString);
-    
+
         // Extract components
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
         const day = String(date.getDate()).padStart(2, '0');
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
-    
+
         // Format as YYYY-MM-DDTHH:mm
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
@@ -67,9 +67,9 @@ export default function EditUser({setUserData }) {
         if(isAdmin) {
             const usercollref = doc(db,'users', user.email)
             updateDoc(usercollref,{
-              isPremium, 
+              isPremium,
               subscription: subscription === "Free" ? "" : subscription,
-              subDate           
+              subDate
             } ).then(response => {
                 getUser(user.email, setUserData)
             }).catch(error =>{
@@ -90,7 +90,7 @@ export default function EditUser({setUserData }) {
     useEffect(() => {
         error && setTimeout(() => {
           setError(null);
-        }, 3000);
+        }, 2000);
       }, [error]);
 
     useEffect(() => {
@@ -111,7 +111,7 @@ export default function EditUser({setUserData }) {
             <div className="input-container">
                 <label htmlFor="email">Email:</label>
                 <input type="text" placeholder='example@gmail.com' id='email' value={email} onChange={(e) => setEmail(e.target.value)} readOnly/>
-            </div>  
+            </div>
             <div className="input-container">
                 <label htmlFor="subscription">Subscription:</label>
                 <input type="text" placeholder='subscription' id='subscription' value={subscription} onChange={(e) => setSubscription(e.target.value)} readOnly={!isAdmin}/>
@@ -124,7 +124,7 @@ export default function EditUser({setUserData }) {
                 <label htmlFor="premium">Is premium</label>
                 <input type="checkbox" placeholder='premium' id='premium' onChange={(e) => setIsPremium(e.target.checked)} checked={isPremium} readOnly={!isAdmin}/>
             </div>
-            
+
             <span style={{
                 width: "100%",
                 display: "flex",

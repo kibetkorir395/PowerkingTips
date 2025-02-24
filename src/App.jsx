@@ -32,7 +32,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const { currentUser} = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
-  
+
   useEffect(() => {
     if(loading){
       if (window.document.readyState === "complete"){
@@ -52,48 +52,48 @@ function App() {
       const currentTime = new Date(); // Current time
       const previousTime = new Date(userData.subDate); // Assuming userData.subDate is the subscription start date
       const { subscription } = userData; // Get subscription type
-  
+
       const timeDifference = currentTime - previousTime;
-  
+
       // Helper function to update user if time limit has passed
       const checkTimeAndUpdate = (timeLimitInMs) => {
         if (timeDifference >= timeLimitInMs) {
           updateUser(currentUser.email, false, null, null);
         }
       };
-  
+
       switch (subscription) {
         case "Daily":
           checkTimeAndUpdate(24 * 60 * 60 * 1000); // 24 hours in milliseconds
           break;
-  
+
         case "Weekly":
           checkTimeAndUpdate(7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
           break;
-  
+
         case "Monthly":
           // Check if a month has passed
-          if (currentTime.getFullYear() > previousTime.getFullYear() || 
+          if (currentTime.getFullYear() > previousTime.getFullYear() ||
               (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() > previousTime.getMonth())) {
             updateUser(currentUser.email, false, null, null);
           }
           break;
-  
+
         case "Yearly":
           // Check if a year has passed
-          if (currentTime.getFullYear() > previousTime.getFullYear() || 
-              (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() > previousTime.getMonth()) || 
+          if (currentTime.getFullYear() > previousTime.getFullYear() ||
+              (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() > previousTime.getMonth()) ||
               (currentTime.getFullYear() === previousTime.getFullYear() && currentTime.getMonth() === previousTime.getMonth() && currentTime.getDate() > previousTime.getDate())) {
             updateUser(currentUser.email, false, null, null);
           }
           break;
-  
+
         default:
           return;
       }
     }
   }, [userData]);
-  
+
   return (
     <HelmetProvider>
     <div className="App">
@@ -120,13 +120,13 @@ function App() {
           <Route path='*' element={<Error />} />
           <Route path='login' element={<Login />} />
           <Route path='register' element={<Register />} />
-          
+
       </Routes>
       <Footer user={currentUser}/>
       </>
       }
     </div>
-    
+
     </HelmetProvider>
   );
 }

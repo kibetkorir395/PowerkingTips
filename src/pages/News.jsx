@@ -24,21 +24,21 @@ export default function News() {
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   });
-  
+
   useEffect(() =>{
     getNews(currentPage * newsPerPage, category, setNews, setLoading);
   }, [currentPage, category, isOnline, newsPerPage, location]);
-  
+
   useEffect(() => {
     loading && setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   }, [loading]);
-  
+
   const handleReload = () => {
     getNews(currentPage * newsPerPage, category, setNews, setLoading);
   }
-  
+
   useEffect(() => {
     location.search.split("=")[1] && setCategory(location.search.split("=")[1]);
   }, [location.search]);
@@ -69,7 +69,7 @@ export default function News() {
               <NavLink className="btn" onClick={handleReload}>Reload</NavLink>
             </div>
           }
-                    
+
           {
             ((!news.length > 0) && loading) && <Loader />
           }

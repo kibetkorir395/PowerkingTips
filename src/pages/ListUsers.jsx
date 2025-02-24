@@ -29,18 +29,18 @@ export default function ListUsers() {
     return navigator.onLine
   })
 
-  
+
   useEffect(() =>{
     if(isAdmin) {
       getAllusers(setUsers, setLoading);
     }
   }, [isOnline, isAdmin]);
-  
+
 
   useEffect(() => {
     loading && setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   }, [loading]);
 
   return (
@@ -48,7 +48,7 @@ export default function ListUsers() {
       {
         loading && <Loader />
       }
-      
+
       {
         users.length > 0 && users.map(user => {
           return <UserCard key={user.email} user={user}/>

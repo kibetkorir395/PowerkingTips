@@ -18,18 +18,18 @@ const Contact = () => {
     event.preventDefault();
     addContact({name, email, message}, setSuccess, setError);
   };
-  
+
   useEffect(() => {
     error && setTimeout(() => {
       setError(null);
-    }, 3000);
-    
+    }, 2000);
+
     success && setTimeout(() => {
       setSuccess(null);
       setEmail('');
       setName('');
       setMessage('');
-    }, 3000);
+    }, 2000);
   }, [error, success]);
     return (
         <div className="contact">
@@ -43,7 +43,7 @@ const Contact = () => {
               </div>
               <textarea placeholder="MESSAGE" required value={message} onChange={(e) => setMessage(e.target.value)}/>
               <button className='btn' title='send' type='submit' aria-label="send">SEND</button>
-          </form> 
+          </form>
      </div>
     );
 }

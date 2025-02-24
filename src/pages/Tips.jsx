@@ -41,7 +41,7 @@ export default function Tips({userData}) {
     return navigator.onLine
   })
 
-  
+
   useEffect(() =>{
     getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
   }, [isOnline, tipsPerPage, currentDate]);
@@ -59,7 +59,7 @@ export default function Tips({userData}) {
   useEffect(() => {
     days && setCurrentDate(days[days.length - 1])
   }, [days]);
-  
+
   useEffect(() =>{
     if(tips.length > 0){
       setActive(tips.filter((tip) => (category==='free') ? (tip.premium === false) : (tip.premium === true))[0])
@@ -69,9 +69,9 @@ export default function Tips({userData}) {
   useEffect(() => {
     loading && setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   }, [loading]);
-  
+
   const handleReload = () => {
     getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
   }
@@ -107,9 +107,9 @@ export default function Tips({userData}) {
       default:
         dayWeek = "Saturday";
     }
-    return dateWeek + " " + dayWeek; 
+    return dateWeek + " " + dayWeek;
   }
- 
+
 
   const handleClick = async (tip) => {
     setActive(tip)
@@ -176,13 +176,13 @@ export default function Tips({userData}) {
               <NavLink className="btn" onClick={handleReload}>Reload</NavLink>
             </div>
           }
-                    
+
           {
             ((!tips.length > 0) && loading) && <Loader />
           }
       </div>
     </div>
-  
+
     {
       active && <PostDetail data={active} userData={userData}/>
     }

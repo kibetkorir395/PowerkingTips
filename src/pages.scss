@@ -21,7 +21,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 20px;
-		
+
 		video{
 			max-height: 200px;
 			margin: 10px 10px;
@@ -31,7 +31,7 @@
 					width: 100%;
 				}
 			}
-		} 
+		}
 
 		.content{
 			min-width: 300px;
@@ -113,9 +113,9 @@
             border-radius: 4px;
             text-align: center;
             padding: 3px 5px;
-        }  
-        
-        
+        }
+
+
         > input, textarea{
           height: fit-content;
           position: relative;
@@ -126,12 +126,12 @@
           box-shadow: var(--shadow);
           width: 100%;
           min-height: 50px;
-          
-          
+
+
           &:first-of-type{
             min-height: 50px;
           }
-          
+
           appearance: none;
           -moz-appearance: none;
           -webkit-appearance: none;
@@ -144,13 +144,13 @@
           -o-transition: all 0.4s;
           overflow-x: auto;
         }
-        
+
         textarea{
             max-width: 100%;
             min-width: 100%;
             min-height: 150px;
-            
-            
+
+
             &:first-of-type{
               min-height: 50px;
             }
@@ -199,13 +199,13 @@
                     width: 100%;
                 }
             }
-      
+
             label {
                 display: block;
                 font-size: 17px;
                 flex: 1;
             }
-            
+
             input {
                 border-radius: 5px;
                 height: inherit;
@@ -252,9 +252,11 @@
                 from(rgba(0, 0, 0, 0.4)),
                 to(rgba(0, 0, 0, 0.4))
               ),
-              url(./assets/l3.jpg);
+              url(./assets/bg1.jpg);
+              //url('https://i.postimg.cc/FzSHSbhQ/img-soccer.jpg');
             background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-              url(./assets/l3.jpg);
+              url(./assets/bg1.jpg);
+              //url('https://i.postimg.cc/FzSHSbhQ/img-soccer.jpg');
             background-size: auto;
             background-position: center;
             background-repeat: no-repeat;
@@ -268,7 +270,7 @@
             h2{
                 font-size: .8em;
                 margin-top: 20px;
-                color: var(--light-blue);
+                color: var(--neon-blue);
                 /*&:nth-of-type(even){
                     color:var(--odd);
                 }
@@ -276,8 +278,14 @@
                     color:var(--light-blue);
                 }*/
             }
+
+            span{
+                &.won{
+                    color: var(--neon-blue);
+                }
+            }
         }
-        
+
         table{
             width: 100%;
             td{
@@ -293,7 +301,7 @@
         justify-content: space-evenly;
         margin: 5px 10px;
         .btn{
-            
+
             text-align: center;
             border-radius: 5px 0 5px 0;
             padding: 5px 10px;
@@ -304,7 +312,7 @@
             }
         }
     }
-        
+
     > .wrapper{
         width: 90%;
 
@@ -356,13 +364,13 @@
                 padding: 3px 5px;
                 border: none;
                 border: 1px solid var(--light-grey);
-                
+
                 &.current{
                     background: var(--lite);
                 }
             }
         }
-        
+
         @media screen and (max-width: 480px){
             &{
                 .order-categories, .order-dates {
@@ -409,7 +417,7 @@
             flex: 1;
             margin-top: 10px;
         }
-        
+
         h2{
             text-align: start;
             color: var(--blue);
@@ -435,11 +443,11 @@
                 width: 1px;
                 display: none;
             }
-              
+
             &::-webkit-scrollbar-track{
                 display: none;
             }
-              
+
             &::-webkit-scrollbar-thumb{
                 background: var(--dark-blue);
                 border-radius: 2px;
@@ -459,13 +467,13 @@
             width: fit-content;
             text-decoration: none;
         }
-        
+
         .category{
             border: 1px solid var(--light-grey);
             border-radius: 4px;
             text-align: center;
             padding: 3px 5px;
-        }  
+        }
         .read {
           float: right;
           font-size: 14px;
@@ -477,7 +485,7 @@
     @media screen and (max-width: 789px){
         &{
             flex-direction: column;
-            
+
             img{
                 width: 100%;
                 max-height: 250px;
@@ -501,7 +509,7 @@
                 }
             }
         }
-        
+
         @media screen and (max-width: 576px){
             &{
                 .sidebar{
@@ -560,16 +568,19 @@
             from(rgba(0, 0, 0, 0.4)),
             to(rgba(0, 0, 0, 0.4))
           ),
-          url(./assets/l4.jpg);
+          //url(./assets/l4.jpg);
+          //url("https://e3.365dm.com/18/06/1096x616/skynews-nike-nigera_4326134.jpg?20180601224151");
+          url('https://i.postimg.cc/FzSHSbhQ/img-soccer.jpg');
         background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-          url(./assets/l4.jpg);
+          //url(./assets/l4.jpg);
+          //url("https://e3.365dm.com/18/06/1096x616/skynews-nike-nigera_4326134.jpg?20180601224151");
+          url('https://i.postimg.cc/FzSHSbhQ/img-soccer.jpg');
+
         background-size: auto;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
 
-        
-    
 
         .filter-wrapper{
             font-size: 14px;
@@ -586,7 +597,7 @@
                 border-radius: 5px;
                 border: none;
                 outline: none;
-            }    
+            }
         }
 
         .filter{
@@ -652,8 +663,8 @@
 table{
     color: var(--lite);
     font-size: 15px;
-    border-collapse: collapse; 
-    
+    border-collapse: collapse;
+
     th, td {
         border: .5px solid #000;
         padding: 2px;
@@ -662,8 +673,10 @@ table{
     th {
         font-weight: 500;
         font-size: .7em;
+        //background: #1F51FF;
+        background: var(--blue);
     }
-    
+
     td {
         text-align: center;
         text-align: start;
@@ -697,9 +710,17 @@ table{
             background: var(--lite);
             color: var(--grey);
             cursor: pointer;
+
+            td{
+                span{
+                    &.won{
+                        color: var(--blue);
+                    }
+                }
+            }
         }
     }
-    
+
     tr:nth-child(odd){
         background:var(--odd);
         &:hover:not(:first-of-type){
@@ -724,7 +745,7 @@ table{
             width: 100%;
         }
     }
-    
+
     .post-detail{
        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
        display: none;
@@ -815,7 +836,7 @@ table{
             &:hover{
                 background: var(--dark-blue);
             }
-              
+
             &:focus{
                 outline: none;
             }

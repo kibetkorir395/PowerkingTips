@@ -22,14 +22,14 @@ const Register = () => {
       currentUser && window.history.back()
       error && setTimeout(() => {
         setError(null);
-      }, 3000);
+      }, 2000);
 
       success && setTimeout(() => {
         setSuccess(null);
         setEmail('');
-      }, 3000);
+      }, 2000);
     }, [error,success, currentUser]);
-      
+
     useLayoutEffect(() => {
         window.scrollTo(0, 0)
     });
@@ -52,4 +52,4 @@ const Register = () => {
     );
 }
 
-export default Register; 
+export default Register;

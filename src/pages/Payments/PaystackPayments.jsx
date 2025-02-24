@@ -21,14 +21,14 @@ export default function PaystackPayments({setUserData}) {
       console.error("Error upgrading user:", error.message);
     }
   };
-  
+
 
   const returnPeriod = () => {
-    if(price === 200){
+    if(price === 250){
       return 'Daily'
-    } else if (price === 600){
+    } else if (price === 850){
       return 'Weekly'
-    } else if (price === 3000){
+    } else if (price === 4000){
       return 'Monthly'
     } else {
       return 'Yearly'
@@ -38,8 +38,8 @@ export default function PaystackPayments({setUserData}) {
   const componentProps = {
     reference: (new Date()).getTime().toString(),
     email: currentUser.email,
-    amount: price * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-    publicKey: 'pk_live_7bee8807842b6de80db9ff956f02cc6ebe64808f',
+    amount: price * 100,
+    publicKey: 'pk_live_bddd84f711046f4cb7bfd24aa6a640af0dbfd784',
     currency: "KES",
     metadata: {
       name: currentUser.email,
@@ -58,24 +58,24 @@ export default function PaystackPayments({setUserData}) {
       <AppHelmet title={"Pay"} location={'/pay'}/>
       <form>
       <fieldset>
-        <input name="prices" type="radio" value={200} id="daily" checked={price===200 ? true : false}   onChange={(e) => setPrice(200)}/>
+        <input name="prices" type="radio" value={250} id="daily" checked={price===250 ? true : false}   onChange={(e) => setPrice(250)}/>
         <label htmlFor="daily">Daily VIP</label>
-        <span className="price">KSH 200</span>
+        <span className="price">KSH 250</span>
       </fieldset>
       <fieldset>
-        <input name="prices" type="radio" value={600} id="weekly" checked={price===600 ? true : false}   onChange={(e) => setPrice(600)}/>
+        <input name="prices" type="radio" value={850} id="weekly" checked={price===850 ? true : false}   onChange={(e) => setPrice(850)}/>
         <label htmlFor="weekly">7 Days VIP</label>
-        <span className="price">KSH 600</span>
+        <span className="price">KSH 850</span>
       </fieldset>
       <fieldset>
-        <input name="prices" type="radio" value={3000} id="monthly" checked={price===3000 ? true : false}   onChange={(e) => setPrice(3000)}/>
+        <input name="prices" type="radio" value={4000} id="monthly" checked={price===4000 ? true : false}   onChange={(e) => setPrice(4000)}/>
         <label htmlFor="monthly">30 Days VIP</label>
-        <span className="price">KSH 3000</span>
+        <span className="price">KSH 4000</span>
       </fieldset>
       <fieldset>
-        <input name="prices" type="radio" value={7500} id="yearly" checked={price===7500 ? true : false}   onChange={(e) => setPrice(7500)}/>
+        <input name="prices" type="radio" value={10000} id="yearly" checked={price===10000 ? true : false}   onChange={(e) => setPrice(10000)}/>
         <label htmlFor="yearly">1 Year VIP</label>
-        <span className="price">KSH 7500</span>
+        <span className="price">KSH 10000</span>
       </fieldset>
     </form>
       <h4>GET {returnPeriod().toUpperCase()} VIP FOR {price}</h4>

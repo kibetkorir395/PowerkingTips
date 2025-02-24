@@ -14,14 +14,14 @@ export const Login = () => {
         e.preventDefault();
         signInUser(email, password, setError);
     }
-    
+
     useEffect(() => {
       currentUser && window.history.back()
       error && setTimeout(() => {
         setError(null);
-      }, 3000);
+      }, 2000);
     }, [error, currentUser]);
-      
+
     useLayoutEffect(() => {
         window.scrollTo(0, 0)
     });
@@ -36,7 +36,7 @@ export const Login = () => {
                 {
                     error && <h4 className='error'>{error}Try again</h4>
                 }
-                
+
                 <div className="text">Don't have an account?&emsp;|&emsp;<NavLink to='/register'>Sign Up &raquo;</NavLink>  </div>
             </form>
         </div>

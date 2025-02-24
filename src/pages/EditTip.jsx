@@ -38,7 +38,7 @@ export default function EditTip() {
     useEffect(() => {
         error && setTimeout(() => {
           setError(null);
-        }, 3000);
+        }, 2000);
       }, [error]);
 
     useEffect(() => {
@@ -52,12 +52,12 @@ const formatDateTimeForInput = (date, time) => {
     // Parse the date string into a Date object
     const [month, day, year] = date.split('/').map((part) => parseInt(part, 10));
     const formattedDate = new Date(year, month - 1, day); // Note: Month is 0-indexed in JS
-  
+
     // Format the date as YYYY-MM-DD
     const yearStr = formattedDate.getFullYear();
     const monthStr = String(formattedDate.getMonth() + 1).padStart(2, '0');
     const dayStr = String(formattedDate.getDate()).padStart(2, '0');
-  
+
     // Combine with the time in HH:mm format
     return `${yearStr}-${monthStr}-${dayStr}T${time}`;
   };
@@ -119,7 +119,7 @@ const formatDateTimeForInput = (date, time) => {
                 <label htmlFor="premium">Is premium</label>
                 <input type="checkbox" placeholder='premium' id='premium' onChange={(e) => setPremium(e.target.checked)} checked={premium}/>
             </div>
-            
+
             <span style={{
                 width: "100%",
                 display: "flex",

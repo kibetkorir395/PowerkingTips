@@ -14,9 +14,13 @@
         from(rgba(0, 0, 0, 0.3)),
         to(rgba(0, 0, 0, 0.3))
       ),
-      url(./../../assets/l4.jpg);
+      //url('https://e3.365dm.com/18/06/1096x616/skynews-nike-nigera_4326134.jpg?20180601224151');
+      //url('https://i.postimg.cc/FzSHSbhQ/img-soccer.jpg');
+      url(./../../assets/bg1.jpg);
     background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-      url(./../../assets/l4.jpg);
+    //url('https://e3.365dm.com/18/06/1096x616/skynews-nike-nigera_4326134.jpg?20180601224151');
+    //url('https://i.postimg.cc/FzSHSbhQ/img-soccer.jpg');
+      url(./../../assets/bg1.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -64,7 +68,7 @@
             *{
                 font-family: 'Courier New', Courier, monospace;
             }
-        
+
             .center{
                 width: 100%;
                 height: 100%;
@@ -94,7 +98,7 @@
                         justify-content: center;
                     }
                 }
-        
+
                 .info{
                     color: var(--grey);
                     display: flex;

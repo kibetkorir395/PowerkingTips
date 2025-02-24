@@ -37,7 +37,7 @@
             }
             a{
                 color: var(--dark);
-                
+
                 position: relative;
                 border-radius: 50%;
                 padding: 5px;
@@ -92,7 +92,7 @@
                 }
               }
             }
-          
+
             .telegram{
               &:hover{
                 background: #46c1f6;
@@ -106,7 +106,7 @@
                 }
               }
             }
-          
+
             .instagram{
               &:hover{
                 background: #e1306c;
@@ -120,8 +120,8 @@
                 }
               }
             }
-          
-            .x{   
+
+            .x{
               &:hover{
                 background: #333333;
                 .tooltip{
@@ -134,7 +134,7 @@
                 }
               }
             }
-          
+
             .whatsapp:hover{
               &:hover{
               background: #25D366;
@@ -189,9 +189,9 @@
                     text-decoration: none;
                     font-size: 17px;
                     cursor: pointer;
-                    color: var(--dark-grey);
+                    color: var(--light-grey);
                     &:hover{
-                      color: var(--light-grey);
+                      color: var(--dark-grey);
                     }
                   }
                 }
@@ -213,12 +213,12 @@
         align-items: center;
         justify-content: space-evenly;
         padding: 5px 0;
-        
+
         @media screen and (max-width: 480px){
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         p{
             font-size: 14px;
             color: var(--dark);

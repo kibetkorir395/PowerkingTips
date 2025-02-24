@@ -19,7 +19,7 @@ export default function Admin() {
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   });
-  
+
   const handleSubmit = (e) => {
       e.preventDefault();
       if(!title && !description && !image){
@@ -31,9 +31,9 @@ export default function Admin() {
   useEffect(() => {
       error && setTimeout(() => {
         setError(null);
-      }, 3000);
+      }, 2000);
     }, [error]);
-    
+
     useEffect(() => {
       !currentUser && window.history.back();
     }, [currentUser]);
@@ -41,7 +41,7 @@ export default function Admin() {
     useEffect(() => {
       setLoading(false);
     }, []);
-    
+
     const handleLogOut = () => {
       signOut(auth);
     };

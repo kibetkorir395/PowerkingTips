@@ -35,7 +35,7 @@ const Footer = ({user}) => {
                     <div className="container">
                         <NavLink to="/" title='healthgen'>HOME</NavLink>
                         <NavLink to="/tips" title='books'>GET TIPS</NavLink>
-                        <NavLink to="/blogs" title='contact'>READ BLOGS</NavLink> 
+                        <NavLink to="/blogs" title='contact'>READ BLOGS</NavLink>
                         <NavLink to="/about" title='contact'>ABOUT US</NavLink>
 
                     </div>
@@ -46,7 +46,7 @@ const Footer = ({user}) => {
                         <NavLink to="/login" title='login'>LOGIN</NavLink>
                         <NavLink to="/register" title='register'>REGISTER</NavLink>
                         <NavLink to="/pay" title='get vip'>GET VIP</NavLink>
-                        <Link to={socialLinks.affliateLink} title='contact' target='_blank'>SPIN & WIN</Link>
+                        <Link to={socialLinks.affliateLink} title='spin and win' target='_blank'>SPIN & WIN</Link>
                         {isAdmin && <>
                             <NavLink to="/admin/tips" title='contact'>ADD TIP</NavLink>
                             <NavLink to="/admin" title='contact'>ADD NEWS</NavLink>
@@ -81,7 +81,7 @@ const Footer = ({user}) => {
                         <div className="tooltip">Instagram</div>
                     </Link>*/}
                 </div >
-                
+
                     </div>
                 </section>
             </div>
@@ -90,7 +90,7 @@ const Footer = ({user}) => {
                 <p>&copy; POWERKING TIPS {new Date().getFullYear()}</p>
                 <button className={`btn-top`} onClick={() => handleScroll()} aria-label="to-top"><ArrowUpward/></button>
             </div>
-        
+
         </div>
     );
 }

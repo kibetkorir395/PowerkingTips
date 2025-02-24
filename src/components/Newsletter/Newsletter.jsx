@@ -15,14 +15,14 @@ const Newsletter = () => {
     useEffect(() => {
         error && setTimeout(() => {
           setError(null);
-        }, 3000);
-        
+        }, 2000);
+
         success && setTimeout(() => {
           setSuccess(null);
           setEmail('');
-        }, 3000);
+        }, 2000);
       }, [error, success]);
-    
+
     return (
         <div className='newsletter theme'>
             <h4>

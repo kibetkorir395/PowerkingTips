@@ -1,8 +1,9 @@
 :root{
-    --lite: #fff;; 
+    --lite: #fff;;
     --black: #000000;
     --dark: #3b3b3b;
     --light-blue: #d0ffc4;
+    --neon-blue: #0FFF50;
     --dark-blue: #007a37;//#007A37;//#0067b8
     --blue: #00ae58;//#00B140;#2ecc71
     --grey: #7288a2;//#8198ae//7a7979//#4d5974
@@ -12,18 +13,18 @@
     --transparent:#00000008;
     --hue: #00ae58;
     --bg: hsl(var(--hue),90%,95%);
-    --fg: hsl(var(--hue),90%,5%);     
+    --fg: hsl(var(--hue),90%,5%);
     --odd: #6ac147;
     --even: #f04f30;
   }
-  
+
   *, *::before, *::after{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font: 17px "Montserrat", sans-serif;
   }
-  
+
   .App{
       width: 100%;
       position: relative;
@@ -33,7 +34,7 @@
       justify-content: center;
       margin-top: 90px;
       color: var(--dark);
-      
+
       h1{
         width: 100%;
         font-size: 28px;
@@ -50,31 +51,31 @@
           font-weight: 500;
         }
       }
-      
+
       h2{
           text-align: center;
           font-size: 26px;
           font-weight: 400;
           margin: 5px 0;
       }
-  
+
       h3{
         font-weight: 400;
         font-size: 24px;
         color: var(--dark-blue);
         flex: 1.5;
       }
-      
+
       h4{
         font-size: 20px;
         color: var(--grey);
       }
-  
+
       a{
         text-decoration: none;
         color: var(--blue);
       }
-      
+
       .post-container{
         width: 100%;
         display: grid;
@@ -89,16 +90,16 @@
         @media screen and (max-width: 789px){
           grid-template-columns: 1fr 1fr;
         }
-        
+
         @media screen and (max-width: 576px){
           grid-template-columns: 1fr;
         }
 
-        
+
 
 
     }
-    
+
     .btn{
       background: var(--blue);
       border-radius: 30px;
@@ -118,11 +119,11 @@
           color: var(--dark-blue);
           box-shadow: none;
           background: var(--light-blue);
-  
+
           box-shadow: 0px 25px 18px -6px rgba(0, 0, 0, 0.2);
           background: var(--dark-blue);
           color: var(--lite);
-      
+
           -webkit-transform: translateY(-5px);
           -ms-transform: translateY(-5px);
           -o-transform: translateY(-5px);
@@ -131,7 +132,7 @@
       }
     }
   }
-  
+
   .jobs-flyer{
     width: 100%;
     background: var(--blue);
@@ -141,7 +142,7 @@
     align-items: center;
     justify-content: space-evenly;
     align-items: flex-end;
-  
+
     h1{
       color: var(--lite);
       font-size: 28px;
@@ -151,8 +152,8 @@
         margin-bottom: 10px;
       }
     }
-  
-      
+
+
     @media screen and (max-width: 576px){
       h1{
           font-size: 18px;
@@ -171,4 +172,3 @@
       }
     }
   }
-  

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Pricing() {
     const navigate = useNavigate();
     const {setPrice} = useContext(PriceContext);
- 
+
     const handleClick = (price) => {
        setPrice(price)
        navigate('/pay')
@@ -15,7 +15,7 @@ export default function Pricing() {
         {
             id: 1,
             title: "Silver",
-            price: 200,
+            price: 250,
             duration: "/Day",
             features: [
                 "Every day is game day! Check out our daily tips and win big!",
@@ -26,8 +26,8 @@ export default function Pricing() {
         {
             id: 2,
             title: "Gold",
-            slogan: "30% cashback on your first purchase",
-            price: 600,
+            //slogan: "30% cashback on your first purchase",
+            price: 850,
             duration: "/Week",
             features: [
                 "Get the scoop on this week’s matches",
@@ -38,8 +38,8 @@ export default function Pricing() {
         {
             id: 3,
             title: "Platinum",
-            slogan: "50% cashback on your first purchase",
-            price: 3000,
+            //slogan: "50% cashback on your first purchase",
+            price: 4000,
             duration: "/Month",
             features: [
                 "Plan ahead with our monthly predictions.",
@@ -52,7 +52,7 @@ export default function Pricing() {
         return (
         <div className="item" key={data.duration}>
             <h1>{data.title} {data.slogan && <><br/><div className='slogan'>{data.slogan}</div></>} </h1>
-            
+
             <p><span>KSH</span><span>{data.price}</span><span>{data.duration}</span></p>
             <ul>
                 {
