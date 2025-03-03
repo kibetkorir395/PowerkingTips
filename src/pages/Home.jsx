@@ -15,7 +15,7 @@ export default function Home() {
   const [allTips, setAllTips] = useState(null);
   const [filteredTips, setFilteredTips] = useState(null);
   const {setPrice} = useContext(PriceContext);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
   const [isOnline] = useState(() =>{
     return navigator.onLine
   })

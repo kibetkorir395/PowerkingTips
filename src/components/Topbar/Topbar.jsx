@@ -11,7 +11,7 @@ export default function Topbar() {
         <Link to={socialLinks.whatsappChannel} title='whatsappa' target='_blank' className='whatsapp'><WhatsApp /></Link>
         <Link to={socialLinks.facebookPage} title='facebook' target='_blank' className='facebook'><Facebook /></Link>
         <Link to={socialLinks.xPage} title='twitter' target='_blank' className='twitter'><X /></Link>
-        {/*<Link to={socialLinks.instagramPage} title='instagram' target='_blank' className='instagram'><Instagram /></Link>*/}
+        <Link to={socialLinks.instagramPage} title='instagram' target='_blank' className='instagram'><Instagram /></Link>
     </div>
   )
 }

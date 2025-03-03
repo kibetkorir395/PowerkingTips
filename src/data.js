@@ -52,11 +52,11 @@ export const faqs = [
 ]
 
 export const socialLinks = {
-    telegramChannel: "https://t.me/powerkingtips",
-    whatsappChannel: "https://whatsapp.com/channel/0029VajZ82OIN9iprM9OG638",
+    telegramChannel: "https://t.me/bet365gurus",
+    whatsappChannel: "https://whatsapp.com/channel/0029Vb3Louu9xVJktevbuZ2K",
     facebookPage: "https://www.facebook.com/profile.php?id=61569974256919&mibextid=ZbWKwL",
     xPage: "https://www.x.com/@powerking_tips",
-    instagramPage: "",
+    instagramPage: "https://instagram.com/goalgenius.vip",
     affliateLink: "https://spin-to-win.powerkingtips.com/",
     promotion: "https://refpa7921972.top/L?tag=d_3966788m_1573c_&site=3966788&ad=1573"
 }

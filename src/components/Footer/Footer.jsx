@@ -1,10 +1,10 @@
-import { ArrowUpward, Facebook, Telegram, WhatsApp, X} from '@mui/icons-material';
+import { ArrowUpward, Facebook, Telegram, WhatsApp, X, Instagram} from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import './Footer.scss';
 import { Link, NavLink } from 'react-router-dom';
 import Newsletter from '../Newsletter/Newsletter';
 import { socialLinks } from '../../data';
-import Promotion from '../../assets/promotion_1xbet.png';
+//import Promotion from '../../assets/promotion_1xbet.png';
 
 const Footer = ({user}) => {
     const [isAdmin, setIsAdmin] = useState(null);
@@ -27,7 +27,7 @@ const Footer = ({user}) => {
       }, [user])
     return (
         <div className='footer theme'>
-            <Link to={socialLinks.promotion} title='200% bonus' target='_blank'><img src={Promotion} alt="1xbet" /></Link>
+            {/*<Link to={socialLinks.promotion} title='200% bonus' target='_blank'><img src={Promotion} alt="1xbet" /></Link>*/}
             <div className="wrapper">
                 <div className="sections">
                 <section>
@@ -76,10 +76,10 @@ const Footer = ({user}) => {
                         <X />
                         <div className="tooltip">X(Twitter)</div>
                     </Link>
-                    {/*<Link to={socialLinks.instagramPage} title='instagram' target='_blank' className="instagram">
+                    <Link to={socialLinks.instagramPage} title='instagram' target='_blank' className="instagram">
                         <Instagram />
                         <div className="tooltip">Instagram</div>
-                    </Link>*/}
+                    </Link>
                 </div >
 
                     </div>
