@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Pricing() {
     const navigate = useNavigate();
-    const {setPrice} = useContext(PriceContext);
+    const { setPrice } = useContext(PriceContext);
 
     const handleClick = (price) => {
-       setPrice(price)
-       navigate('/pay')
+        setPrice(price)
+        navigate('/pay')
     }
     const plans = [
         {
@@ -27,7 +27,7 @@ export default function Pricing() {
             id: 2,
             title: "Gold",
             //slogan: "30% cashback on your first purchase",
-            price: 850,
+            price: 750,
             duration: "/Week",
             features: [
                 "Get the scoop on this week’s matches",
@@ -39,7 +39,7 @@ export default function Pricing() {
             id: 3,
             title: "Platinum",
             //slogan: "50% cashback on your first purchase",
-            price: 4000,
+            price: 3000,
             duration: "/Month",
             features: [
                 "Plan ahead with our monthly predictions.",
@@ -48,30 +48,30 @@ export default function Pricing() {
             ]
         }
     ]
-    const Item = ({data}) => {
+    const Item = ({ data }) => {
         return (
-        <div className="item" key={data.duration}>
-            <h1>{data.title} {data.slogan && <><br/><div className='slogan'>{data.slogan}</div></>} </h1>
+            <div className="item" key={data.duration}>
+                <h1>{data.title} {data.slogan && <><br /><div className='slogan'>{data.slogan}</div></>} </h1>
 
-            <p><span>KSH</span><span>{data.price}</span><span>{data.duration}</span></p>
-            <ul>
-                {
-                    data.features.map(item => {
-                        return <li key={item}>{item}</li>
-                    })
-                }
-            </ul>
-            <button className="btn" onClick={() => handleClick(data.price)}>Get Started Now</button>
-        </div>
+                <p><span>KSH</span><span>{data.price}</span><span>{data.duration}</span></p>
+                <ul>
+                    {
+                        data.features.map(item => {
+                            return <li key={item}>{item}</li>
+                        })
+                    }
+                </ul>
+                <button className="btn" onClick={() => handleClick(data.price)}>Get Started Now</button>
+            </div>
         )
     }
     return (
-    <div className="pricing">
-        {
-            plans.map(item => {
-                return <Item data={item} key={item.id}/>
-            })
-        }
-    </div>
-  )
+        <div className="pricing">
+            {
+                plans.map(item => {
+                    return <Item data={item} key={item.id} />
+                })
+            }
+        </div>
+    )
 }

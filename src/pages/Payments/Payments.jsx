@@ -5,42 +5,35 @@ import AppHelmet from "../../components/AppHelmet";
 //import Ticket from "./Ticket";
 import CardPayment from "./CardPayment";
 import PaystackPayments from "./PaystackPayments";
-export default function Payments({setUserData}) {
+export default function Payments({ setUserData }) {
     const [paymentType, setPaymentType] = useState("mpesa")
     const renderPaymentType = () => {
         let item;
-        switch(paymentType) {
+        switch (paymentType) {
             case "crypto":
-                item = <CryptoPayments setUserData={setUserData}/>
-              break;
+                item = <CryptoPayments setUserData={setUserData} />
+                break;
             /*case "paypal":
                 item = <PaypalPayment />
               break;*/
-            case "card":
-                item = <CardPayment />
-                break;
             default:
-                item = <PaystackPayments  setUserData={setUserData}/>
+                item = <PaystackPayments setUserData={setUserData} />
         }
 
         return item;
     }
     return (
         <div className="payments">
-            <AppHelmet title={"Pay"} location={'/pay'}/>
+            <AppHelmet title={"Pay"} location={'/pay'} />
             <div className="wrapper">
                 <h2>select payment method</h2>
                 <form className="method">
                     <fieldset>
-                        <input name="payment-method" type="radio" value={"mpesa"} id="mpesa" checked={paymentType === "mpesa"}   onChange={(e) => setPaymentType(e.target.value)}/>
+                        <input name="payment-method" type="radio" value={"mpesa"} id="mpesa" checked={paymentType === "mpesa"} onChange={(e) => setPaymentType(e.target.value)} />
                         <label htmlFor="mpesa">mpesa</label>
                     </fieldset>
                     <fieldset>
-                        <input name="payment-method" type="radio" value={"card"} id="card" checked={paymentType === "card"}   onChange={(e) => setPaymentType(e.target.value)}/>
-                        <label htmlFor="card">credit card</label>
-                    </fieldset>
-                    <fieldset>
-                        <input name="payment-method" type="radio" value={"crypto"} id="crypto" checked={paymentType === "crypto"}  onChange={(e) => setPaymentType(e.target.value)}/>
+                        <input name="payment-method" type="radio" value={"crypto"} id="crypto" checked={paymentType === "crypto"} onChange={(e) => setPaymentType(e.target.value)} />
                         <label htmlFor="crypto">crypto</label>
                     </fieldset>
                     {/*<fieldset>
