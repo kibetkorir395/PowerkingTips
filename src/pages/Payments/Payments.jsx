@@ -2,8 +2,6 @@ import { useState } from "react";
 import CryptoPayments from "./CryptoPayments";
 import './Payments.scss'
 import AppHelmet from "../../components/AppHelmet";
-//import Ticket from "./Ticket";
-import CardPayment from "./CardPayment";
 import PaystackPayments from "./PaystackPayments";
 export default function Payments({ setUserData }) {
     const [paymentType, setPaymentType] = useState("mpesa")
@@ -13,9 +11,6 @@ export default function Payments({ setUserData }) {
             case "crypto":
                 item = <CryptoPayments setUserData={setUserData} />
                 break;
-            /*case "paypal":
-                item = <PaypalPayment />
-              break;*/
             default:
                 item = <PaystackPayments setUserData={setUserData} />
         }

@@ -57,11 +57,11 @@ export const socialLinks = {
     facebookPage: "https://www.facebook.com/profile.php?id=61569974256919&mibextid=ZbWKwL",
     xPage: "https://www.x.com/@powerking_tips",
     instagramPage: "https://instagram.com/goalgenius.vip",
-    affliateLink: "https://spin-to-win.powerkingtips.com/",
+    affliateLink: "https://spin-to-win.myfootballtips.com/",
     promotion: "https://refpa7921972.top/L?tag=d_3966788m_1573c_&site=3966788&ad=1573"
 }
 
-/*export const testimonials = [
+export const testimonials = [
     {
         text: 'This site has been a game-changer for me! The VIP predictions are spot on, and I’ve seen my winnings improve dramatically.',
         name: 'Kariuki',
@@ -134,53 +134,5 @@ export const socialLinks = {
         text: "The results speak for themselves—ever since I started using this site, my betting accuracy has improved significantly. A+ service!",
         name: 'Gabriel',
         country: 'Luxembourg'
-    }
-]*/
-
-export const testimonials = [
-    {
-        text: 'The VIP predictions are spot on, and I’ve seen my winnings improve dramatically.',
-        name: 'Kariuki',
-        country: 'Kenya'
-    },
-    {
-        text: 'I love how detailed the analysis is.',
-        name: 'Conor',
-        country: 'Ireland'
-    },
-    {
-        text: 'The predictions are spot on! I won big!',
-        name: 'Theodore',
-        country: 'Australia'
-    },
-    {
-        text: 'I appreciate the range of payment options—it makes subscribing so much easier.',
-        name: 'Alejandro',
-        country: 'Colombia'
-    },
-    {
-        text: "I can't believe  how accuarate this tips are!",
-        name: 'José',
-        country: 'Mexico'
-    },
-    {
-        text: "It's definitely improved my betting strategy.",
-        name: 'Melokuhle',
-        country: 'South Africa'
-    },
-    {
-        text: 'I was skeptical, but now I am a believer.',
-        name: 'Acheampong',
-        country: 'Ghana'
-    },
-    {
-        text: "Winning feels great, thanks to these predictions!",
-        name: 'Archie',
-        country: 'England'
-    },
-    {
-        text: "I tell all my friends about this site",
-        name: 'Carl',
-        country: 'Sweden'
     }
 ]

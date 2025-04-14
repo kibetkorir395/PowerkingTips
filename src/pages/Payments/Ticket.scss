@@ -26,11 +26,11 @@
     grid-gap: 1rem;
     padding: 5px 5px;
     background: var(--transparent);
-    
+
     @media(min-width: 400px){
       grid-template-columns: repeat(2, 1fr);
     }
-    
+
     @media(min-width: 900px){
      grid-template-columns: repeat(4, 1fr);
     }
@@ -41,7 +41,7 @@
         position: relative;
         display: flex;
         justify-content: space-between;
-        
+
         @media(min-width: 1300px){
           margin-top: 0;
         }
@@ -58,11 +58,11 @@
             position: relative;
             z-index: 1;
           }
-          
+
           label:hover{
             background: #D8D8D8;
           }
-          
+
           input[type="radio"]{
             visibility: hidden;
             position: absolute;
@@ -81,10 +81,10 @@
             transition: all 200ms ease-in-out;
             font-size: 1.5rem;
           }
-          
+
           input[type="radio"]:checked{
             ~ label{
-              background: #56b056;
+              background: var(--dark-blue);
               color: var(--lite);
               box-shadow: 0 0.2em 0.45em 0.1em rgba(0,0,0, 0.4);
               transform: scale(1.05);
@@ -93,16 +93,16 @@
               position: relative;
               z-index: 5;
             }
-            
+
             ~ .price{
               top: -1rem;
               transition: all 200ms ease-in-out;
               z-index: 5;
             }
-          } 
+          }
     }
   }
-  
+
   .paypal-wrapper{
     width: 100%;
     display: flex;
@@ -121,4 +121,3 @@
     }
   }
 }
-  

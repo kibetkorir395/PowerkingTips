@@ -7,17 +7,17 @@ import Loader from '../components/Loader/Loader';
 export default function ListUsers() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [isAdmin, setIsAdmin] = useState(null);
 
   useEffect(() => {
-    if(currentUser !== null){
-        if(currentUser.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'charleykibet254@gmail.com') {
-            setIsAdmin(true)
-        } else {
-            setIsAdmin(false)
-            window.history.back()
-        }
+    if (currentUser !== null) {
+      if (currentUser.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'arovanzgamez@gmail.com') {
+        setIsAdmin(true)
+      } else {
+        setIsAdmin(false)
+        window.history.back()
+      }
     }
   }, [currentUser])
 
@@ -25,13 +25,13 @@ export default function ListUsers() {
     window.scrollTo(0, 0)
   });
 
-  const [isOnline] = useState(() =>{
+  const [isOnline] = useState(() => {
     return navigator.onLine
   })
 
 
-  useEffect(() =>{
-    if(isAdmin) {
+  useEffect(() => {
+    if (isAdmin) {
       getAllusers(setUsers, setLoading);
     }
   }, [isOnline, isAdmin]);
@@ -51,7 +51,7 @@ export default function ListUsers() {
 
       {
         users.length > 0 && users.map(user => {
-          return <UserCard key={user.email} user={user}/>
+          return <UserCard key={user.email} user={user} />
         })
       }
     </div>

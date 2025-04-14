@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import PostDetail from '../components/PostDetails/PostDetails';
-import {Error, NetworkWifi1Bar, Verified} from '@mui/icons-material';
-import {NavLink} from 'react-router-dom';
-import {getTips} from '../firebase';
+import { Error, NetworkWifi1Bar, Verified } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
+import { getTips } from '../firebase';
 import Loader from '../components/Loader/Loader';
 import AppHelmet from '../components/AppHelmet';
 
-export default function Tips({userData}) {
+export default function Tips({ userData }) {
   const [loading, setLoading] = useState(true);
   const [tips, setTips] = useState([]);
   const [days, setDays] = useState(null);
@@ -28,7 +28,7 @@ export default function Tips({userData}) {
   }
 
   useEffect(() => {
-    if(userData !== null){
+    if (userData !== null) {
       setIsPremium(userData.isPremium)
     }
   }, [userData])
@@ -37,12 +37,12 @@ export default function Tips({userData}) {
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   });
-  const [isOnline] = useState(() =>{
+  const [isOnline] = useState(() => {
     return navigator.onLine
   })
 
 
-  useEffect(() =>{
+  useEffect(() => {
     getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
   }, [isOnline, tipsPerPage, currentDate]);
 
@@ -60,9 +60,9 @@ export default function Tips({userData}) {
     days && setCurrentDate(days[days.length - 1])
   }, [days]);
 
-  useEffect(() =>{
-    if(tips.length > 0){
-      setActive(tips.filter((tip) => (category==='free') ? (tip.premium === false) : (tip.premium === true))[0])
+  useEffect(() => {
+    if (tips.length > 0) {
+      setActive(tips.filter((tip) => (category === 'free') ? (tip.premium === false) : (tip.premium === true))[0])
     }
   }, [tips]);
 
@@ -82,28 +82,28 @@ export default function Tips({userData}) {
     let day = d.getDay();
     let dateWeek = d.getDate()
     let dayWeek;
-    switch(day){
+    switch (day) {
       case 0:
         dayWeek = "Sunday";
-      break;
+        break;
       case 1:
         dayWeek = "Monday";
-      break;
+        break;
       case 2:
         dayWeek = "Tuesday";
-      break;
+        break;
       case 3:
         dayWeek = "Wednesday";
-      break;
+        break;
       case 4:
         dayWeek = "Thursday";
-      break;
+        break;
       case 5:
         dayWeek = "Friday";
-      break;
+        break;
       case 6:
         dayWeek = "Saturday";
-      break;
+        break;
       default:
         dayWeek = "Saturday";
     }
@@ -118,16 +118,16 @@ export default function Tips({userData}) {
 
   return (
     <div className="tips">
-      <AppHelmet title={"Powerking Tips"} location={'/tips'}/>
+      <AppHelmet title={"Myfootball Tips"} location={'/tips'} />
       <div className='container'>
-      <div className="filter-wrapper">
-        <p>{formattedDate}</p>
-        <select onChange={(e) => setCategory(e.target.value)} value={category}>
+        <div className="filter-wrapper">
+          <p>{formattedDate}</p>
+          <select onChange={(e) => setCategory(e.target.value)} value={category}>
             <option value="free" >Free</option>
             <option value="premium">Premium</option>
-        </select>
-      </div>
-      <div className="filter">
+          </select>
+        </div>
+        <div className="filter">
           {
             days && days.map((day) => {
               return <button className={`btn-filter ${(currentDate === day) && 'active'}`} onClick={() => setCurrentDate(day)} key={days.indexOf(day)} aria-label={day}>
@@ -138,41 +138,43 @@ export default function Tips({userData}) {
           }
         </div>
 
-      <table className='tips-table'>
-        <tr>
-          <th>TIME</th>
-          <th>HOME</th>
-          <th>AWAY</th>
-          <th>TIP</th>
-          <th>ODDS</th>
-          <th>RESULTS</th>
-        </tr>
-        {
-          (tips.length > 0) && tips.filter((tip) => (category==='free') ? (tip.premium === false) : (tip.premium === true)).map(tip => {
-            return (<tr key={tip.id} onClick={() => handleClick(tip)} >
-                      <td>
-                        {tip.time}
-                      </td>
-                      <td style={{
-                           color: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && 'transparent',
-                           textShadow: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && '0 0 5px rgba(0,0,0,.2)'}}>{tip.home}</td>
-                      <td style={{
-                           color: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && 'transparent',
-                           textShadow: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && '0 0 5px rgba(0,0,0,0.2)'}}>{tip.away}</td>
-                      <td>{tip.pick}</td>
-                      <td>{tip.odd}</td>
-                      <td>{tip.won === 'won' ? <span className='won'><p>Won</p> <Verified className='icon'/></span>  : tip.status === "pending" ? <span>?-?</span> : <span className='lost'><p>Lost</p> <Error className='icon'/></span>}</td>
-                    </tr>)
-          })
-        }
+        <table className='tips-table'>
+          <tr>
+            <th>TIME</th>
+            <th>HOME</th>
+            <th>AWAY</th>
+            <th>TIP</th>
+            <th>ODDS</th>
+            <th>RESULTS</th>
+          </tr>
+          {
+            (tips.length > 0) && tips.filter((tip) => (category === 'free') ? (tip.premium === false) : (tip.premium === true)).map(tip => {
+              return (<tr key={tip.id} onClick={() => handleClick(tip)} >
+                <td>
+                  {tip.time}
+                </td>
+                <td style={{
+                  color: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && 'transparent',
+                  textShadow: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && '0 0 5px rgba(0,0,0,.2)'
+                }}>{tip.home}</td>
+                <td style={{
+                  color: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && 'transparent',
+                  textShadow: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && '0 0 5px rgba(0,0,0,0.2)'
+                }}>{tip.away}</td>
+                <td>{tip.pick}</td>
+                <td>{tip.odd}</td>
+                <td>{tip.won === 'won' ? <span className='won'><p>Won</p> <Verified className='icon' /></span> : tip.status === "pending" ? <span>?-?</span> : <span className='lost'><p>Lost</p> <Error className='icon' /></span>}</td>
+              </tr>)
+            })
+          }
 
-      </table>
-      <div className="wrapper">
+        </table>
+        <div className="wrapper">
           {
             (!isOnline && (tips.length === 0) && !loading) && <div className='no-network'>
               <h1>Nothing Yet!</h1>
               <p>This could be a network issue. Check you internet and try again.</p>
-              <NetworkWifi1Bar className='wifi'/>
+              <NetworkWifi1Bar className='wifi' />
               <NavLink className="btn" onClick={handleReload}>Reload</NavLink>
             </div>
           }
@@ -180,12 +182,12 @@ export default function Tips({userData}) {
           {
             ((!tips.length > 0) && loading) && <Loader />
           }
+        </div>
       </div>
-    </div>
 
-    {
-      active && <PostDetail data={active} userData={userData}/>
-    }
+      {
+        active && <PostDetail data={active} userData={userData} />
+      }
     </div>
   )
 }

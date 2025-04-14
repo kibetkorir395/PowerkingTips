@@ -13,7 +13,7 @@ export default function Flyer() {
   })
 
   useEffect(() => {
-    getWonTips(10, setTips);
+    getWonTips(12, setTips);
   }, [isOnline]);
 
 
@@ -26,8 +26,8 @@ export default function Flyer() {
 
   return (
     <div className='flyer'>
-      <h1 className='title'>Expert Football Predictions!</h1>
-      <h2 className='title'>Unlock the secret of winning high today!</h2>
+      <h1 className='title'>Expert Football Tips!</h1>
+      <h2 className='title'>Join Us and Win high today!</h2>
       <NavLink to={'pay'} className='btn' onClick={() => setPrice(3000)}>GET STARTED</NavLink>
       <div className="scroll">
         <div className="scroll-track">

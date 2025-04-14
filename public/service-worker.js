@@ -1,9 +1,9 @@
-const CACHE_NAME = 'powerkingtips-cache';
+const CACHE_NAME = 'myfootballtips-cache';
 const urlsToCache = [
     '/',
     '/index.html',
     '/manifest.json',
-    '/logo512.png', 
+    '/logo512.png',
     '*'
 ];
 
@@ -12,7 +12,7 @@ window.self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 return cache.addAll(urlsToCache)
-                .then(() => window.self.skipWaiting());
+                    .then(() => window.self.skipWaiting());
             })
     );
 });
@@ -22,11 +22,11 @@ window.self.addEventListener('activate', event => {
 })
 
 window.self.addEventListener('fetch', (event) => {
-    if(navigator.onLine){
+    if (navigator.onLine) {
         var fetchRequest = event.request.clone();
         return fetch(fetchRequest).then(
             function (response) {
-                if(!response || response.status !== 200 || response.type !== 'basic') {
+                if (!response || response.status !== 200 || response.type !== 'basic') {
                     return response;
                 }
                 var responseToCache = response.clone();
@@ -39,7 +39,7 @@ window.self.addEventListener('fetch', (event) => {
     } else {
         event.respondWith(
             caches.match(event.request).then(response => {
-                if(response) {
+                if (response) {
                     return response;
                 }
             })

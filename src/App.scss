@@ -2,19 +2,19 @@
     --lite: #fff;;
     --black: #000000;
     --dark: #3b3b3b;
-    --light-blue: #d0ffc4;
-    --neon-blue: #0FFF50;
-    --dark-blue: #007a37;//#007A37;//#0067b8
-    --blue: #00ae58;//#00B140;#2ecc71
-    --grey: #7288a2;//#8198ae//7a7979//#4d5974
+    --light-blue: #d6f0ff;
+    --neon-blue: #04d9ff;
+    --dark-blue: #1f83bd;
+    --blue: #38b6ff;
+    --grey: #7288a2;
     --light-grey: #ccc;
     --dark-shadow: 0px 5px 3px -4px var(--dark);
     --shadow: 0px 1px 2px -1px var(--dark),0px 1px 2px -1px var(--blue);
-    --transparent:#00000008;
-    --hue: #00ae58;
+    --transparent: rgba(0, 0, 0, .03);
+    --hue: #38b6ff;
     --bg: hsl(var(--hue),90%,95%);
     --fg: hsl(var(--hue),90%,5%);
-    --odd: #6ac147;
+    --odd: #38b6ff;
     --even: #f04f30;
   }
 
@@ -23,6 +23,7 @@
     padding: 0;
     box-sizing: border-box;
     font: 17px "Montserrat", sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   .App{
@@ -32,7 +33,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-top: 90px;
+      margin-top: 60px;
       color: var(--dark);
 
       h1{
@@ -102,7 +103,7 @@
 
     .btn{
       background: var(--blue);
-      border-radius: 30px;
+      border-radius: 5px;
       padding: 8px 20px;
       color: var(--lite);
       transition: all 0.2s;

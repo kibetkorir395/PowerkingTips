@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { getAllTips, getNews } from '../firebase';
+import { getAllTips } from '../firebase';
 import AppHelmet from '../components/AppHelmet';
 import Flyer from '../components/Flyer/Flyer';
-import Slider from '../components/Slider/Slider';
 import { NavLink } from 'react-router-dom';
 import Testimonials from '../components/Testimonials/Testimonials';
 import { PriceContext } from '../PriceContext';
@@ -10,7 +9,6 @@ import { Error, Verified } from '@mui/icons-material';
 import Pricing from '../components/Pricing/Pricing';
 
 export default function Home() {
-  const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allTips, setAllTips] = useState(null);
   const [filteredTips, setFilteredTips] = useState(null);
@@ -23,7 +21,6 @@ export default function Home() {
 
 
   useEffect(() => {
-    getNews(6, "all", setNews, setLoading);
     getAllTips(setAllTips, setLoading)
   }, [isOnline]);
 
@@ -69,12 +66,11 @@ export default function Home() {
       </section>
       <section>
         <h1>Pricing</h1>
-        <h2>Find a plan that's right for you.</h2>
         <Pricing />
       </section>
       <section className='tables'>
         {
-          filteredTips && <>
+          filteredTips && filteredTips.length > 0 && <>
             <h1>WINNING HISTORY</h1>
             <span className='btn-holder'>
               <div className={`btn ${!status && "selected"}`} onClick={() => setStatus(false)}>Free</div>
@@ -132,45 +128,7 @@ export default function Home() {
           })
         }
       </section>
-      {/*<section className='tables'>
-      {
-        allTips && <h2>WINNING HISTORY</h2>
-      }
 
-      <span className='btn-holder'>
-        <div className={`btn ${!status && "selected"}`} onClick={() => setStatus(false)}>Free</div>
-        <div className={`btn ${status && "selected"}`} onClick={() => setStatus(true)}>Premium</div>
-        <NavLink to={"/tips"} className='btn'>VIP TIPS&raquo;</NavLink>
-      </span>
-
-      {
-        allTips &&(
-        <table className='wrapper'>
-          <tr>
-            <th>DATE</th>
-            <th>HOME</th>
-            <th>AWAY</th>
-            <th>PICK</th>
-            <th>ODDS</th>
-            <th>RESULTS</th>
-          </tr>
-
-          {
-             allTips.filter((tip) => (tip.status === 'finished') && (tip.premium === status)).map(tip => {
-              return (<tr key={allTips.indexOf(tip)}>
-                        <td>{tip.date}</td>
-                        <td>{tip.home}</td>
-                        <td>{tip.away}</td>
-                        <td>{tip.pick}</td>
-                        <td>{tip.odd}</td>
-                        <td>{tip.won === 'won' ? <span className='won'><p>Won</p> <Verified className='icon'/></span>  : <span className='lost'><p>Lost</p> <Error className='icon'/></span>}</td>
-                      </tr>)
-            })
-          }
-
-        </table>)
-      }
-      </section>*/}
       <section>
         <h1>Testimonials</h1>
         <h2>What clients say:</h2>
@@ -183,10 +141,6 @@ export default function Home() {
           <NavLink to={"/pay"} className='btn' onClick={() => setPrice(3000)}>Subscribe Now</NavLink>
         </div>
       </section>
-      <section>
-        {news.length && <><h1>ARTICLES</h1><h2>Trending Posts</h2></>}
-        {news.length && <Slider data={news} />}
-      </section>
-    </div>
+    </div >
   )
 }

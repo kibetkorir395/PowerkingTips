@@ -1,8 +1,8 @@
 {
-  "name": "powerkingtips",
+  "name": "myfootballtips",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://powerkingtips.com/",
+  "homepage": "https://myfootballtips.com/",
   "proxy": "*",
   "type": "module",
   "scripts": {

@@ -1,253 +1,85 @@
-.footer{
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+
+  .social {
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--black);
+    padding: 5px 0;
+    flex-wrap: wrap;
 
-    > a{
-      border: 1px dashed var(--blue);
-      padding: 5px;
-      margin: 5px 5px;
-      width: 100%;
-      max-width: 600px;
-      img{
-        width: 100%;
-        max-width: 600px;
-        height: auto;
-        max-height: 250px;
-      }
-    }
-    .social{
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        .wrapper{
-            min-width: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-            @media screen and (max-width: 480px){
-              &{
-                  min-width: 100%;
-              }
-            }
-            a{
-                color: var(--dark);
+    .wrapper {
+      min-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
 
-                position: relative;
-                border-radius: 50%;
-                padding: 5px;
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                background: var(--grey);
-                color: var(--lite);
-                cursor: pointer;
-                *{
-                    font-size: 18px;
-                }
-
-                .tooltip {
-                  position: absolute;
-                  top: -30px;
-                  font-size: 14px;
-                  color: var(--lite);
-                  background: inherit;
-                  padding: 5px 8px;
-                  border-radius: 4px;
-                  opacity: 0;
-                  pointer-events: none;
-                  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                  &::before {
-                    position: absolute;
-                    content: "";
-                    height: 4px;
-                    width: 4px;
-                    background: var(--lite);
-                    bottom: -3px;
-                    left: 50%;
-                    transform: translate(-50%) rotate(45deg);
-                    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                  }
-                }
-            }
-            .facebook{
-              &:hover{
-                background: #3b5999;
-                .tooltip{
-                  background: #3b5999;
-                  opacity: 1;
-                  &::before{
-                    background: #3b5999;
-                    color: var(--lite);
-                  }
-                }
-              }
-            }
-
-            .telegram{
-              &:hover{
-                background: #46c1f6;
-                .tooltip{
-                  background: #46c1f6;
-                  opacity: 1;
-                  &::before{
-                    background: #46c1f6;
-                    color: var(--lite);
-                  }
-                }
-              }
-            }
-
-            .instagram{
-              &:hover{
-                background: #e1306c;
-                .tooltip{
-                  background: #e1306c;
-                  opacity: 1;
-                  &::before{
-                    background: #e1306c;
-                    color: var(--lite);
-                  }
-                }
-              }
-            }
-
-            .x{
-              &:hover{
-                background: #333333;
-                .tooltip{
-                  background: #333333;
-                  opacity: 1;
-                  &::before{
-                    background: #333333;
-                    color: var(--lite);
-                  }
-                }
-              }
-            }
-
-            .whatsapp:hover{
-              &:hover{
-              background: #25D366;
-                .tooltip{
-                  background: #25D366;
-                  opacity: 1;
-                  &::before{
-                    background: #25D366;
-                    color: var(--lite);
-                  }
-                }
-              }
-            }
-        }
-    }
-    >.wrapper{
-        width: 100%;
-        height: max-content;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
-        gap: 5px;
-        .sections{
-          width: 100%;
-          display: flex;
-          align-items: start;
-          justify-content: space-between;
-          gap: 5px;
-          flex: 2;
-          width: calc((100% / 3) - 50px);
-          min-width: 290px;
-          padding: 10px 10px;
-              section{
-                width: 100%;
-                flex: 1;
-                min-width: 150px;
-                h3{
-                  font-weight: 500;
-                  font-size: 17px;
-                  text-align: start;
-                }
-                .container{
-                  width: 100%;
-                  display: flex;
-                  align-items: start;
-                  flex-direction: column;
-                  gap: 5px;
-                  a{
-                    width: 100%;
-                    text-align: start;
-                    text-decoration: none;
-                    font-size: 17px;
-                    cursor: pointer;
-                    color: var(--light-grey);
-                    &:hover{
-                      color: var(--dark-grey);
-                    }
-                  }
-                }
-          }
-
-        }
-      }
-
-    hr{
-        width: 80%;
+      a {
         color: var(--dark);
-        border-radius: 50%;
-        margin: 10px 0px;
+        cursor: pointer;
+
+        * {
+          font-size: 24px;
+        }
+      }
     }
 
-    .footer-bottom{
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        padding: 5px 0;
 
-        @media screen and (max-width: 480px){
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+  }
 
-        p{
-            font-size: 14px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-        }
+  hr {
+    width: 80%;
+    color: var(--dark);
+    border-radius: 50%;
+    margin: 20px 0px;
+  }
 
-        a{
-            color: var(--dark);
-            font-size: 14px;
-            cursor: pointer;
-        }
+  .footer-bottom {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 
-        .btn-top{
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            outline: none;
-            border: 1px solid var(--dark-blue);
-            background: transparent;
-            border-radius: 5px;
-            z-index: 1000;
-            transition: all 0.4s ease-in-out;
-            color: var(--lite);
-
-            &:hover{
-              background: var(--blue);
-            }
-        }
+    //@media screen and (max-width: 478px) {
+    @media screen and (max-width: 480px) {
+      flex-wrap: wrap;
+      gap: 10px;
     }
+
+    p {
+      font-size: 14px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
+    a {
+      color: var(--dark);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-top {
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+      outline: none;
+      border: 1px solid var(--dark-blue);
+      background-color: transparent;
+      border-radius: 5px;
+      z-index: 1000;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .btn-top:hover {
+      background-color: var(--green);
+    }
+  }
 }

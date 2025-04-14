@@ -1,7 +1,7 @@
 {
-  "short_name": "POWERKING TIPS",
-  "name": "POWERKING TIPS",
-  "homepage": "https://powerkingtips.com",
+  "short_name": "Myfootball Tips",
+  "name": "Myfootball Tips",
+  "homepage": "https://myfootballtips.com",
   "version": "0.1.0",
   "description": "Get all the latest ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world.",
   "icons": [
@@ -106,19 +106,36 @@
     "type": "classic"
   },
   "developer": {
-    "name": "powerkingtips",
-    "url": "https://powerkingtips.com"
+    "name": "myfootballtips",
+    "url": "https://myfootballtips.com"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/kkibe/powerking-tips"
   },
-
   "license": "ISC/MIT",
   "keywords": [
-    "Football Predictions", "Betting Odds", "Live Scores", "Betika", "Sportpesa", "365Bet",
-    "Live Sports", "Football Results", "Football Fixtures", "Football Today", "Online Betting", "Sports", "Odibets",
-    "Premier League", "Championship", "Super Sports", "Laliga", "Bundesliga", "Serie A", "Live Bet", "Casino"
+    "Football Predictions",
+    "Betting Odds",
+    "Live Scores",
+    "Betika",
+    "Sportpesa",
+    "365Bet",
+    "Live Sports",
+    "Football Results",
+    "Football Fixtures",
+    "Football Today",
+    "Online Betting",
+    "Sports",
+    "Odibets",
+    "Premier League",
+    "Championship",
+    "Super Sports",
+    "Laliga",
+    "Bundesliga",
+    "Serie A",
+    "Live Bet",
+    "Casino"
   ],
   "dir": "ltr",
   "lang": "en",
@@ -128,11 +145,20 @@
   "theme_color": "#00ae58",
   "background_color": "#ebf4fc",
   "orientation": "portrait",
-  "categories": ["Utilities", "Sports", "Betting", "Productivity", "Social", "News", "Tools", "Gambling"],
+  "categories": [
+    "Utilities",
+    "Sports",
+    "Betting",
+    "Productivity",
+    "Social",
+    "News",
+    "Tools",
+    "Gambling"
+  ],
   "related_applications": [
     {
       "platform": "play",
-      "id": "com.powerking", 
+      "id": "com.powerking",
       "url": "https://play.google.com/store/apps/details?id=com.powerking"
     },
     {
