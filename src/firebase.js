@@ -3,13 +3,14 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, limit, query, updateDoc, where, orderBy, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA_Z8QqRxIFNKM_EQibqx5rH22icKefGy4",
-  authDomain: "myfootballtips-de149.firebaseapp.com",
-  projectId: "myfootballtips-de149",
-  storageBucket: "myfootballtips-de149.firebasestorage.app",
-  messagingSenderId: "758162443258",
-  appId: "1:758162443258:web:9b981990779020cda0f243",
-  measurementId: "G-L24VM8Q3KS"
+  apiKey: "AIzaSyANFhP14_BJOaImr50PiFoychlbR88JeXU",
+  authDomain: "powerking-betting-tips.firebaseapp.com",
+  databaseURL: "https://powerking-betting-tips-default-rtdb.firebaseio.com",
+  projectId: "powerking-betting-tips",
+  storageBucket: "powerking-betting-tips.appspot.com",
+  messagingSenderId: "617291483997",
+  appId: "1:617291483997:web:e3114cc5c5fa03d9d7b6b4",
+  measurementId: "G-57VGM61EY8"
 };
 
 const app = initializeApp(firebaseConfig);
