@@ -32,7 +32,7 @@ export default function EditTip() {
         e.preventDefault()
         //const d = new Date(time)
         //let date = d.toLocaleString().split(',')[0]
-        updateTip(data.id, {home, away, odd, pick, status, won, premium, results}, setError, setLoading, setData);
+        updateTip(data.id, {home, away, odd, pick.toUpperCase(), status.toLowerCase(), won.toLowerCase(), premium, results}, setError, setLoading, setData);
     }
 
     useEffect(() => {
