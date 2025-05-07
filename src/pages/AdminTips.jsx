@@ -31,7 +31,7 @@ export default function AdminTips() {
             minute: '2-digit',
             hour12: false,
         });
-        addTip({ home, away, date, odd, pick..toUpperCase(), status.toLowerCase(), time: timeOnly, won.toLowerCase(), premium, results }, setError, setLoading);
+        addTip({ home, away, date, odd, pick, status, time: timeOnly, won, premium, results }, setError, setLoading);
     }
 
     useEffect(() => {
@@ -63,11 +63,11 @@ export default function AdminTips() {
                 </div>
                 <div className="input-container">
                     <label htmlFor="pick">Pick</label>
-                    <input type="text" placeholder='pick' id='pick' value={pick} onChange={(e) => setPick(e.target.value)} required />
+                    <input type="text" placeholder='pick' id='pick' value={pick} onChange={(e) => setPick(e.target.value.toUpperCase())} required />
                 </div>
                 <div className="input-container">
                     <label htmlFor="status">Status: </label>
-                    <input type="text" placeholder='finished/pending/live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required />
+                    <input type="text" placeholder='finished/pending/live' id='status' value={status} onChange={(e) => setStatus(e.target.value.toLowerCase())} required />
                 </div>
                 <div className="input-container">
                     <label htmlFor="time">Date/Time: </label>
@@ -79,7 +79,7 @@ export default function AdminTips() {
                 </div>
                 <div className="input-container">
                     <label htmlFor="won">Is won</label>
-                    <input type="text" placeholder='won/pending/lost' id='won' value={won} onChange={(e) => setWon(e.target.value)} required />
+                    <input type="text" placeholder='won/pending/lost' id='won' value={won} onChange={(e) => setWon(e.target.value.toLowerCase())} required />
                 </div>
                 <div className="input-container">
                     <label htmlFor="premium">Is premium</label>
