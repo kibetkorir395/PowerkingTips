@@ -32,7 +32,7 @@ export default function EditTip() {
         e.preventDefault()
         //const d = new Date(time)
         //let date = d.toLocaleString().split(',')[0]
-        updateTip(data.id, {home, away, odd, pick.toUpperCase(), status.toLowerCase(), won.toLowerCase(), premium, results}, setError, setLoading, setData);
+        updateTip(data.id, {home, away, odd, pick, status, won, premium, results}, setError, setLoading, setData);
     }
 
     useEffect(() => {
@@ -97,11 +97,11 @@ const formatDateTimeForInput = (date, time) => {
             </div>
             <div className="input-container">
                 <label htmlFor="pick">Pick</label>
-                <input type="text" placeholder='pick' id='pick' value={pick} onChange={(e) => setPick(e.target.value)} required/>
+                <input type="text" placeholder='pick' id='pick' value={pick} onChange={(e) => setPick(e.target.value.toUpperCase())} required/>
             </div>
             <div className="input-container">
                 <label htmlFor="status">Status: </label>
-                <input type="text" placeholder='Finish/Pending/Live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required/>
+                <input type="text" placeholder='Finish/Pending/Live' id='status' value={status} onChange={(e) => setStatus(e.target.value.toLowerCase())} required/>
             </div>
             {/*<div className="input-container">
                 <label htmlFor="time">Date/Time: </label>
@@ -113,7 +113,7 @@ const formatDateTimeForInput = (date, time) => {
             </div>
             <div className="input-container">
                 <label htmlFor="won">Is won</label>
-                <input type="text" placeholder='won/pending/lost' id='won' value={won} onChange={(e) => setWon(e.target.value)} required/>
+                <input type="text" placeholder='won/pending/lost' id='won' value={won} onChange={(e) => setWon(e.target.value.toLowerCase())} required/>
             </div>
             <div className="input-container">
                 <label htmlFor="premium">Is premium</label>
