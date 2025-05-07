@@ -21,7 +21,11 @@ export default function PostDetail({ data, userData }) {
 
   useEffect(() => {
     if (userData !== null) {
-      setIsPremium(userData.isPremium)
+      if (userData.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'arovanzgamez@gmail.com') {
+         setIsPremium(true)
+      } else {
+        setIsPremium(userData.isPremium)
+      }
     }
   }, [userData])
 
@@ -30,6 +34,7 @@ export default function PostDetail({ data, userData }) {
     if (currentUser !== null) {
       if (currentUser.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'arovanzgamez@gmail.com') {
         setIsAdmin(true)
+        setIsPremium(true)
       } else {
         setIsAdmin(false)
       }
