@@ -31,7 +31,7 @@ export default function AdminTips() {
             minute: '2-digit',
             hour12: false,
         });
-        addTip({ home, away, date, odd, pick.toLowerCase(), status.toLowerCase(), time: timeOnly, won.toLowerCase(), premium, results }, setError, setLoading);
+        addTip({ home, away, date, odd, pick..toUpperCase(), status.toLowerCase(), time: timeOnly, won.toLowerCase(), premium, results }, setError, setLoading);
     }
 
     useEffect(() => {
