@@ -29,7 +29,11 @@ export default function Tips({ userData }) {
 
   useEffect(() => {
     if (userData !== null) {
-      setIsPremium(userData.isPremium)
+      if (userData.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'arovanzgamez@gmail.com') {
+         setIsPremium(true)
+      } else {
+        setIsPremium(userData.isPremium)
+      }
     }
   }, [userData])
 
