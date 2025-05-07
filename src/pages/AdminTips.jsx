@@ -67,7 +67,7 @@ export default function AdminTips() {
                 </div>
                 <div className="input-container">
                     <label htmlFor="status">Status: </label>
-                    <input type="text" placeholder='Finish/Pending/Live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required />
+                    <input type="text" placeholder='finished/pending/live' id='status' value={status} onChange={(e) => setStatus(e.target.value.toLowerCase())} required />
                 </div>
                 <div className="input-container">
                     <label htmlFor="time">Date/Time: </label>
