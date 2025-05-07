@@ -31,7 +31,7 @@ export default function AdminTips() {
             minute: '2-digit',
             hour12: false,
         });
-        addTip({ home, away, date, odd, pick, status, time: timeOnly, won, premium, results }, setError, setLoading);
+        addTip({ home, away, date, odd, pick.toLowerCase(), status.toLowerCase(), time: timeOnly, won.toLowerCase(), premium, results }, setError, setLoading);
     }
 
     useEffect(() => {
@@ -67,7 +67,7 @@ export default function AdminTips() {
                 </div>
                 <div className="input-container">
                     <label htmlFor="status">Status: </label>
-                    <input type="text" placeholder='finished/pending/live' id='status' value={status} onChange={(e) => setStatus(e.target.value.toLowerCase())} required />
+                    <input type="text" placeholder='finished/pending/live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required />
                 </div>
                 <div className="input-container">
                     <label htmlFor="time">Date/Time: </label>
