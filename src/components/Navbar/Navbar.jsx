@@ -4,11 +4,19 @@ import './Navbar.scss';
 import { NavLink } from "react-router-dom";
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 const Navbar1 = () => {
     const { currentUser } = useContext(AuthContext);
-    const handleLogout = () => {
-        signOut(auth);
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            console.log("Logged out successfully");
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
     }
 
     return (

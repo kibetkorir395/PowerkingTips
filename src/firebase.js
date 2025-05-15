@@ -106,7 +106,16 @@ export const addContact = async (data, setSuccess, setError) => {
 
 export const addTip = async (data, setError, setLoading) => {
   setLoading(true);
-  const tipsDocRef = doc(db, "tips", data.home.trim() + data.away.trim() + data.date.split("/").join(""));
+  const timestamp = Date.now(); // milliseconds since epoch
+  const customId = (
+    data.home.trim() +
+    data.away.trim() +
+    data.date.split("/").join("") +
+    timestamp
+  ).toLowerCase();
+
+  const tipsDocRef = doc(db, "tips", customId);
+
   await setDoc(tipsDocRef, {
     ...data
   }).then(async (docRef) => {

@@ -3,7 +3,7 @@ User-agent: *
 Disallow:
 
 # Specify the sitemap location
-Sitemap: https://myfootballtips.com/sitemap.xml
+Sitemap: https://mytips.onrender.com/sitemap.xml
 
 # (Optional) Restrict access to certain areas
 Disallow: /admin/

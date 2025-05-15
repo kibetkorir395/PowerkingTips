@@ -2,7 +2,7 @@
   "name": "myfootballtips",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://myfootballtips.com/",
+  "homepage": "https://mytips.onrender.com/",
   "proxy": "*",
   "type": "module",
   "scripts": {
