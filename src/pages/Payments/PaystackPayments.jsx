@@ -4,7 +4,8 @@ import { PriceContext } from '../../PriceContext';
 import AppHelmet from '../../components/AppHelmet';
 import { PaystackButton } from 'react-paystack';
 import { AuthContext } from '../../AuthContext';
-import { getUser, updateUser } from '../../firebase';
+import { db, getUser, updateUser } from '../../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function PaystackPayments({ setUserData }) {
   const { price, setPrice } = useContext(PriceContext)
@@ -13,7 +14,7 @@ export default function PaystackPayments({ setUserData }) {
   const handleUpgrade = async () => {
     try {
       const currentDate = new Date().toISOString();
-      await updateUser(currentUser.email, true, returnPeriod(), currentDate).then(async () => {
+      /*await updateUser(currentUser.email, true, returnPeriod(), currentDate).then(async () => {
         alert('You Have Upgraded To ' + returnPeriod() + " VIP");
       }).then(async () => {
         await getUser(currentUser.email, setUserData);
@@ -21,6 +22,24 @@ export default function PaystackPayments({ setUserData }) {
         //window.location.pathname = '/tips';
       }).catch(() => {
 
+      });*/
+
+      const userDocRef = doc(db, "users", currentUser.email);
+      await setDoc(userDocRef, {
+        email: currentUser.email,
+        username: currentUser.email,
+        isPremium: true,
+        subscription: returnPeriod(),
+        subDate: currentDate
+      }, { merge: true }).then(async (response) => {
+        alert('You Have Upgraded To ' + returnPeriod() + " VIP");
+      }).then(async () => {
+        await getUser(currentUser.email, setUserData);
+      }).then(async () => {
+        window.location.pathname = '/tips';
+      }).catch(async (error) => {
+        const errorMessage = await error.message;
+        alert(errorMessage);
       });
     } catch (error) {
       console.error("Error upgrading user:", error.message);
@@ -44,7 +63,7 @@ export default function PaystackPayments({ setUserData }) {
     reference: (new Date()).getTime().toString(),
     email: currentUser.email,
     amount: price * 100,
-    publicKey: 'pk_test_eb4b77a298b6a2ee40af9598385f8735bac1889c',
+    publicKey: 'pk_live_f36eadef9a97cb84ef23ebec889bfc4e458e3a4a',
     currency: "KES",
     metadata: {
       name: currentUser.email,

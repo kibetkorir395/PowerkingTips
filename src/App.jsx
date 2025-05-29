@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from './AuthContext'
-import { getUser, updateUser } from "./firebase";
+import { db, getUser, updateUser } from "./firebase";
+import { getAuth } from "firebase/auth";
 
 import Navbar from './components/Navbar/Navbar';
 import Loader from './components/Loader/Loader';
@@ -20,6 +21,7 @@ import EditTip from "./pages/EditTip";
 import UserProfile from "./pages/userProfile/UserProfile";
 import ListUsers from "./pages/ListUsers";
 import EditUser from "./pages/EditUser";
+import { doc, getDoc } from "firebase/firestore";
 
 
 function App() {
@@ -37,9 +39,44 @@ function App() {
     }
   }, [loading]);
 
+  /*useEffect(() => {
+    const auth = getAuth();
+    const email = auth.currentUser?.email;
+    if (email) {
+      getUser(email, setUserData);
+    }
+    //currentUser && getUser(currentUser.email, setUserData)
+  }, [currentUser])*/
+
   useEffect(() => {
-    currentUser && getUser(currentUser.email, setUserData)
-  }, [currentUser])
+    const fetchUserDataWithRetry = async () => {
+      const email = currentUser?.email;
+      if (!email) return;
+
+      let retries = 0;
+      while (retries < 5) {
+        const userRef = doc(db, "users", email);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setUserData(userSnap.data());
+          break;
+        }
+
+        retries++;
+        await new Promise((res) => setTimeout(res, 500)); // wait 500ms before retry
+      }
+
+      if (retries === 5) {
+        console.warn("User document still not found after retries");
+      }
+    };
+
+    if (currentUser) {
+      fetchUserDataWithRetry();
+    }
+  }, [currentUser]);
+
 
   useEffect(() => {
     if (userData && userData.isPremium) {

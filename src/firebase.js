@@ -31,18 +31,14 @@ export const signInUser = (email, password, setError) => {
 export const registerUser = (username, email, password, setSuccess, setError) => {
   createUserWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
     const user = userCredential.user;
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-    if (userDoc.exists()) {
-      return setError("The user already exists! Login insted.");
-    }
+    const userDocRef = doc(db, "users", user.email);
     await setDoc(userDocRef, {
-      email: user.uid,
+      email: user.email,
       username: username,
       isPremium: false,
       subscription: null
-    }).then(async (response) => {
-      setSuccess(`User with ${user.uid} has been registered successfully`)
+    }, { merge: true }).then(async (response) => {
+      setSuccess(`User with ${user.email} has been registered successfully`)
     }).catch(async (error) => {
       const errorMessage = await error.message;
       setError(errorMessage);
@@ -72,7 +68,6 @@ export const getUser = async (userId, setUserData) => {
   const userDoc = await getDoc(doc(db, 'users', userId));
   if (userDoc.exists()) {
     setUserData(userDoc.data());
-    console.log(userDoc)
   } else {
     console.error("User not found");
   }
