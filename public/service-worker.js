@@ -1,4 +1,4 @@
-const CACHE_NAME = 'myfootballtips-cache';
+const CACHE_NAME = 'Gurutips-cache';
 const urlsToCache = [
     '/',
     '/index.html',

@@ -30,7 +30,7 @@ export default function Tips({ userData }) {
   useEffect(() => {
     if (userData !== null) {
       if (userData.email === 'kkibetkkoir@gmail.com' || userData.email === 'arovanzgamez@gmail.com') {
-         setIsPremium(true)
+        setIsPremium(true)
       } else {
         setIsPremium(userData.isPremium)
       }
@@ -122,7 +122,7 @@ export default function Tips({ userData }) {
 
   return (
     <div className="tips">
-      <AppHelmet title={"Myfootball Tips"} location={'/tips'} />
+      <AppHelmet title={"Guru Tips"} location={'/tips'} />
       <div className='container'>
         <div className="filter-wrapper">
           <p>{formattedDate}</p>

@@ -13,10 +13,15 @@ export default function PaystackPayments({ setUserData }) {
   const handleUpgrade = async () => {
     try {
       const currentDate = new Date().toISOString();
-      await updateUser(currentUser.email, true, returnPeriod(), currentDate);
-      alert('You Have Upgraded To ' + returnPeriod() + " VIP");
-      await getUser(currentUser.email, setUserData);
-      window.location.pathname = '/tips';
+      await updateUser(currentUser.email, true, returnPeriod(), currentDate).then(async () => {
+        alert('You Have Upgraded To ' + returnPeriod() + " VIP");
+      }).then(async () => {
+        await getUser(currentUser.email, setUserData);
+      }).then(() => {
+        //window.location.pathname = '/tips';
+      }).catch(() => {
+
+      });
     } catch (error) {
       console.error("Error upgrading user:", error.message);
     }
@@ -39,13 +44,14 @@ export default function PaystackPayments({ setUserData }) {
     reference: (new Date()).getTime().toString(),
     email: currentUser.email,
     amount: price * 100,
-    publicKey: 'pk_live_d1d1b5057c1240a906852cd3ffbea3a0a581dc72',
+    publicKey: 'pk_test_eb4b77a298b6a2ee40af9598385f8735bac1889c',
     currency: "KES",
     metadata: {
       name: currentUser.email,
     },
     text: 'Pay Now',
     onSuccess: (response) => {
+      console.log("Payment success response:", response);
       handleUpgrade();
     },
     onClose: () => {

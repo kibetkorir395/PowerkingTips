@@ -31,18 +31,18 @@ export const signInUser = (email, password, setError) => {
 export const registerUser = (username, email, password, setSuccess, setError) => {
   createUserWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
     const user = userCredential.user;
-    const userDocRef = doc(db, "users", user.email);
+    const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
     if (userDoc.exists()) {
       return setError("The user already exists! Login insted.");
     }
     await setDoc(userDocRef, {
-      email: user.email,
+      email: user.uid,
       username: username,
       isPremium: false,
       subscription: null
     }).then(async (response) => {
-      setSuccess(`User with ${user.email} has been registered successfully`)
+      setSuccess(`User with ${user.uid} has been registered successfully`)
     }).catch(async (error) => {
       const errorMessage = await error.message;
       setError(errorMessage);
@@ -55,22 +55,24 @@ export const registerUser = (username, email, password, setSuccess, setError) =>
 }
 
 export const updateUser = async (userId, isPremium, subscription, subDate) => {
-  const usercollref = doc(db, 'users', userId)
-  updateDoc(usercollref, {
-    isPremium,
-    subscription,
-    subDate
-  }).then(response => {
-    //alert("updated")
-  }).catch(error => {
-    //console.log(error.message)
-  })
-}
+  const usercollref = doc(db, 'users', userId);
+  try {
+    await updateDoc(usercollref, {
+      isPremium,
+      subscription,
+      subDate
+    }, { merge: true }); // Will create the doc if it doesn't exist, or update it;
+  } catch (error) {
+    console.error("Error updating user:", error.message);
+  }
+};
+
 
 export const getUser = async (userId, setUserData) => {
   const userDoc = await getDoc(doc(db, 'users', userId));
   if (userDoc.exists()) {
     setUserData(userDoc.data());
+    console.log(userDoc)
   } else {
     console.error("User not found");
   }
