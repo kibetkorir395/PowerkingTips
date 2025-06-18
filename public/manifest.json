@@ -74,10 +74,10 @@
   ],
   "shortcuts": [
     {
-      "name": "View Latest Tips",
-      "short_name": "Latest Tips",
+      "name": "Get VIP Tips",
+      "short_name": "VIP Tips",
       "description": "Access the latest fixed VIP tips and predictions.",
-      "url": "/tips",
+      "url": "/",
       "icons": [
         {
           "src": "icons/logo192.png",
@@ -90,7 +90,7 @@
       "name": "Today's Predictions",
       "short_name": "Today's Tips",
       "description": "Check for toda's VIP Tips.",
-      "url": "/tips",
+      "url": "/",
       "icons": [
         {
           "src": "icons/logo192.png",

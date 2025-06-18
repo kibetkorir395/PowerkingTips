@@ -19,7 +19,7 @@ export default function PaystackPayments({ setUserData }) {
       }).then(async () => {
         await getUser(currentUser.email, setUserData);
       }).then(() => {
-        //window.location.pathname = '/tips';
+        //window.location.pathname = '/';
       }).catch(() => {
 
       });*/
@@ -36,7 +36,7 @@ export default function PaystackPayments({ setUserData }) {
       }).then(async () => {
         await getUser(currentUser.email, setUserData);
       }).then(async () => {
-        window.location.pathname = '/tips';
+        window.location.pathname = '/';
       }).catch(async (error) => {
         const errorMessage = await error.message;
         alert(errorMessage);

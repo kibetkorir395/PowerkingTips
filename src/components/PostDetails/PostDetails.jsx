@@ -19,16 +19,6 @@ export default function PostDetail({ data, userData }) {
     document.querySelector(".post-detail").classList.remove("active")
   }
 
-  useEffect(() => {
-    if (userData !== null) {
-      if (userData.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'arovanzgamez@gmail.com') {
-         setIsPremium(true)
-      } else {
-        setIsPremium(userData.isPremium)
-      }
-    }
-  }, [userData])
-
 
   useEffect(() => {
     if (currentUser !== null) {
@@ -37,6 +27,7 @@ export default function PostDetail({ data, userData }) {
         setIsPremium(true)
       } else {
         setIsAdmin(false)
+        setIsPremium(userData.isPremium)
       }
     }
   }, [currentUser])

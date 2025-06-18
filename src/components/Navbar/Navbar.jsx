@@ -25,8 +25,7 @@ const Navbar1 = () => {
                 <img src={Logo} alt='kdan_logo' />
             </NavLink>
             <nav>
-                <NavLink to="/" title='home' >Home</NavLink>
-                <NavLink to="/tips" title='predictions' >Tips</NavLink>
+                <NavLink to="/" title='predictions' >Home</NavLink>
                 <NavLink to="/about" title='about-us' >About</NavLink>
                 <div className="btn-wrapper">
                     {currentUser ? <NavLink className="btn" onClick={handleLogout} title='signout'>Logout</NavLink> :

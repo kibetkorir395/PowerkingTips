@@ -117,7 +117,7 @@ export const addTip = async (data, setError, setLoading) => {
     ...data
   }).then(async (docRef) => {
     alert("tip added")
-    window.location.replace(`/tips`);
+    window.location.replace(`/`);
   }).catch(async (error) => {
     setError(error.message);
     setLoading(false);

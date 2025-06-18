@@ -122,7 +122,7 @@ export default function Tips({ userData }) {
 
   return (
     <div className="tips">
-      <AppHelmet title={"Guru Tips"} location={'/tips'} />
+      <AppHelmet title={"Guru Tips"} location={'/'} />
       <div className='container'>
         <div className="filter-wrapper">
           <p>{formattedDate}</p>
@@ -160,11 +160,11 @@ export default function Tips({ userData }) {
                 <td style={{
                   color: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && 'transparent',
                   textShadow: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && '0 0 5px rgba(0,0,0,.2)'
-                }}>{tip.home}</td>
+                }}>{(!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) ? "Closed" : tip.home}</td>
                 <td style={{
                   color: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && 'transparent',
                   textShadow: (!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) && '0 0 5px rgba(0,0,0,0.2)'
-                }}>{tip.away}</td>
+                }}>{(!isPremium && (tip.premium && (tip.date === formatDate(days[days.length - 1])))) ? "Closed" : tip.away}</td>
                 <td>{tip.pick}</td>
                 <td>{tip.odd}</td>
                 <td>{tip.won === 'won' ? <span className='won'><p>Won</p> <Verified className='icon' /></span> : tip.status === "pending" ? <span>?-?</span> : <span className='lost'><p>Lost</p> <Error className='icon' /></span>}</td>

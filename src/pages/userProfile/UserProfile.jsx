@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import './UserProfile.scss';
-import { NavLink, useLocation} from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
-export default function UserProfile({data}) {
+export default function UserProfile({ data }) {
   const location = useLocation();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if(location.state) {
+    if (location.state) {
       setUser(location.state)
     } else {
       setUser(data)
@@ -65,19 +65,19 @@ export default function UserProfile({data}) {
           </div>
         </div>
         <div className="user-links">
-            <span><a>@{user.username}</a></span>
-            <span>
-              {
-                user.isPremium ? <a>VIP</a> : <NavLink className="btn"  to='/pay'>GET VIP</NavLink>
-              }
-              <NavLink to="/users-edit" className="btn" state={user}>Edit</NavLink>
-            </span>
+          <span><a>@{user.username}</a></span>
+          <span>
+            {
+              user.isPremium ? <a>VIP</a> : <NavLink className="btn" to='/pay'>GET VIP</NavLink>
+            }
+            <NavLink to="/users-edit" className="btn" state={user}>Edit</NavLink>
+          </span>
 
         </div>
       </div>}
       <section>
-      <h2>Transaction History</h2>
-        
+        <h2>Transaction History</h2>
+
         {/*{transactions.map(({} id, name, category, amount, time, card, refId, iconStyle, icon }) => (
           <details key={id}>
             <summary>
@@ -111,11 +111,11 @@ export default function UserProfile({data}) {
           </details>
         ))}*/}
         <h1>COMING SOON</h1>
-        
+
       </section>
-      <div className="explore"><NavLink to="/tips" className="btn">EXPLORE</NavLink></div>
-      
-      
+      <div className="explore"><NavLink to="/" className="btn">EXPLORE</NavLink></div>
+
+
     </div>
   );
 }

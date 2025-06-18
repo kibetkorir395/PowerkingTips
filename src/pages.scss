@@ -285,7 +285,7 @@
             }
         }
 
-        table{
+        table.wrapper{
             width: 100%;
             td{
                 pointer-events: none;
@@ -555,7 +555,7 @@
         width: 100%;
         min-width: 300px;
         height: max-content;
-        min-height: 55vh;
+        //min-height: 55vh;
         display: flex;
         flex-direction: column;
         padding: 1rem 1%;

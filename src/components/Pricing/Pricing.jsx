@@ -66,7 +66,7 @@ export default function Pricing() {
         )
     }
     return (
-        <div className="pricing">
+        <div className="pricing" id='pricing'>
             {
                 plans.map(item => {
                     return <Item data={item} key={item.id} />

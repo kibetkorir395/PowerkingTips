@@ -31,9 +31,11 @@ const Footer = ({ user }) => {
             <div className='social'>
                 <h2>Follow us</h2>
                 <div className='wrapper'>
-                    <Link to={socialLinks.facebookPage} title='facebook' target='_blank'><Facebook /></Link>
-                    <Link to={socialLinks.whatsappChannel} title='whatsapp' target='_blank'><WhatsApp /></Link>
-                    <Link to={socialLinks.telegramChannel} title='telegram' target='_blank'><Telegram /></Link>
+                    <Link to={socialLinks.telegramChannel} title='@powerkingtips' target='_blank' className='linkedin'><Telegram /></Link>
+                    <Link to={socialLinks.whatsappChannel} title='whatsappa' target='_blank' className='whatsapp'><WhatsApp /></Link>
+                    <Link to={socialLinks.facebookPage} title='facebook' target='_blank' className='facebook'><Facebook /></Link>
+                    <Link to={socialLinks.xPage} title='twitter' target='_blank' className='twitter'><X /></Link>
+                    <Link to={socialLinks.instagramPage} title='instagram' target='_blank' className='instagram'><Instagram /></Link>
                 </div >
 
             </div>

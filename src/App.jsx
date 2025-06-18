@@ -10,7 +10,6 @@ import Loader from './components/Loader/Loader';
 import Footer from './components/Footer/Footer';
 
 import Home from './pages/Home';
-import Tips from "./pages/Tips";
 import About from './pages/About';
 import AdminTips from "./pages/AdminTips";
 import { Login } from "./pages/Login";
@@ -22,6 +21,7 @@ import UserProfile from "./pages/userProfile/UserProfile";
 import ListUsers from "./pages/ListUsers";
 import EditUser from "./pages/EditUser";
 import { doc, getDoc } from "firebase/firestore";
+import Topbar from "./components/Topbar/Topbar";
 
 
 function App() {
@@ -133,10 +133,10 @@ function App() {
         }
         {
           !loading && <>
+            <Topbar />
             <Navbar />
             <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='tips' element={<Tips userData={userData} />} />
+              <Route path='/' element={<Home userData={userData} />} />
               <Route path='pay' element={currentUser ? <Payments setUserData={setUserData} /> : <Login />} />
               <Route path='admin/tips' element={currentUser ? <AdminTips /> : <Login />} />
               <Route path='edit' element={currentUser ? <EditTip /> : <Login />} />
