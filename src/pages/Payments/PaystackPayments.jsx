@@ -48,7 +48,7 @@ export default function PaystackPayments({ setUserData }) {
 
 
   const returnPeriod = () => {
-    if (price === 200) {
+    if (price === 250) {
       return 'Daily'
     } else if (price === 600) {
       return 'Weekly'
@@ -63,7 +63,7 @@ export default function PaystackPayments({ setUserData }) {
     reference: (new Date()).getTime().toString(),
     email: currentUser.email,
     amount: price * 100,
-    publicKey: 'pk_live_f36eadef9a97cb84ef23ebec889bfc4e458e3a4a',
+    publicKey: 'pk_live_71bf88a41666c28d7e035b7086eddedda3ba8c47',
     currency: "KES",
     metadata: {
       name: currentUser.email,
@@ -83,9 +83,9 @@ export default function PaystackPayments({ setUserData }) {
       <AppHelmet title={"Pay"} location={'/pay'} />
       <form>
         <fieldset>
-          <input name="prices" type="radio" value={200} id="daily" checked={price === 200 ? true : false} onChange={(e) => setPrice(200)} />
+          <input name="prices" type="radio" value={250} id="daily" checked={price === 250 ? true : false} onChange={(e) => setPrice(250)} />
           <label htmlFor="daily">Daily VIP</label>
-          <span className="price">KSH 200</span>
+          <span className="price">KSH 250</span>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={600} id="weekly" checked={price === 600 ? true : false} onChange={(e) => setPrice(600)} />

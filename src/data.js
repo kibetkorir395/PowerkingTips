@@ -51,98 +51,85 @@ export const faqs = [
     },
 ]
 
-/*export const socialLinks = {
-    telegramChannel: "https://t.me/bet365gurus",
+export const socialLinks = {
+    telegramChannel: "https://t.me/powerkingtips",
     whatsappChannel: "https://whatsapp.com/channel/0029Vb3Louu9xVJktevbuZ2K",
     facebookPage: "https://www.facebook.com/profile.php?id=61569974256919&mibextid=ZbWKwL",
     xPage: "https://www.x.com/@powerking_tips",
-    instagramPage: "https://instagram.com/goalgenius.vip",
-    affliateLink: "https://spin-to-win.Gurutips.com/",
-    promotion: "https://refpa7921972.top/L?tag=d_3966788m_1573c_&site=3966788&ad=1573"
-}*/
-
-export const socialLinks = {
-    telegramChannel: "https://t.me/gurutipsvip",
-    whatsappChannel: "https://whatsapp.com/channel/0029VbAxLiL8vd1UgOgNBE2d",
-    facebookPage: "https://www.facebook.com/profile.php?id=61576948975853",
-    xPage: "https://www.x.com/@powerking_tips",
-    instagramPage: "https://www.instagram.com/gurutips1x2",
-    affliateLink: "https://spin-to-win.Gurutips.com/",
+    instagramPage: "https://www.instagram.com/powerkingtips/",
+    affliateLink: "https://spin-to-win.powerking-tips.com/",
     promotion: "https://refpa7921972.top/L?tag=d_3966788m_1573c_&site=3966788&ad=1573"
 }
 
 export const testimonials = [
     {
-        text: 'This site has been a game-changer for me! The VIP predictions are spot on, and I’ve seen my winnings improve dramatically.',
+        text: 'This site has truly changed how I bet. The VIP tips are very accurate, and I’ve seen great improvement in my winnings.',
         name: 'Kariuki',
         country: 'Kenya'
     },
     {
-        text: 'I love how detailed the analysis is. It’s clear the team puts in a lot of effort to provide accurate predictions!',
-        name: 'Conor',
-        country: 'Ireland'
+        text: 'I was skeptical at first, but now I’m a believer. The predictions are solid, and I love that I can pay easily via M-Pesa.',
+        name: 'Brian',
+        country: 'Kenya'
     },
     {
-        text: 'The free tips are great, but once I upgraded to VIP, I saw a significant boost in my betting success. Totally worth it!',
-        name: 'Theodore',
-        country: 'Australia'
+        text: 'Since I started using the VIP package, my betting strategy has improved. I’ve made more money than ever before.',
+        name: 'Mwangi',
+        country: 'Kenya'
     },
     {
-        text: 'I appreciate the range of payment options—it makes subscribing so much easier.',
-        name: 'Alejandro',
-        country: 'Colombia'
+        text: 'The daily tips are on point. I check them every morning before placing any bets. Best decision I made!',
+        name: 'Sharon',
+        country: 'Kenya'
     },
     {
-        text: 'I’ve tried many prediction sites, but this one stands out with its consistency and accuracy. Highly recommended for serious gamblers.',
-        name: 'Dembe',
-        country: 'Uganda'
+        text: 'The odds are crazy good, especially on combos. I’ve hit multiple wins since joining VIP. Keep it up!',
+        name: 'Kevin',
+        country: 'Kenya'
     },
     {
-        text: 'The daily updates and fresh predictions keep me ahead of the game. Plus, their analysis is top-notch!',
-        name: 'José',
-        country: 'Mexico'
+        text: 'Very detailed analysis, even for local and international matches. You can tell they know what they’re doing.',
+        name: 'Mercy',
+        country: 'Kenya'
     },
     {
-        text: "As a football fan and bettor, I find their predictions reliable and accurate. It's definitely improved my betting strategy.",
-        name: 'Melokuhle',
-        country: 'South Africa'
+        text: 'My favorite thing is how simple the site is to use. Predictions are updated daily and are very accurate.',
+        name: 'Otieno',
+        country: 'Kenya'
     },
     {
-        text: 'I’ve been using this site for months, and the VIP service is incredible. The predictions are consistently accurate, and I’ve made solid returns.',
-        name: 'Acheampong',
-        country: 'Ghana'
+        text: 'This site has helped me turn betting into a proper income stream. I only follow their tips now.',
+        name: 'Faith',
+        country: 'Kenya'
     },
     {
-        text: "I was hesitant at first, but after trying the VIP subscription, I’m hooked! Their insights are top-tier, and I’m winning more bets.",
-        name: 'Archie',
-        country: 'England'
+        text: 'Love the layout and how fast the site loads, even on my phone. Very convenient for live betting.',
+        name: 'Ndung’u',
+        country: 'Kenya'
     },
     {
-        text: "Great job with the detailed match previews and predictions. It’s helped me make smarter bets, and I’m very happy with the results.",
-        name: 'Carl',
-        country: 'Sweden'
+        text: 'I used to lose a lot before, but since I started using their VIP tips, I win consistently. Definitely worth it!',
+        name: 'Jane',
+        country: 'Kenya'
     },
     {
-        text: "I appreciate the responsible betting advice provided. Not only are the predictions good, but the site also encourages smart betting habits.",
-        name: 'Bernardo',
-        country: 'Brazil'
+        text: 'Reliable predictions and fast support. I had a question about my subscription, and they responded instantly.',
+        name: 'Maina',
+        country: 'Kenya'
+    },
+    {
+        text: 'As someone who bets almost daily, I appreciate how fresh and accurate the predictions are. It’s the real deal.',
+        name: 'Wanjiru',
+        country: 'Kenya'
+    },
+    {
+        text: 'The site is clean, simple, and straight to the point. Perfect for anyone serious about football betting.',
+        name: 'George',
+        country: 'Kenya'
+    },
+    {
+        text: 'The first time I used the free tips, I won big. I subscribed to VIP the same day and haven’t looked back!',
+        name: 'Chebet',
+        country: 'Kenya'
     }
-    ,
-    {
-        text: "I subscribed to the VIP predictions, and it was the best decision I’ve made. The tips are accurate, and the returns are great!",
-        name: 'Korhonen',
-        country: 'Finland'
-    }
-    ,
-    {
-        text: "The site’s user-friendly layout and reliable predictions make it my go-to platform for football betting. Highly recommend it!",
-        name: 'Adedayo',
-        country: 'Nigeria'
-    }
-    ,
-    {
-        text: "The results speak for themselves—ever since I started using this site, my betting accuracy has improved significantly. A+ service!",
-        name: 'Gabriel',
-        country: 'Luxembourg'
-    }
-]
+];

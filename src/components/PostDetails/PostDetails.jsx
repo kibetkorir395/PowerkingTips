@@ -50,15 +50,15 @@ export default function PostDetail({ data, userData }) {
         }
       </h4>
       <hr className="divider" />
-      <h4><span style={{
+      <h4><span style={{/*
         color: (data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate())) && 'transparent',
         textShadow: (data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate())) && '0 0 5px rgba(0,0,0,.1)'
-      }}>{data.home}</span> <span>{data.results ? data.results.split('-')[0] : "?"}</span></h4>
+      */}}>{(data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate())) ? "Join VIP To View" : data.home}</span> <span>{data.results ? data.results.split('-')[0] : "?"}</span></h4>
       <hr className="divider" />
-      <h4><span style={{
+      <h4><span style={{/*
         color: (data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate())) && 'transparent',
         textShadow: (data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate())) && '0 0 5px rgba(0,0,0,.1)'
-      }}>{data.away}</span> <span>{data.results ? data.results.split('-')[1] : "?"}</span></h4>
+      */}}>{(data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate())) ? "Join VIP To View" : data.away}</span> <span>{data.results ? data.results.split('-')[1] : "?"}</span></h4>
       <hr className="divider" />
       <div className="detail-btn">
         <button className="btn" disabled aria-label="premium">💡{data.pick}</button>

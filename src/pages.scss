@@ -568,9 +568,9 @@
             from(rgba(0, 0, 0, 0.4)),
             to(rgba(0, 0, 0, 0.4))
           ),
-          url(./assets/b2.jpg);
+          url(./assets/l4.jpg);
         background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-          url(./assets/b2.jpg);
+          url(./assets/l4.jpg);
         background-size: auto;
         background-position: center;
         background-repeat: no-repeat;
@@ -692,7 +692,7 @@ table{
             }
 
             &.won{
-                color: var(--light-blue);
+                color: var(--neon-blue);
             }
         }
     }
@@ -717,7 +717,7 @@ table{
     }
 
     tr:nth-child(odd){
-        background:var(--odd);
+        background:var(--dark-blue);
         &:hover:not(:first-of-type){
             background: var(--lite);
             color: var(--grey);
