@@ -25,11 +25,11 @@ export default function Payments({ setUserData }) {
                 <form className="method">
                     <fieldset>
                         <input name="payment-method" type="radio" value={"mpesa"} id="mpesa" checked={paymentType === "mpesa"} onChange={(e) => setPaymentType(e.target.value)} />
-                        <label htmlFor="mpesa">mpesa</label>
+                        <label htmlFor="mpesa">mpesa 📲</label>
                     </fieldset>
                     <fieldset>
                         <input name="payment-method" type="radio" value={"crypto"} id="crypto" checked={paymentType === "crypto"} onChange={(e) => setPaymentType(e.target.value)} />
-                        <label htmlFor="crypto">crypto</label>
+                        <label htmlFor="crypto">crypto ₿</label>
                     </fieldset>
                     {/*<fieldset>
                         <input name="payment-method" type="radio" value={"paypal"} id="paypal" checked={paymentType === "paypal"} onChange={(e) => setPaymentType(e.target.value)}/>

@@ -25,6 +25,7 @@
                 justify-content: space-between;
                 label{
                     text-transform: uppercase;
+                    font-weight: bold;
                     letter-spacing: .1rem;
                     background: #E8E8E8;
                     text-align: center;
@@ -131,10 +132,15 @@
                     border: 1px solid #ccc;
                     position: relative;
                     z-index: 1;
-                  }
 
-                  label:hover{
-                    background: #D8D8D8;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    letter-spacing: .1rem;
+                    padding: .5em;
+
+                    &:hover{
+                        background: #D8D8D8;
+                    }
                   }
 
                   input[type="radio"]{
@@ -153,7 +159,9 @@
                     top: 0;
                     left: 0;
                     transition: all 200ms ease-in-out;
-                    font-size: .8rem;
+                    font-size: 1rem;
+                    text-transform: uppercase;
+                    font-weight: bold;
                   }
 
                   input[type="radio"]:checked{
@@ -169,7 +177,7 @@
                     }
 
                     ~ .sub{
-                      top: -.5rem;
+                      top: -1rem;
                       transition: all 200ms ease-in-out;
                       z-index: 5;
                     }
