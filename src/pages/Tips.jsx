@@ -130,11 +130,32 @@ export default function Tips({ userData }) {
     return dateWeek + " " + dayWeek;
   }*/
 
-  const returnDate = (dateString) => {
+  /*const returnDate = (dateString) => {
   const date = new Date(dateString);
   const options = { weekday: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
-};
+};*/
+
+   const returnDate = (dateString) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // Month is zero-indexed
+
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date:", dateString);
+      return "Invalid Date";
+    }
+
+    const today = new Date();
+    const isToday =
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
+
+    const weekday = date.toLocaleDateString('en-US', { weekday: 'short' });
+    const monthDay = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+    return isToday ? `${weekday}, Today` : `${weekday} ${monthDay}`;
+  };
 
 
   const handleClick = async (tip) => {
