@@ -50,7 +50,7 @@ export default function Tips({ userData }) {
     getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
   }, [isOnline, tipsPerPage, currentDate]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     let dates = [];
     for (let i = 0; i < 7; i++) {
       let date = new Date();
@@ -58,7 +58,23 @@ export default function Tips({ userData }) {
       dates.push(date.toISOString().split('T')[0]);
     }
     setDays(dates.reverse())
-  }, []);
+  }, []);*/
+
+  useEffect(() => {
+  let dates = [];
+  const today = new Date();
+  
+  for (let i = 0; i < 7; i++) {
+    let date = new Date(today);
+    date.setDate(date.getDate() - i);
+    // Use local date methods instead of ISO string
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    dates.push(`${year}-${month}-${day}`);
+  }
+  setDays(dates.reverse());
+}, []);
 
   useEffect(() => {
     days && setCurrentDate(days[days.length - 1])
