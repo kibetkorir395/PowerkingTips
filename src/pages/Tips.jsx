@@ -130,13 +130,13 @@ export default function Tips({ userData }) {
     return dateWeek + " " + dayWeek;
   }*/
 
-  /*const returnDate = (dateString) => {
+  const returnDate = (dateString) => {
   const date = new Date(dateString);
   const options = { weekday: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
-};*/
+};
 
-   const returnDate = (dateString) => {
+  /* const returnDate = (dateString) => {
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day); // Month is zero-indexed
 
@@ -155,7 +155,7 @@ export default function Tips({ userData }) {
     const monthDay = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
     return isToday ? `${weekday}, Today` : `${weekday} ${monthDay}`;
-  };
+  };*/
 
 
   const handleClick = async (tip) => {
