@@ -97,7 +97,7 @@ export default function Tips({ userData }) {
   }
 
 
-  const returnDate = (date) => {
+  /*const returnDate = (date) => {
     const d = new Date(date);
     let day = d.getDay();
     let dateWeek = d.getDate()
@@ -128,7 +128,13 @@ export default function Tips({ userData }) {
         dayWeek = "Saturday";
     }
     return dateWeek + " " + dayWeek;
-  }
+  }*/
+
+  const returnDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = { weekday: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+};
 
 
   const handleClick = async (tip) => {
