@@ -15,7 +15,7 @@ export default function CryptoPayments() {
   const [address, setAddress] = useState("");
   const [network, setNetwork] = useState("");
   const selectRef = useRef();
-  const [price, setPrice] = useState(23);
+  const [price, setPrice] = useState(10);
 
   async function getAddress() {
     const params = {
