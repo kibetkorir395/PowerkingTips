@@ -126,35 +126,63 @@ function App() {
   }, [userData]);
 
   return (
-    <HelmetProvider>
-      <div className="App">
-        {
-          loading && <Loader />
-        }
-        {
-          !loading && <>
-            <Topbar />
-            <Navbar />
-            <Routes>
-              <Route path='/' element={<Home userData={userData} />} />
-              <Route path='pay' element={currentUser ? <Payments setUserData={setUserData} /> : <Login />} />
-              <Route path='admin/tips' element={currentUser ? <AdminTips /> : <Login />} />
-              <Route path='edit' element={currentUser ? <EditTip /> : <Login />} />
-              <Route path='users' element={currentUser ? <ListUsers /> : <Login />} />
-              <Route path='users/:id' element={currentUser ? <UserProfile data={userData} /> : <Login />} />
-              <Route path='users-edit' element={currentUser ? <EditUser userData={userData} setUserData={setUserData} /> : <Login />} />
-              <Route path='about' element={<About />} />
-              <Route path='*' element={<Error />} />
-              <Route path='login' element={<Login />} />
-              <Route path='register' element={<Register />} />
-
-            </Routes>
-            <Footer user={currentUser} />
-          </>
-        }
-      </div>
-
-    </HelmetProvider>
-  );
+		<HelmetProvider>
+			<div className="App">
+				{loading && <Loader />}
+				{!loading && (
+					<>
+						<Topbar />
+						<Navbar user={currentUser} />
+						<Routes>
+							<Route path="/" element={<Home userData={userData} />} />
+							<Route
+								path="pay"
+								element={
+									currentUser ? (
+										<Payments setUserData={setUserData} />
+									) : (
+										<Login />
+									)
+								}
+							/>
+							<Route
+								path="admin/tips"
+								element={currentUser ? <AdminTips /> : <Login />}
+							/>
+							<Route
+								path="edit"
+								element={currentUser ? <EditTip /> : <Login />}
+							/>
+							<Route
+								path="users"
+								element={currentUser ? <ListUsers /> : <Login />}
+							/>
+							<Route
+								path="users/:id"
+								element={
+									currentUser ? <UserProfile data={userData} /> : <Login />
+								}
+							/>
+							<Route
+								path="users-edit"
+								element={
+									currentUser ? (
+										<EditUser userData={userData} setUserData={setUserData} />
+									) : (
+										<Login />
+									)
+								}
+							/>
+							<Route path="about" element={<About />} />
+							<Route path="*" element={<Error />} />
+							<Route path="login" element={<Login />} />
+							<Route path="register" element={<Register />} />
+						</Routes>
+						<Footer user={currentUser} />
+					</>
+				)}
+			</div>
+		</HelmetProvider>
+	);
 }
 export default App;

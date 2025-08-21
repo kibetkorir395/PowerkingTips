@@ -850,7 +850,6 @@ table{
     }
 }
 
-
 .list-users{
     width: 100%;
     min-height: 100vh;
@@ -860,5 +859,47 @@ table{
     flex-wrap: wrap;
     padding: 10px 5px;
     gap: 5px;
-
 }
+
+
+.list-users .header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+    flex-wrap: wrap;
+  }
+
+  .list-users .header input[type="search"] {
+    flex: 1;
+    min-width: 250px;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .list-users .header select {
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    color: #718096;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .list-users .header {
+      flex-direction: column;
+    }
+
+    .list-users .header input[type="search"] {
+      min-width: 100%;
+    }
+  }
