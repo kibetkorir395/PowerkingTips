@@ -62,7 +62,7 @@ export default function PostDetail({ data, userData }) {
       <hr className="divider" />
       <div className="detail-btn">
         <button className="btn" disabled aria-label="premium">💡{data.pick}</button>
-        {(data.premium && !isPremium) && <Link to={'/pay'} className='btn' onClick={() => setPrice(1)}>GET VIP</Link>}
+        {(data.premium && !isPremium) && <Link to={'/pay'} className='btn' onClick={() => setPrice(800)}>GET VIP</Link>}
 
         {isAdmin && <Link to={'/edit'} className='btn' state={data}>Edit</Link>}
       </div>
