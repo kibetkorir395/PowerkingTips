@@ -22,6 +22,7 @@ export default function AppHelmet({ title, location }) {
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="/logo512.png" />
+      <meta name="referrer" content="no-referrer-when-downgrade" />
     </Helmet>
   );
 }
