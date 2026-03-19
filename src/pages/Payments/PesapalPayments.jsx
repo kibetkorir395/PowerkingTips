@@ -11,7 +11,7 @@ import {
   registerIpn, 
   submitOrder,
   checkTransactionStatus 
-} from '../../utils/pesapal';
+} from './pesapal';
 
 export default function PesapalPayments({ setUserData }) {
   const { price, setPrice } = useContext(PriceContext);
