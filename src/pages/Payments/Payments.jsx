@@ -2,7 +2,7 @@ import { useState } from "react";
 import CryptoPayments from "./CryptoPayments";
 import './Payments.scss'
 import AppHelmet from "../../components/AppHelmet";
-import PesapalPayments from "./PesapalPayments";
+import KoraPayments from "./KoraPayments";
 export default function Payments({ setUserData }) {
     const [paymentType, setPaymentType] = useState("mpesa")
     const renderPaymentType = () => {
@@ -12,7 +12,7 @@ export default function Payments({ setUserData }) {
                 item = <CryptoPayments setUserData={setUserData} />
                 break;
             default:
-                item = <PesapalPayments setUserData={setUserData} />
+                item = <KoraPayments setUserData={setUserData} />
         }
 
         return item;
