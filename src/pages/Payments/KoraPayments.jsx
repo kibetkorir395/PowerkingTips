@@ -115,7 +115,7 @@ export default function KoraPayments({ setUserData }) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_API_KEY'
+            'Authorization': 'Bearer ZtMjLX4B2s7CExCNfrSwSdBkfxVZ1Hye'
           },
           body: JSON.stringify({
             amount: amountInKES,
@@ -236,7 +236,7 @@ export default function KoraPayments({ setUserData }) {
     const countryConfig = countries[selectedCountry];
     
     const paymentOptions = {
-      key: "pk_live_Gu3aUUGAzWj1zeonHdwBAi4oDD9Vc4AViyHWqALp",
+      key: "pk_live_KxNb5jDg18CQtJWzJt1RdgyMNsRo4D9NanrmE7nP",
       reference: `ref-${Date.now()}`,
       amount: Math.round(getCurrentConvertedPrice()),
       currency: countryConfig.currency,
