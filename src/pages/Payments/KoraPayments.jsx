@@ -54,7 +54,7 @@ export default function KoraPayments({ setUserData }) {
         key: "pk_live_Gu3aUUGAzWj1zeonHdwBAi4oDD9Vc4AViyHWqALp",
         reference: `ref-${Date.now()}`,
         amount: price,
-        currency: "GHS",
+        currency: "KES",
         customer: {
             name: currentUser.email,
             email: currentUser.email,
