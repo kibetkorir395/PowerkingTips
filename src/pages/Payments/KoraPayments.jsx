@@ -25,12 +25,12 @@ export default function KoraPayments({ setUserData }) {
   // Country configurations
   const countries = {
     'Nigeria': { code: 'NG', currency: 'NGN', flag: '🇳🇬', defaultPrice: 2500 },
-    'Cameroon': { code: 'CM', currency: 'XAF', flag: '🇨🇲', defaultPrice: 1500 },
-    'Ghana': { code: 'GH', currency: 'GHS', flag: '🇬🇭', defaultPrice: 20 },
-    'South Africa': { code: 'ZA', currency: 'ZAR', flag: '🇿🇦', defaultPrice: 50 },
+    //'Cameroon': { code: 'CM', currency: 'XAF', flag: '🇨🇲', defaultPrice: 1500 },
+    //'Ghana': { code: 'GH', currency: 'GHS', flag: '🇬🇭', defaultPrice: 20 },
+    //'South Africa': { code: 'ZA', currency: 'ZAR', flag: '🇿🇦', defaultPrice: 50 },
     'Kenya': { code: 'KE', currency: 'KES', flag: '🇰🇪', defaultPrice: 250 },
-    'Egypt': { code: 'EG', currency: 'EGP', flag: '🇪🇬', defaultPrice: 80 },
-    'Ivory Coast': { code: 'CI', currency: 'XOF', flag: '🇨🇮', defaultPrice: 1000 }
+    //'Egypt': { code: 'EG', currency: 'EGP', flag: '🇪🇬', defaultPrice: 80 },
+    //'Ivory Coast': { code: 'CI', currency: 'XOF', flag: '🇨🇮', defaultPrice: 1000 }
   };
 
   // Price options in KES (base currency)
@@ -139,8 +139,16 @@ export default function KoraPayments({ setUserData }) {
         }
       }
       
-      setConvertedPrices(newConvertedPrices);
-      setExchangeRates(newExchangeRates);
+      //setConvertedPrices(newConvertedPrices);
+      //setExchangeRates(newExchangeRates);
+
+      const fallbackRate = getFallbackRate(toCurrency);
+      setConvertedPrices({
+        daily: 250 * fallbackRate,
+        weekly: 800 * fallbackRate,
+        monthly: 3000 * fallbackRate,
+        yearly: 8000 * fallbackRate
+      });
       
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
@@ -160,13 +168,13 @@ export default function KoraPayments({ setUserData }) {
   // Fallback rates if API fails
   const getFallbackRate = (toCurrency) => {
     const fallbackRates = {
-      'NGN': 1.5,
-      'XAF': 6,
-      'GHS': 0.12,
+      'NGN': 10.63,
+      'XAF': 4.37,
+      'GHS': 0.084,
       'ZAR': 0.13,
       'KES': 1,
-      'EGP': 0.47,
-      'XOF': 6
+      'EGP': 0.41,
+      'XOF': 4.37
     };
     return fallbackRates[toCurrency] || 1;
   };
