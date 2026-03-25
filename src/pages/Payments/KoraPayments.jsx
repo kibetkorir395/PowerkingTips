@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import './Ticket.scss';
+import './Ticket2.scss';
 import { PriceContext } from '../../PriceContext';
 import AppHelmet from '../../components/AppHelmet';
 import KoraPayment from 'kora-checkout';
