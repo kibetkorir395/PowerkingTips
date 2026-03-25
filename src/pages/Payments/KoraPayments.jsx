@@ -89,7 +89,15 @@ export default function KoraPayments({ setUserData }) {
   };
 
   // Fetch exchange rate from Kora API
-  const fetchExchangeRate = async (fromCurrency, toCurrency, amount) => {
+  const fetchExchangeRate = async (toCurrency, amountInKES) => {
+    // If the selected country is Kenya, no conversion needed
+    if (toCurrency === 'KES') {
+      setConvertedPrice(amountInKES);
+      setExchangeRate(1);
+      setIsLoadingRate(false);
+      return amountInKES;
+    }
+
     setIsLoadingRate(true);
     try {
       const response = await fetch('https://api.korapay.com/api/v1/conversions/rates', {
@@ -99,8 +107,8 @@ export default function KoraPayments({ setUserData }) {
           'Authorization': 'Bearer YOUR_API_KEY' // Add your Kora API key here
         },
         body: JSON.stringify({
-          amount: amount,
-          from_currency: fromCurrency,
+          amount: amountInKES,
+          from_currency: 'KES', // Always KES as source currency
           to_currency: toCurrency,
           reference: `rate-${currentUser?.email || 'guest'}-${Date.now()}`
         })
@@ -123,7 +131,7 @@ export default function KoraPayments({ setUserData }) {
       console.error('Error fetching exchange rate:', error);
       // Fallback to manual conversion if API fails
       const fallbackRate = getFallbackRate(toCurrency);
-      const manualConverted = amount * fallbackRate;
+      const manualConverted = amountInKES * fallbackRate;
       setConvertedPrice(manualConverted);
       return manualConverted;
     } finally {
@@ -131,7 +139,7 @@ export default function KoraPayments({ setUserData }) {
     }
   };
 
-  // Fallback rates if API fails (approximate rates)
+  // Fallback rates if API fails (approximate rates from KES)
   const getFallbackRate = (toCurrency) => {
     const fallbackRates = {
       'NGN': 1.5,    // 1 KES ≈ 1.5 NGN
@@ -151,11 +159,8 @@ export default function KoraPayments({ setUserData }) {
       const basePrice = priceOptions[returnPeriod()];
       const countryConfig = countries[selectedCountry];
       
-      if (countryConfig && countryConfig.currency !== 'KES') {
-        await fetchExchangeRate('KES', countryConfig.currency, basePrice);
-      } else {
-        setConvertedPrice(basePrice);
-      }
+      // Always convert from KES to selected country's currency
+      await fetchExchangeRate(countryConfig.currency, basePrice);
     };
     
     updatePriceForCountry();
@@ -190,7 +195,9 @@ export default function KoraPayments({ setUserData }) {
         subDate: currentDate,
         country: selectedCountry,
         currency: countries[selectedCountry].currency,
-        amountPaid: convertedPrice
+        amountPaidKES: price, // Original amount in KES
+        amountPaidLocal: convertedPrice, // Converted amount
+        exchangeRate: exchangeRate
       }, { merge: true }).then(async (response) => {
         alert(`You Have Upgraded To ${returnPeriod()} VIP (${selectedCountry})`);
       }).then(async () => {
@@ -221,8 +228,11 @@ export default function KoraPayments({ setUserData }) {
       metadata: {
         country: selectedCountry,
         plan: returnPeriod(),
-        original_price: price,
-        exchange_rate: exchangeRate
+        original_price_KES: price,
+        converted_amount: convertedPrice,
+        exchange_rate: exchangeRate,
+        from_currency: 'KES',
+        to_currency: countryConfig.currency
       },
       onSuccess: () => {
         handleUpgrade();
@@ -285,6 +295,9 @@ export default function KoraPayments({ setUserData }) {
           <span className="price">
             {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
           </span>
+          <small className="original-price">
+            (≈ KES {price})
+          </small>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={800} id="weekly" checked={price === 800} onChange={(e) => setPrice(800)} />
@@ -292,6 +305,9 @@ export default function KoraPayments({ setUserData }) {
           <span className="price">
             {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
           </span>
+          <small className="original-price">
+            (≈ KES {price})
+          </small>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={3000} id="monthly" checked={price === 3000} onChange={(e) => setPrice(3000)} />
@@ -299,6 +315,9 @@ export default function KoraPayments({ setUserData }) {
           <span className="price">
             {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
           </span>
+          <small className="original-price">
+            (≈ KES {price})
+          </small>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={8000} id="yearly" checked={price === 8000} onChange={(e) => setPrice(8000)} />
@@ -306,12 +325,18 @@ export default function KoraPayments({ setUserData }) {
           <span className="price">
             {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
           </span>
+          <small className="original-price">
+            (≈ KES {price})
+          </small>
         </fieldset>
       </form>
       
       <h4>
         GET {returnPeriod().toUpperCase()} VIP FOR {' '}
         {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
+        <small className="original-price-h4">
+          (KES {price})
+        </small>
       </h4>
       
       <button onClick={handlePayment} className="btn" disabled={isLoadingRate}>
