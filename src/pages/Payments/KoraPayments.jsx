@@ -236,7 +236,7 @@ export default function KoraPayments({ setUserData }) {
         name: currentUser.email,
         email: currentUser.email,
       },
-      metadata: {
+      /*metadata: {
         country: selectedCountry,
         plan: returnPeriod(),
         original_price_KES: price,
@@ -244,7 +244,7 @@ export default function KoraPayments({ setUserData }) {
         exchange_rate: exchangeRates[returnPeriod()],
         from_currency: 'KES',
         to_currency: countryConfig.currency
-      },
+      },*/
       onSuccess: () => {
         handleUpgrade();
       },
