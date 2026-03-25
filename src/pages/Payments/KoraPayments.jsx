@@ -11,8 +11,13 @@ export default function KoraPayments({ setUserData }) {
   const { price, setPrice } = useContext(PriceContext);
   const { currentUser } = useContext(AuthContext);
   const [selectedCountry, setSelectedCountry] = useState('Kenya');
-  const [convertedPrice, setConvertedPrice] = useState(price);
-  const [exchangeRate, setExchangeRate] = useState(null);
+  const [convertedPrices, setConvertedPrices] = useState({
+    daily: 250,
+    weekly: 800,
+    monthly: 3000,
+    yearly: 8000
+  });
+  const [exchangeRates, setExchangeRates] = useState({});
   const [isLoadingRate, setIsLoadingRate] = useState(false);
   const [userCountry, setUserCountry] = useState(null);
   const [showCountrySelector, setShowCountrySelector] = useState(false);
@@ -39,7 +44,6 @@ export default function KoraPayments({ setUserData }) {
   // Detect user's country using IP geolocation
   const detectUserCountry = async () => {
     try {
-      // Try multiple APIs for reliability
       const apis = [
         'https://ipapi.co/json/',
         'https://ipwho.is/',
@@ -62,7 +66,6 @@ export default function KoraPayments({ setUserData }) {
             countryCode = data.country;
           }
           
-          // Find matching country
           const matchedCountry = Object.entries(countries).find(
             ([_, config]) => config.code === countryCode
           );
@@ -78,7 +81,6 @@ export default function KoraPayments({ setUserData }) {
         }
       }
       
-      // Default to Kenya if detection fails
       setSelectedCountry('Kenya');
       setUserCountry('Kenya');
     } catch (error) {
@@ -88,83 +90,96 @@ export default function KoraPayments({ setUserData }) {
     }
   };
 
-  // Fetch exchange rate from Kora API
-  const fetchExchangeRate = async (toCurrency, amountInKES) => {
-    // If the selected country is Kenya, no conversion needed
+  // Fetch exchange rate for all plans
+  const fetchAllExchangeRates = async (toCurrency) => {
     if (toCurrency === 'KES') {
-      setConvertedPrice(amountInKES);
-      setExchangeRate(1);
-      setIsLoadingRate(false);
-      return amountInKES;
+      setConvertedPrices({
+        daily: 250,
+        weekly: 800,
+        monthly: 3000,
+        yearly: 8000
+      });
+      return;
     }
 
     setIsLoadingRate(true);
     try {
-      const response = await fetch('https://api.korapay.com/api/v1/conversions/rates', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer YOUR_API_KEY' // Add your Kora API key here
-        },
-        body: JSON.stringify({
-          amount: amountInKES,
-          from_currency: 'KES', // Always KES as source currency
-          to_currency: toCurrency,
-          reference: `rate-${currentUser?.email || 'guest'}-${Date.now()}`
-        })
-      });
+      const plans = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
+      const newConvertedPrices = {};
+      const newExchangeRates = {};
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch exchange rate');
+      for (const plan of plans) {
+        const amountInKES = priceOptions[plan];
+        
+        const response = await fetch('https://api.korapay.com/api/v1/conversions/rates', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_API_KEY'
+          },
+          body: JSON.stringify({
+            amount: amountInKES,
+            from_currency: 'KES',
+            to_currency: toCurrency,
+            reference: `rate-${currentUser?.email || 'guest'}-${plan}-${Date.now()}`
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch exchange rate');
+        }
+
+        const result = await response.json();
+        
+        if (result.status && result.data) {
+          newConvertedPrices[plan.toLowerCase()] = result.data.to_amount;
+          newExchangeRates[plan] = result.data.rate;
+        } else {
+          throw new Error('Invalid response');
+        }
       }
-
-      const result = await response.json();
       
-      if (result.status && result.data) {
-        setExchangeRate(result.data.rate);
-        setConvertedPrice(result.data.to_amount);
-        return result.data.to_amount;
-      } else {
-        throw new Error('Invalid response from exchange rate API');
-      }
+      setConvertedPrices(newConvertedPrices);
+      setExchangeRates(newExchangeRates);
+      
     } catch (error) {
-      console.error('Error fetching exchange rate:', error);
-      // Fallback to manual conversion if API fails
+      console.error('Error fetching exchange rates:', error);
+      // Fallback to manual conversion
       const fallbackRate = getFallbackRate(toCurrency);
-      const manualConverted = amountInKES * fallbackRate;
-      setConvertedPrice(manualConverted);
-      return manualConverted;
+      setConvertedPrices({
+        daily: 250 * fallbackRate,
+        weekly: 800 * fallbackRate,
+        monthly: 3000 * fallbackRate,
+        yearly: 8000 * fallbackRate
+      });
     } finally {
       setIsLoadingRate(false);
     }
   };
 
-  // Fallback rates if API fails (approximate rates from KES)
+  // Fallback rates if API fails
   const getFallbackRate = (toCurrency) => {
     const fallbackRates = {
-      'NGN': 1.5,    // 1 KES ≈ 1.5 NGN
-      'XAF': 6,      // 1 KES ≈ 6 XAF
-      'GHS': 0.12,   // 1 KES ≈ 0.12 GHS
-      'ZAR': 0.13,   // 1 KES ≈ 0.13 ZAR
-      'KES': 1,      // Base currency
-      'EGP': 0.47,   // 1 KES ≈ 0.47 EGP
-      'XOF': 6       // 1 KES ≈ 6 XOF
+      'NGN': 1.5,
+      'XAF': 6,
+      'GHS': 0.12,
+      'ZAR': 0.13,
+      'KES': 1,
+      'EGP': 0.47,
+      'XOF': 6
     };
     return fallbackRates[toCurrency] || 1;
   };
 
-  // Update price when country or selected plan changes
+  // Update all prices when country changes
   useEffect(() => {
-    const updatePriceForCountry = async () => {
-      const basePrice = priceOptions[returnPeriod()];
+    const updatePricesForCountry = async () => {
       const countryConfig = countries[selectedCountry];
-      
-      // Always convert from KES to selected country's currency
-      await fetchExchangeRate(countryConfig.currency, basePrice);
+      await fetchAllExchangeRates(countryConfig.currency);
     };
     
-    updatePriceForCountry();
-  }, [selectedCountry, price]);
+    updatePricesForCountry();
+  }, [selectedCountry]);
 
   // Detect user country on component mount
   useEffect(() => {
@@ -172,15 +187,15 @@ export default function KoraPayments({ setUserData }) {
   }, []);
 
   const returnPeriod = () => {
-    if (price === 250) {
-      return 'Daily';
-    } else if (price === 800) {
-      return 'Weekly';
-    } else if (price === 3000) {
-      return 'Monthly';
-    } else {
-      return 'Yearly';
-    }
+    if (price === 250) return 'Daily';
+    if (price === 800) return 'Weekly';
+    if (price === 3000) return 'Monthly';
+    return 'Yearly';
+  };
+
+  const getCurrentConvertedPrice = () => {
+    const period = returnPeriod().toLowerCase();
+    return convertedPrices[period] || price;
   };
 
   const handleUpgrade = async () => {
@@ -195,21 +210,17 @@ export default function KoraPayments({ setUserData }) {
         subDate: currentDate,
         country: selectedCountry,
         currency: countries[selectedCountry].currency,
-        amountPaidKES: price, // Original amount in KES
-        amountPaidLocal: convertedPrice, // Converted amount
-        exchangeRate: exchangeRate
-      }, { merge: true }).then(async (response) => {
-        alert(`You Have Upgraded To ${returnPeriod()} VIP (${selectedCountry})`);
-      }).then(async () => {
-        await getUser(currentUser.email, setUserData);
-      }).then(async () => {
-        window.location.pathname = '/';
-      }).catch(async (error) => {
-        const errorMessage = await error.message;
-        alert(errorMessage);
-      });
+        amountPaidKES: price,
+        amountPaidLocal: getCurrentConvertedPrice(),
+        exchangeRate: exchangeRates[returnPeriod()]
+      }, { merge: true });
+      
+      alert(`You Have Upgraded To ${returnPeriod()} VIP (${selectedCountry})`);
+      await getUser(currentUser.email, setUserData);
+      window.location.pathname = '/';
     } catch (error) {
       console.error("Error upgrading user:", error.message);
+      alert(error.message);
     }
   };
 
@@ -219,7 +230,7 @@ export default function KoraPayments({ setUserData }) {
     const paymentOptions = {
       key: "pk_live_Gu3aUUGAzWj1zeonHdwBAi4oDD9Vc4AViyHWqALp",
       reference: `ref-${Date.now()}`,
-      amount: convertedPrice,
+      amount: Math.round(getCurrentConvertedPrice()),
       currency: countryConfig.currency,
       customer: {
         name: currentUser.email,
@@ -229,8 +240,8 @@ export default function KoraPayments({ setUserData }) {
         country: selectedCountry,
         plan: returnPeriod(),
         original_price_KES: price,
-        converted_amount: convertedPrice,
-        exchange_rate: exchangeRate,
+        converted_amount: getCurrentConvertedPrice(),
+        exchange_rate: exchangeRates[returnPeriod()],
         from_currency: 'KES',
         to_currency: countryConfig.currency
       },
@@ -293,50 +304,35 @@ export default function KoraPayments({ setUserData }) {
           <input name="prices" type="radio" value={250} id="daily" checked={price === 250} onChange={(e) => setPrice(250)} />
           <label htmlFor="daily">Daily VIP</label>
           <span className="price">
-            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
+            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrices.daily)}`}
           </span>
-          <small className="original-price">
-            (≈ KES {price})
-          </small>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={800} id="weekly" checked={price === 800} onChange={(e) => setPrice(800)} />
           <label htmlFor="weekly">7 Days VIP</label>
           <span className="price">
-            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
+            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrices.weekly)}`}
           </span>
-          <small className="original-price">
-            (≈ KES {price})
-          </small>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={3000} id="monthly" checked={price === 3000} onChange={(e) => setPrice(3000)} />
           <label htmlFor="monthly">30 Days VIP</label>
           <span className="price">
-            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
+            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrices.monthly)}`}
           </span>
-          <small className="original-price">
-            (≈ KES {price})
-          </small>
         </fieldset>
         <fieldset>
           <input name="prices" type="radio" value={8000} id="yearly" checked={price === 8000} onChange={(e) => setPrice(8000)} />
           <label htmlFor="yearly">1 Year VIP</label>
           <span className="price">
-            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
+            {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrices.yearly)}`}
           </span>
-          <small className="original-price">
-            (≈ KES {price})
-          </small>
         </fieldset>
       </form>
       
       <h4>
         GET {returnPeriod().toUpperCase()} VIP FOR {' '}
-        {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(convertedPrice)}`}
-        <small className="original-price-h4">
-          (KES {price})
-        </small>
+        {isLoadingRate ? 'Loading...' : `${countries[selectedCountry].currency} ${Math.round(getCurrentConvertedPrice())}`}
       </h4>
       
       <button onClick={handlePayment} className="btn" disabled={isLoadingRate}>
