@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import PostDetail from '../components/PostDetails/PostDetails';
 import { NavLink } from 'react-router-dom';
 import { getTips } from '../firebase';
@@ -17,6 +17,9 @@ export default function Tips({ userData }) {
   const [category, setCategory] = useState('premium');
   const [isPremium, setIsPremium] = useState(false);
   const [isOnline] = useState(navigator.onLine);
+  
+  // Reference for the filter container
+  const filterRef = useRef(null);
 
   const date = new Date();
   const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
@@ -61,6 +64,18 @@ export default function Tips({ userData }) {
     setCurrentDate(dates[dates.length - 1]);
   }, []);
 
+  // Auto-scroll to the far right (today's date) when days are loaded
+  useEffect(() => {
+    if (days && days.length > 0 && filterRef.current) {
+      // Small delay to ensure DOM is fully rendered
+      setTimeout(() => {
+        const filterContainer = filterRef.current;
+        // Scroll to the far right
+        filterContainer.scrollLeft = filterContainer.scrollWidth;
+      }, 100);
+    }
+  }, [days]);
+
   useEffect(() => {
     if (tips.length > 0) {
       const filteredTips = tips.filter(tip => 
@@ -92,6 +107,21 @@ export default function Tips({ userData }) {
     category === 'free' ? !tip.premium : tip.premium
   );
 
+  // Function to scroll to a specific date when clicked
+  const handleDateClick = (day, index) => {
+    setCurrentDate(day);
+    // Optional: Scroll the clicked button into view
+    const filterContainer = filterRef.current;
+    const buttons = filterContainer?.querySelectorAll('.btn-filter');
+    if (buttons && buttons[index]) {
+      buttons[index].scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  };
+
   return (
     <div className="tips">
       <AppHelmet title={"Powerking Tips"} location={'/'} />
@@ -104,12 +134,12 @@ export default function Tips({ userData }) {
           </select>
         </div>
 
-        <div className="filter">
+        <div className="filter" ref={filterRef}>
           {days?.map((day, index) => (
             <button 
               key={index}
               className={`btn-filter ${currentDate === day ? 'active' : ''}`} 
-              onClick={() => setCurrentDate(day)}
+              onClick={() => handleDateClick(day, index)}
             >
               <span>{returnDate(day).split(" ")[1]?.substring(0, 3)}</span>
               <span>{returnDate(day).split(" ")[0]}</span>

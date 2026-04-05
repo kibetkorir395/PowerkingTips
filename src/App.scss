@@ -862,6 +862,7 @@ html {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin: 10px 8px;
       
       p {
         color: var(--lite);
@@ -882,6 +883,11 @@ html {
       overflow: auto;
       margin: 0.5rem 0;
       gap: 10px;
+      // Smooth scrolling behavior
+      scroll-behavior: smooth;
+      
+      // Ensure the last button is visible
+      scroll-snap-type: x mandatory;
       
       &::-webkit-scrollbar {
         height: 5px;
@@ -907,6 +913,7 @@ html {
         border-radius: 20px;
         transition: var(--transition-smooth);
         white-space: nowrap;
+        scroll-snap-align: start;
 
         &:hover {
           background: var(--gradient-primary);
@@ -917,6 +924,7 @@ html {
         &.active {
           background: var(--gradient-primary);
           color: var(--lite);
+          animation: pulse 0.5s ease-out;
         }
       }
       
@@ -937,6 +945,21 @@ html {
       gap: .2rem;
       overflow: auto;
     }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 174, 88, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(0, 174, 88, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 174, 88, 0);
   }
 }
 
