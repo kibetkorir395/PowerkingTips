@@ -11,13 +11,13 @@ export default function AppHelmet({ title, location }) {
       <link rel="canonical" href={canonicalUrl} />
       <meta
         name="description"
-        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world."
+        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions."
       />
       {/* Open Graph tags for social media */}
       <meta property="og:title" content={title} />
       <meta
         property="og:description"
-        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world."
+        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions."
       />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content="website" />
