@@ -17,37 +17,27 @@ export default function Tips({ userData }) {
   const [category, setCategory] = useState('premium');
   const [isPremium, setIsPremium] = useState(false);
   const [isOnline] = useState(navigator.onLine);
-  const [userTimezone, setUserTimezone] = useState(null);
   
   // Reference for the filter container
   const filterRef = useRef(null);
 
-  // Get user's timezone
-  useEffect(() => {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    setUserTimezone(timezone);
-  }, []);
+  // Get user's timezone and current date
+  const getUserTimezone = () => {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  };
 
-  // Function to get current date in user's timezone
   const getCurrentDateInUserTimezone = () => {
     const now = new Date();
+    const userTimezone = getUserTimezone();
     const userDate = new Date(now.toLocaleString('en-US', { timeZone: userTimezone }));
     return userDate;
   };
 
-  // Format date consistently across timezones
-  const formatDate = (dateString, useUserTimezone = true) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    if (useUserTimezone && userTimezone) {
-      return date.toLocaleDateString('en-US', { 
-        timeZone: userTimezone,
-        year: 'numeric', 
-        month: '2-digit', 
-        day: '2-digit' 
-      });
-    }
-    return date.toLocaleDateString('en-US');
+  const date = getCurrentDateInUserTimezone();
+  const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US');
   };
 
   const returnDate = (dateString) => {
@@ -59,13 +49,10 @@ export default function Tips({ userData }) {
       return 'Today';
     }
     
-    return date.toLocaleDateString('en-US', { 
-      timeZone: userTimezone,
-      weekday: 'long', 
-      day: 'numeric' 
-    });
+    return date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
   };
 
+  // Get short day name or "Today" for the button
   const getShortDay = (dateString) => {
     const date = new Date(dateString);
     const today = getCurrentDateInUserTimezone();
@@ -75,30 +62,11 @@ export default function Tips({ userData }) {
       return 'Today';
     }
     
-    return date.toLocaleDateString('en-US', { 
-      timeZone: userTimezone,
-      weekday: 'short' 
-    });
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
   };
 
-  // Generate dates based on user's timezone
-  const generateDates = () => {
-    const dates = [];
-    const today = getCurrentDateInUserTimezone();
-    
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      dates.push(`${year}-${month}-${day}`);
-    }
-    return dates;
-  };
-
-  // Check if a date is today in user's timezone
-  const isToday = (dateString) => {
+  // Check if a date is today
+  const isTodayDate = (dateString) => {
     const date = new Date(dateString);
     const today = getCurrentDateInUserTimezone();
     return date.toDateString() === today.toDateString();
@@ -116,18 +84,24 @@ export default function Tips({ userData }) {
   }, []);
 
   useEffect(() => {
-    if (currentDate) {
-      getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate, false));
-    }
+    getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
   }, [isOnline, tipsPerPage, currentDate]);
 
   useEffect(() => {
-    if (userTimezone) {
-      const dates = generateDates();
-      setDays(dates);
-      setCurrentDate(dates[dates.length - 1]); // Set to today's date
+    const dates = [];
+    const today = getCurrentDateInUserTimezone();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      dates.push(`${year}-${month}-${day}`);
     }
-  }, [userTimezone]);
+    setDays(dates);
+    setCurrentDate(dates[dates.length - 1]);
+  }, []);
 
   // Auto-scroll to the far right (today's date) when days are loaded
   useEffect(() => {
@@ -154,7 +128,7 @@ export default function Tips({ userData }) {
   }, [loading]);
 
   const handleReload = () => {
-    getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate, false));
+    getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
   };
 
   const handleClick = (tip) => {
@@ -163,8 +137,9 @@ export default function Tips({ userData }) {
   };
 
   const isTipLocked = (tip) => {
-    const todayDate = generateDates()[generateDates().length - 1];
-    return !isPremium && tip.premium && tip.date === formatDate(todayDate, false);
+    const today = getCurrentDateInUserTimezone();
+    const todayFormatted = today.toLocaleDateString('en-US');
+    return !isPremium && tip.premium && tip.date === todayFormatted;
   };
 
   const filteredTips = tips.filter(tip => 
@@ -184,22 +159,12 @@ export default function Tips({ userData }) {
     }
   };
 
-  // Get formatted month/year in user's timezone
-  const getFormattedMonthYear = () => {
-    const today = getCurrentDateInUserTimezone();
-    return today.toLocaleDateString('en-US', { 
-      timeZone: userTimezone,
-      year: 'numeric', 
-      month: 'long' 
-    });
-  };
-
   return (
     <div className="tips">
       <AppHelmet title={"Powerking Tips"} location={'/'} />
       <div className='container'>
         <div className="filter-wrapper">
-          <p>{getFormattedMonthYear()}</p>
+          <p>{formattedDate}</p>
           <select onChange={(e) => setCategory(e.target.value)} value={category}>
             <option value="free">Free</option>
             <option value="premium">Premium</option>
@@ -207,20 +172,15 @@ export default function Tips({ userData }) {
         </div>
 
         <div className="filter" ref={filterRef}>
-          {days?.map((day, index) => {
-            const todayFlag = isToday(day);
-            return (
-              <button 
-                key={index}
-                className={`btn-filter ${currentDate === day ? 'active' : ''} ${todayFlag ? 'today-btn' : ''}`} 
-                onClick={() => handleDateClick(day, index)}
-              >
-                {todayFlag && <span className="today-badge">Today</span>}
-                <span className="day-short">{getShortDay(day)}</span>
-                <span className="date-num">{new Date(day).getDate()}</span>
-              </button>
-            );
-          })}
+          {days?.map((day, index) => (
+            <button 
+              key={index}
+              className={`btn-filter ${currentDate === day ? 'active' : ''}`} 
+              onClick={() => handleDateClick(day, index)}
+            >
+              <span>{getShortDay(day)}</span>
+            </button>
+          ))}
         </div>
 
         <table className='tips-table'>
@@ -240,8 +200,8 @@ export default function Tips({ userData }) {
               return (
                 <tr key={tip.id} onClick={() => handleClick(tip)}>
                   <td>{tip.time}</td>
-                  <td>{isLocked ? "🔒 Join VIP" : tip.home}</td>
-                  <td>{isLocked ? "🔒 To View" : tip.away}</td>
+                  <td>{isLocked ? "Join VIP To View" : tip.home}</td>
+                  <td>{isLocked ? "Closed" : tip.away}</td>
                   <td>{isLocked ? <FontAwesomeIcon icon={faLock} /> : tip.pick}</td>
                   <td>{tip.odd}</td>
                   <td>
