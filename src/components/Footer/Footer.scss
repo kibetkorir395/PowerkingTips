@@ -5,6 +5,18 @@
   align-items: center;
   justify-content: center;
   padding: 10px 0;
+  background: var(--gradient-bg);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-primary);
+  }
 
   .social {
     width: 100%;
@@ -13,29 +25,77 @@
     justify-content: center;
     padding: 5px 0;
     flex-wrap: wrap;
+    gap: 20px;
+
+    h2 {
+      font-size: 20px;
+      color: var(--dark);
+      margin: 0;
+      font-weight: 600;
+    }
 
     .wrapper {
       min-width: 300px;
       display: flex;
       align-items: center;
       justify-content: space-evenly;
+      gap: 15px;
 
       a {
         color: var(--dark);
         cursor: pointer;
+        transition: var(--transition-smooth);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: var(--lite);
+        box-shadow: var(--card-shadow);
+        
+        &:hover {
+          transform: translateY(-5px);
+          
+          &.telegram {
+            color: #0088cc;
+            background: rgba(0, 136, 204, 0.1);
+          }
+          
+          &.whatsapp {
+            color: #25D366;
+            background: rgba(37, 211, 102, 0.1);
+          }
+          
+          &.facebook {
+            color: #1877f2;
+            background: rgba(24, 119, 242, 0.1);
+          }
+          
+          &.twitter {
+            color: #000000;
+            background: rgba(0, 0, 0, 0.1);
+          }
+          
+          &.instagram {
+            color: #e4405f;
+            background: rgba(228, 64, 95, 0.1);
+          }
+        }
 
         * {
           font-size: 24px;
+          transition: var(--transition-smooth);
         }
       }
     }
-
-
   }
 
   hr {
     width: 80%;
-    color: var(--dark);
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--dark-blue), var(--blue), transparent);
     border-radius: 50%;
     margin: 20px 0px;
   }
@@ -45,11 +105,14 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px 20px;
 
-    //@media screen and (max-width: 478px) {
     @media screen and (max-width: 480px) {
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
+      padding: 15px 10px;
     }
 
     p {
@@ -58,28 +121,130 @@
       display: flex;
       align-items: center;
       justify-content: space-evenly;
+      margin: 0;
     }
 
-    a {
+    .footer-link {
       color: var(--dark);
       font-size: 14px;
       cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      padding: 5px 10px;
+      border-radius: 20px;
+      
+      &:hover {
+        color: var(--blue);
+        transform: translateY(-2px);
+        background: rgba(0, 174, 88, 0.1);
+      }
     }
 
     .btn-top {
-      width: 35px;
-      height: 35px;
+      width: 40px;
+      height: 40px;
       cursor: pointer;
       outline: none;
-      border: 1px solid var(--dark-blue);
-      background-color: transparent;
-      border-radius: 5px;
+      border: 1px solid var(--blue);
+      background: var(--lite);
+      border-radius: 50%;
       z-index: 1000;
-      transition: all 0.4s ease-in-out;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      
+      &:hover {
+        background: var(--gradient-primary);
+        color: var(--lite);
+        transform: translateY(-3px);
+        box-shadow: var(--card-hover-shadow);
+        border-color: transparent;
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+      
+      * {
+        font-size: 20px;
+      }
     }
+  }
+}
 
-    .btn-top:hover {
-      background-color: var(--green);
+// Dark theme support if needed
+.footer.theme {
+  background: var(--gradient-bg);
+}
+
+// Responsive adjustments
+@media screen and (max-width: 768px) {
+  .footer {
+    .social {
+      .wrapper {
+        min-width: 250px;
+        gap: 10px;
+        
+        a {
+          width: 40px;
+          height: 40px;
+          
+          * {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+    
+    .footer-bottom {
+      .btn-top {
+        width: 35px;
+        height: 35px;
+        
+        * {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer {
+    .social {
+      h2 {
+        font-size: 18px;
+      }
+      
+      .wrapper {
+        min-width: 200px;
+        
+        a {
+          width: 35px;
+          height: 35px;
+          
+          * {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+    
+    .footer-bottom {
+      p, .footer-link {
+        font-size: 12px;
+      }
+      
+      .btn-top {
+        width: 30px;
+        height: 30px;
+        
+        * {
+          font-size: 16px;
+        }
+      }
     }
   }
 }

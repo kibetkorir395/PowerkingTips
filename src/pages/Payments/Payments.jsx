@@ -1,49 +1,75 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import CryptoPayments from "./CryptoPayments";
-import './Payments.scss'
-import AppHelmet from "../../components/AppHelmet";
+import PaypalPayments from "./PaypalPayments";
 import KoraPayments from "./KoraPayments";
-export default function Payments({ setUserData }) {
-    const [paymentType, setPaymentType] = useState("mpesa")
-    const renderPaymentType = () => {
-        let item;
-        switch (paymentType) {
-            case "crypto":
-                item = <CryptoPayments setUserData={setUserData} />
-                break;
-            default:
-                item = <KoraPayments setUserData={setUserData} />
-        }
+import AppHelmet from "../../components/AppHelmet";
+import "./Payments.scss";
 
-        return item;
+export default function Payments({ setUserData }) {
+  const [paymentType, setPaymentType] = useState("mpesa");
+
+  const handlePaymentChange = useCallback((e) => {
+    setPaymentType(e.target.value);
+  }, []);
+
+  const renderPaymentType = useCallback(() => {
+    // Add a key to force re-render when payment type changes
+    const key = paymentType;
+    
+    switch (paymentType) {
+      case "paypal":
+        return <PaypalPayments key={key} setUserData={setUserData} />;
+      case "crypto":
+        return <CryptoPayments key={key} setUserData={setUserData} />;
+      case "mpesa":
+        return <KoraPayments key={key} setUserData={setUserData} />;
+      default:
+        return <KoraPayments key={key} setUserData={setUserData} />;
     }
-    return (
-        <div className="payments">
-            <AppHelmet title={"Pay"} location={'/pay'} />
-            <div className="wrapper">
-                <h2>select payment method</h2>
-                <form className="method">
-                    <fieldset>
-                        <input name="payment-method" type="radio" value={"mpesa"} id="mpesa" checked={paymentType === "mpesa"} onChange={(e) => setPaymentType(e.target.value)} />
-                        <label htmlFor="mpesa">Mobile Payments 📲</label>
-                    </fieldset>
-                    <fieldset>
-                        <input name="payment-method" type="radio" value={"crypto"} id="crypto" checked={paymentType === "crypto"} onChange={(e) => setPaymentType(e.target.value)} />
-                        <label htmlFor="crypto">Crypto ₿</label>
-                    </fieldset>
-                    {/*<fieldset>
-                        <input name="payment-method" type="radio" value={"paypal"} id="paypal" checked={paymentType === "paypal"} onChange={(e) => setPaymentType(e.target.value)}/>
-                        <label htmlFor="paypal">paypal</label>
-                    </fieldset>
-                    <fieldset>
-                        <input name="payment-method" type="radio" value={"other"} id="other" checked={paymentType === "other"} onChange={(e) => setPaymentType(e.target.value)}/>
-                        <label htmlFor="other">other</label>
-                    </fieldset>*/}
-                </form>
-            </div>
-            {
-                renderPaymentType()
-            }
-        </div>
-    )
+  }, [paymentType, setUserData]);
+
+  return (
+    <div className="payments">
+      <AppHelmet title={"Pay"} location={"/pay"} />
+      <div className="wrapper">
+        <h2>Select Payment Method</h2>
+        <form className="method">
+          <fieldset>
+            <input
+              name="payment-method"
+              type="radio"
+              value="mpesa"
+              id="mpesa"
+              checked={paymentType === "mpesa"}
+              onChange={handlePaymentChange}
+            />
+            <label htmlFor="mpesa">Mobile Payments 📲</label>
+          </fieldset>
+          <fieldset>
+            <input
+              name="payment-method"
+              type="radio"
+              value="paypal"
+              id="paypal"
+              checked={paymentType === "paypal"}
+              onChange={handlePaymentChange}
+            />
+            <label htmlFor="paypal">PayPal 💳</label>
+          </fieldset>
+          <fieldset>
+            <input
+              name="payment-method"
+              type="radio"
+              value="crypto"
+              id="crypto"
+              checked={paymentType === "crypto"}
+              onChange={handlePaymentChange}
+            />
+            <label htmlFor="crypto">Crypto ₿</label>
+          </fieldset>
+        </form>
+      </div>
+      {renderPaymentType()}
+    </div>
+  );
 }
