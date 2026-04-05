@@ -963,6 +963,60 @@ html {
   }
 }
 
+
+.btn-filter {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  
+  .today-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: var(--dark);
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    animation: bounce 0.5s ease-out;
+  }
+  
+  .day-short {
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  
+  .date-num {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  
+  &.today-btn {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: var(--dark);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    
+    &:hover {
+      transform: scale(1.08);
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
 // Enhanced tables
 table {
   color: var(--lite);

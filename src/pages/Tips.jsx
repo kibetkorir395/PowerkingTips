@@ -17,20 +17,91 @@ export default function Tips({ userData }) {
   const [category, setCategory] = useState('premium');
   const [isPremium, setIsPremium] = useState(false);
   const [isOnline] = useState(navigator.onLine);
+  const [userTimezone, setUserTimezone] = useState(null);
   
   // Reference for the filter container
   const filterRef = useRef(null);
 
-  const date = new Date();
-  const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+  // Get user's timezone
+  useEffect(() => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setUserTimezone(timezone);
+  }, []);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US');
+  // Function to get current date in user's timezone
+  const getCurrentDateInUserTimezone = () => {
+    const now = new Date();
+    const userDate = new Date(now.toLocaleString('en-US', { timeZone: userTimezone }));
+    return userDate;
+  };
+
+  // Format date consistently across timezones
+  const formatDate = (dateString, useUserTimezone = true) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (useUserTimezone && userTimezone) {
+      return date.toLocaleDateString('en-US', { 
+        timeZone: userTimezone,
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit' 
+      });
+    }
+    return date.toLocaleDateString('en-US');
   };
 
   const returnDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
+    const today = getCurrentDateInUserTimezone();
+    const isToday = date.toDateString() === today.toDateString();
+    
+    if (isToday) {
+      return 'Today';
+    }
+    
+    return date.toLocaleDateString('en-US', { 
+      timeZone: userTimezone,
+      weekday: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const getShortDay = (dateString) => {
+    const date = new Date(dateString);
+    const today = getCurrentDateInUserTimezone();
+    const isToday = date.toDateString() === today.toDateString();
+    
+    if (isToday) {
+      return 'Today';
+    }
+    
+    return date.toLocaleDateString('en-US', { 
+      timeZone: userTimezone,
+      weekday: 'short' 
+    });
+  };
+
+  // Generate dates based on user's timezone
+  const generateDates = () => {
+    const dates = [];
+    const today = getCurrentDateInUserTimezone();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      dates.push(`${year}-${month}-${day}`);
+    }
+    return dates;
+  };
+
+  // Check if a date is today in user's timezone
+  const isToday = (dateString) => {
+    const date = new Date(dateString);
+    const today = getCurrentDateInUserTimezone();
+    return date.toDateString() === today.toDateString();
   };
 
   useEffect(() => {
@@ -45,32 +116,24 @@ export default function Tips({ userData }) {
   }, []);
 
   useEffect(() => {
-    getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
+    if (currentDate) {
+      getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate, false));
+    }
   }, [isOnline, tipsPerPage, currentDate]);
 
   useEffect(() => {
-    const dates = [];
-    const today = new Date();
-    
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      dates.push(`${year}-${month}-${day}`);
+    if (userTimezone) {
+      const dates = generateDates();
+      setDays(dates);
+      setCurrentDate(dates[dates.length - 1]); // Set to today's date
     }
-    setDays(dates);
-    setCurrentDate(dates[dates.length - 1]);
-  }, []);
+  }, [userTimezone]);
 
   // Auto-scroll to the far right (today's date) when days are loaded
   useEffect(() => {
     if (days && days.length > 0 && filterRef.current) {
-      // Small delay to ensure DOM is fully rendered
       setTimeout(() => {
         const filterContainer = filterRef.current;
-        // Scroll to the far right
         filterContainer.scrollLeft = filterContainer.scrollWidth;
       }, 100);
     }
@@ -91,7 +154,7 @@ export default function Tips({ userData }) {
   }, [loading]);
 
   const handleReload = () => {
-    getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate));
+    getTips(tipsPerPage, setTips, setLoading, formatDate(currentDate, false));
   };
 
   const handleClick = (tip) => {
@@ -100,17 +163,16 @@ export default function Tips({ userData }) {
   };
 
   const isTipLocked = (tip) => {
-    return !isPremium && tip.premium && tip.date === formatDate(days?.[days.length - 1]);
+    const todayDate = generateDates()[generateDates().length - 1];
+    return !isPremium && tip.premium && tip.date === formatDate(todayDate, false);
   };
 
   const filteredTips = tips.filter(tip => 
     category === 'free' ? !tip.premium : tip.premium
   );
 
-  // Function to scroll to a specific date when clicked
   const handleDateClick = (day, index) => {
     setCurrentDate(day);
-    // Optional: Scroll the clicked button into view
     const filterContainer = filterRef.current;
     const buttons = filterContainer?.querySelectorAll('.btn-filter');
     if (buttons && buttons[index]) {
@@ -122,12 +184,22 @@ export default function Tips({ userData }) {
     }
   };
 
+  // Get formatted month/year in user's timezone
+  const getFormattedMonthYear = () => {
+    const today = getCurrentDateInUserTimezone();
+    return today.toLocaleDateString('en-US', { 
+      timeZone: userTimezone,
+      year: 'numeric', 
+      month: 'long' 
+    });
+  };
+
   return (
     <div className="tips">
       <AppHelmet title={"Powerking Tips"} location={'/'} />
       <div className='container'>
         <div className="filter-wrapper">
-          <p>{formattedDate}</p>
+          <p>{getFormattedMonthYear()}</p>
           <select onChange={(e) => setCategory(e.target.value)} value={category}>
             <option value="free">Free</option>
             <option value="premium">Premium</option>
@@ -135,16 +207,20 @@ export default function Tips({ userData }) {
         </div>
 
         <div className="filter" ref={filterRef}>
-          {days?.map((day, index) => (
-            <button 
-              key={index}
-              className={`btn-filter ${currentDate === day ? 'active' : ''}`} 
-              onClick={() => handleDateClick(day, index)}
-            >
-              <span>{returnDate(day).split(" ")[1]?.substring(0, 3)}</span>
-              <span>{returnDate(day).split(" ")[0]}</span>
-            </button>
-          ))}
+          {days?.map((day, index) => {
+            const todayFlag = isToday(day);
+            return (
+              <button 
+                key={index}
+                className={`btn-filter ${currentDate === day ? 'active' : ''} ${todayFlag ? 'today-btn' : ''}`} 
+                onClick={() => handleDateClick(day, index)}
+              >
+                {todayFlag && <span className="today-badge">Today</span>}
+                <span className="day-short">{getShortDay(day)}</span>
+                <span className="date-num">{new Date(day).getDate()}</span>
+              </button>
+            );
+          })}
         </div>
 
         <table className='tips-table'>
@@ -164,8 +240,8 @@ export default function Tips({ userData }) {
               return (
                 <tr key={tip.id} onClick={() => handleClick(tip)}>
                   <td>{tip.time}</td>
-                  <td>{isLocked ? "Join VIP To View" : tip.home}</td>
-                  <td>{isLocked ? "Closed" : tip.away}</td>
+                  <td>{isLocked ? "🔒 Join VIP" : tip.home}</td>
+                  <td>{isLocked ? "🔒 To View" : tip.away}</td>
                   <td>{isLocked ? <FontAwesomeIcon icon={faLock} /> : tip.pick}</td>
                   <td>{tip.odd}</td>
                   <td>
