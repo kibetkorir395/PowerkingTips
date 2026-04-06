@@ -45,7 +45,7 @@ export default function Payments({ setUserData }) {
             />
             <label htmlFor="mpesa">Mobile Payments 📲</label>
           </fieldset>
-          {/*<fieldset>
+          <fieldset>
             <input
               name="payment-method"
               type="radio"
@@ -55,7 +55,7 @@ export default function Payments({ setUserData }) {
               onChange={handlePaymentChange}
             />
             <label htmlFor="paypal">PayPal 💳</label>
-          </fieldset>*/}
+          </fieldset>
           <fieldset>
             <input
               name="payment-method"
