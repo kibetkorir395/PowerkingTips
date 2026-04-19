@@ -1,20 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx';
-import { BrowserRouter } from "react-router-dom";
-import { AuthContextProvider } from "./AuthContext";
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { PriceProvider } from './context/PriceContext';
+import App from './App';
 import './App.scss';
-import { PriceContextProvider } from './PriceContext.jsx';
 
+// Performance monitoring (optional)
+const reportWebVitals = (metric) => {
+  console.log(metric);
+  // Send to analytics if needed
+};
 
-createRoot(document.getElementById('root')).render(
+const root = createRoot(document.getElementById('root'));
+
+root.render(
   <StrictMode>
-  <AuthContextProvider>
-    <PriceContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </PriceContextProvider>
-  </AuthContextProvider>
-  </StrictMode>,
-)
+    <BrowserRouter>
+      <AuthProvider>
+        <PriceProvider>
+          <App />
+        </PriceProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </StrictMode>
+);
+
+// Report web vitals
+reportWebVitals(console.log);

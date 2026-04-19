@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react'
-import FaqItem from '../components/FaqItem/FaqItem';
-import { faqs } from '../data';
-import AppHelmet from '../components/AppHelmet';
+import FaqItem from '../../components/FaqItem/FaqItem';
+import { faqs } from '../../data';
+import AppHelmet from '../../components/AppHelmet';
 
 export default function About() {
   useLayoutEffect(() => {

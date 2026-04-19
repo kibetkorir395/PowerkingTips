@@ -1,5 +1,6 @@
 import { doc, setDoc } from "firebase/firestore";
-import { db, getUser } from "../../firebase";
+import { db } from "../../config/firebase";
+import { userService } from "../../services/firestore.service";
 import Swal from "sweetalert2";
 
 // Subscription plans mapping for different payment methods
@@ -68,34 +69,54 @@ export const getPlanName = (price) => {
 
 // Handle user upgrade after successful payment
 export const handleUpgrade = async (currentUser, price, setUserData) => {
+  if (!currentUser || !currentUser.email) {
+    Swal.fire({
+      title: "Error",
+      text: "User not found. Please login again.",
+      icon: "error",
+    });
+    return;
+  }
+
   try {
+    const subscriptionPeriod = getSubscriptionPeriod(price);
     const userDocRef = doc(db, "users", currentUser.email);
+    
     await setDoc(
       userDocRef,
       {
         email: currentUser.email,
-        username: currentUser.email,
+        username: currentUser.email.split('@')[0],
         isPremium: true,
-        subscription: getSubscriptionPeriod(price),
+        subscription: subscriptionPeriod,
         subDate: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       },
       { merge: true }
     );
-    await getUser(currentUser.email, setUserData);
+    
+    // Refresh user data
+    if (setUserData) {
+      const updatedUser = await userService.getUser(currentUser.email);
+      setUserData(updatedUser);
+    }
 
     Swal.fire({
       title: "Upgrade Successful! 🎉",
-      html: `You have upgraded to ${getSubscriptionPeriod(price)} VIP`,
+      html: `You have upgraded to <strong>${subscriptionPeriod} VIP</strong> plan!`,
       icon: "success",
       confirmButtonText: "Continue",
+      confirmButtonColor: "#00ae58",
     }).then(() => {
-      window.location.pathname = "/";
+      window.location.href = "/";
     });
   } catch (error) {
+    console.error("Upgrade error:", error);
     Swal.fire({
       title: "Error",
-      text: error.message,
+      text: error.message || "Failed to upgrade. Please contact support.",
       icon: "error",
+      confirmButtonText: "OK",
     });
   }
 };
@@ -162,4 +183,15 @@ export const getDefaultPlan = (paymentType) => {
     return SUBSCRIPTION_PLANS.dollars[0];
   }
   return SUBSCRIPTION_PLANS.shillings[0];
+};
+
+// Add transaction record
+export const addTransaction = async (userEmail, transactionData) => {
+  try {
+    const { transactionService } = await import("../../services/firestore.service");
+    return await transactionService.addTransaction(userEmail, transactionData);
+  } catch (error) {
+    console.error("Error adding transaction:", error);
+    return null;
+  }
 };

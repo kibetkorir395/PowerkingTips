@@ -1,3 +1,23 @@
+// In your ListUsers.scss or global.scss
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  @media screen and (max-width: 576px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}
+
 .user-card-minimal {
   width: 280px;
   background: var(--lite);
@@ -278,6 +298,7 @@
     }
   }
 
+  // Responsive Design
   @media screen and (max-width: 768px) {
     width: 260px;
   }
@@ -353,11 +374,65 @@
   }
 }
 
+// Loading animation
 @keyframes loading {
   0% {
     background-position: 200% 0;
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+// Additional styles for user card enhancements
+.user-card-minimal {
+  // Status badge for subscription expiry warning
+  .expiry-warning {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(240, 79, 48, 0.9);
+    color: var(--lite);
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    z-index: 3;
+  }
+  
+  // Joined date indicator
+  .joined-date {
+    font-size: 0.65rem;
+    color: var(--grey);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    svg {
+      font-size: 12px;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .user-card-minimal {
+    background: rgba(255, 255, 255, 0.05);
+    
+    .card-body-minimal {
+      .user-info-compact .plan-name,
+      .details-compact .detail-line .text-email,
+      .details-compact .detail-line .text-date {
+        color: var(--lite);
+      }
+      
+      .user-info-compact {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      .card-footer {
+        border-top-color: rgba(255, 255, 255, 0.1);
+      }
+    }
   }
 }

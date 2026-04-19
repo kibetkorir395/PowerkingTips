@@ -1,6 +1,6 @@
-import { useContext, useState, useEffect, useRef } from "react";
-import { AuthContext } from "../../AuthContext";
-import { PriceContext } from "../../PriceContext";
+import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { usePrice } from "../../context/PriceContext";
 import {
   SUBSCRIPTION_PLANS,
   getSubscriptionPeriod,
@@ -8,11 +8,10 @@ import {
   handleUpgrade,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
-import "./Payments.scss";
 
 export default function KoraPayments({ setUserData }) {
-  const { price, setPrice } = useContext(PriceContext);
-  const { currentUser } = useContext(AuthContext);
+  const { price, setPrice } = usePrice();
+  const { currentUser } = useAuth();
   const [processing, setProcessing] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("Kenya");
   const [convertedPrices, setConvertedPrices] = useState({
@@ -132,7 +131,6 @@ export default function KoraPayments({ setUserData }) {
   const convertToNaira = async () => {
     setIsLoadingRate(true);
     try {
-      // Fixed conversion rate for NGN (10.63 NGN = 1 KES)
       const rate = countries.Nigeria.rate;
 
       setConvertedPrices({
@@ -143,7 +141,6 @@ export default function KoraPayments({ setUserData }) {
       });
     } catch (error) {
       console.error("Error converting to Naira:", error);
-      // Fallback conversion
       const fallbackRate = 10.63;
       setConvertedPrices({
         daily: Math.round(priceOptions.Daily * fallbackRate),
@@ -357,7 +354,7 @@ export default function KoraPayments({ setUserData }) {
 
         <button
           onClick={handlePayment}
-          className="confirm-payment-btn"
+          className="confirm-payment-btn btn"
           disabled={processing || isLoadingRate || !koraLoaded}
         >
           {processing ? (

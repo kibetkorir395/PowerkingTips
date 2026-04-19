@@ -1,8 +1,8 @@
-import { useState, useContext, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Check, CopyAll } from "@mui/icons-material";
 import NowPaymentsApi from "@nowpaymentsio/nowpayments-api-js";
-import { AuthContext } from "../../AuthContext";
-import { PriceContext } from "../../PriceContext";
+import { useAuth } from "../../context/AuthContext";
+import { usePrice } from "../../context/PriceContext";
 import {
   SUBSCRIPTION_PLANS,
   getSubscriptionPeriod,
@@ -15,10 +15,10 @@ import "./Payments.scss";
 const npApi = new NowPaymentsApi({ apiKey: "D7YT1YV-PCAM4ZN-HX9W5M1-H02KFCV" });
 
 export default function CryptoPayments({ setUserData }) {
-  const { price, setPrice } = useContext(PriceContext);
-  const { currentUser } = useContext(AuthContext);
+  const { price, setPrice } = usePrice();
+  const { currentUser } = useAuth();
   const [currenciesArr, setCurrenciesArr] = useState(null);
-  const [selectedCurrency, setSelectedCurrency] = useState("TUSD");
+  const [selectedCurrency, setSelectedCurrency] = useState("USDT"); // Changed from TUSD
   const addressRef = useRef();
   const [copied, setCopied] = useState(false);
   const [payAmount, setPayAmount] = useState("");
@@ -28,6 +28,7 @@ export default function CryptoPayments({ setUserData }) {
   const [paymentId, setPaymentId] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
+  const [error, setError] = useState(null);
   const pollingIntervalRef = useRef(null);
 
   // Crypto subscription plans (dollars)
@@ -49,6 +50,7 @@ export default function CryptoPayments({ setUserData }) {
 
   const getCryptoAddress = async () => {
     setIsGenerating(true);
+    setError(null);
 
     try {
       const params = {
@@ -59,7 +61,14 @@ export default function CryptoPayments({ setUserData }) {
         order_description: `${getPlanName(price)} VIP Subscription`,
       };
 
+      console.log("Creating payment with params:", params);
+      
       const response = await npApi.createPayment(params);
+      console.log("Payment response:", response);
+
+      if (!response || !response.pay_address) {
+        throw new Error("Invalid response from payment provider");
+      }
 
       setPayAmount(response.pay_amount);
       setPayCurrency(response.pay_currency);
@@ -76,9 +85,10 @@ export default function CryptoPayments({ setUserData }) {
       });
     } catch (error) {
       console.error("Error generating address:", error);
+      setError(error.message || "Failed to generate payment address");
       Swal.fire({
         title: "Error",
-        text: "Failed to generate payment address. Please try again.",
+        text: error.message || "Failed to generate payment address. Please try again or select a different currency.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -88,7 +98,7 @@ export default function CryptoPayments({ setUserData }) {
   };
 
   const checkPaymentStatus = async () => {
-    if (!paymentId) return;
+    if (!paymentId) return false;
 
     try {
       const response = await fetch(
@@ -192,11 +202,12 @@ export default function CryptoPayments({ setUserData }) {
           if (completed) {
             Swal.close();
           }
-        }, 10000);
+        }, 15000); // Increased to 15 seconds
 
+        // Initial check after 3 seconds
         setTimeout(() => {
           checkPaymentStatus();
-        }, 2000);
+        }, 3000);
       },
       willClose: () => {
         if (pollingIntervalRef.current) {
@@ -210,10 +221,20 @@ export default function CryptoPayments({ setUserData }) {
 
   const handleCopy = (e) => {
     e.preventDefault();
-    addressRef.current.select();
-    document.execCommand("copy");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
+    if (addressRef.current) {
+      addressRef.current.select();
+      document.execCommand("copy");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      
+      Swal.fire({
+        title: "Copied!",
+        text: "Address copied to clipboard",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
   };
 
   useEffect(() => {
@@ -226,9 +247,16 @@ export default function CryptoPayments({ setUserData }) {
           }
         );
         const data = await response.json();
-        setCurrenciesArr(data.selectedCurrencies);
+        if (data && data.selectedCurrencies) {
+          setCurrenciesArr(data.selectedCurrencies);
+        } else {
+          // Fallback currencies if API fails
+          setCurrenciesArr(["USDT", "BTC", "ETH", "LTC", "BCH", "XRP", "DOGE"]);
+        }
       } catch (error) {
         console.error("Error fetching currencies:", error);
+        // Set fallback currencies
+        setCurrenciesArr(["USDT", "BTC", "ETH", "LTC", "BCH", "XRP", "DOGE"]);
       }
     };
 
@@ -239,6 +267,7 @@ export default function CryptoPayments({ setUserData }) {
     setPrice(planValue);
     setAddress("");
     setPaymentId(null);
+    setError(null);
     if (pollingIntervalRef.current) {
       clearInterval(pollingIntervalRef.current);
       pollingIntervalRef.current = null;
@@ -250,6 +279,7 @@ export default function CryptoPayments({ setUserData }) {
     setSelectedCurrency(currency);
     setAddress("");
     setPaymentId(null);
+    setError(null);
   };
 
   return (
@@ -277,11 +307,12 @@ export default function CryptoPayments({ setUserData }) {
         <h3>CRYPTO PAYMENT DETAILS</h3>
 
         <div className="form-group">
-          <label>Select Currency:</label>
+          <label>Select Cryptocurrency:</label>
           <select
             value={selectedCurrency}
             onChange={(e) => handleCurrencyChange(e.target.value)}
             className="glass-select"
+            disabled={isGenerating}
           >
             {currenciesArr?.map((currency) => (
               <option key={currency} value={currency}>
@@ -291,20 +322,26 @@ export default function CryptoPayments({ setUserData }) {
           </select>
         </div>
 
+        {error && (
+          <div className="error-message" style={{ color: "#d63031", marginBottom: "15px" }}>
+            {error}
+          </div>
+        )}
+
         {address ? (
           <>
             <div className="payment-info">
               <p>
-                Amount:{" "}
+                Amount to Send:{" "}
                 <span>
-                  {payAmount} {payCurrency?.toUpperCase()}
+                  {parseFloat(payAmount).toFixed(6)} {payCurrency?.toUpperCase()}
                 </span>
               </p>
               <p>
-                Network: <span>{network?.toUpperCase()}</span>
+                Network: <span>{network?.toUpperCase() || "Select network in wallet"}</span>
               </p>
               <p>
-                Address: <span>{address}</span>
+                Recipient Address: <span className="address-text">{address}</span>
               </p>
             </div>
 
@@ -316,12 +353,8 @@ export default function CryptoPayments({ setUserData }) {
                 ref={addressRef}
                 className="glass-input"
               />
-              <button onClick={handleCopy} className="copy-btn">
-                {copied ? (
-                  <Check className="icon" />
-                ) : (
-                  <CopyAll className="icon" />
-                )}
+              <button onClick={handleCopy} className="copy-btn" disabled={!address}>
+                {copied ? <Check className="icon" /> : <CopyAll className="icon" />}
               </button>
             </div>
 
@@ -334,7 +367,7 @@ export default function CryptoPayments({ setUserData }) {
                 {isGenerating ? "Generating..." : "Generate New Address"}
               </button>
 
-              {!isPolling && (
+              {!isPolling && paymentId && (
                 <button className="check-status-btn" onClick={startPolling}>
                   Check Payment Status
                 </button>
@@ -354,9 +387,7 @@ export default function CryptoPayments({ setUserData }) {
             onClick={getCryptoAddress}
             disabled={isGenerating}
           >
-            {isGenerating
-              ? "Generating Address..."
-              : "Generate Payment Address"}
+            {isGenerating ? "Generating Address..." : "Generate Payment Address"}
           </button>
         )}
       </div>

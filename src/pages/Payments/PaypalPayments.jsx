@@ -1,7 +1,6 @@
-import { useState, useContext, useEffect, useRef } from "react";
-import { loadScript } from "@paypal/paypal-js";
-import { AuthContext } from "../../AuthContext";
-import { PriceContext } from "../../PriceContext";
+import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { usePrice } from "../../context/PriceContext";
 import {
   SUBSCRIPTION_PLANS,
   getPlanName,
@@ -11,19 +10,12 @@ import Swal from "sweetalert2";
 import "./Payments.scss";
 
 export default function PaypalPayments({ setUserData }) {
-  const { price, setPrice } = useContext(PriceContext);
-  const { currentUser } = useContext(AuthContext);
+  const { price, setPrice } = usePrice();
+  const { currentUser } = useAuth();
   const [isPaypalLoaded, setIsPaypalLoaded] = useState(false);
-  const [eligiblePaymentMethods, setEligiblePaymentMethods] = useState({
-    paypal: true,
-    venmo: false,
-    paylater: false,
-  });
-  
+  const [isProcessing, setIsProcessing] = useState(false);
   const buttonContainerRef = useRef(null);
   const paypalButtonsRef = useRef(null);
-  const venmoButtonsRef = useRef(null);
-  const paylaterButtonsRef = useRef(null);
 
   const subscriptionPlans = SUBSCRIPTION_PLANS.dollars;
 
@@ -32,172 +24,158 @@ export default function PaypalPayments({ setUserData }) {
     setPrice(subscriptionPlans[0].value);
   }, []);
 
-  // Load PayPal script with multiple components
+  // Load PayPal script properly
   useEffect(() => {
-    loadScript({
-      "client-id": "AXIggvGGvXozbZhdkvizPLd89nVYW8KoyNlHO0gHx7hjY_Ah_IfgXihUQGf7T2HUUVYx-D5SNncM0CtU",
-      currency: "USD",
-      intent: "capture",
-      components: "buttons,venmo,paylater", // Add venmo and paylater components
-      "enable-funding": "venmo,paylater", // Enable Venmo and PayLater funding sources
-    })
-      .then((paypal) => {
-        console.log("PayPal loaded successfully", paypal);
-        
-        // Check which payment methods are available
-        const isVenmoAvailable = paypal.FUNDING && paypal.FUNDING.VENMO;
-        const isPayLaterAvailable = paypal.FUNDING && paypal.FUNDING.PAYLATER;
-        
-        setEligiblePaymentMethods({
-          paypal: true,
-          venmo: isVenmoAvailable,
-          paylater: isPayLaterAvailable,
-        });
-        
-        setIsPaypalLoaded(true);
-      })
-      .catch((error) => {
-        console.error("Failed to load PayPal SDK:", error);
-        Swal.fire({
-          title: "Error",
-          text: "Failed to load PayPal. Please refresh the page.",
-          icon: "error",
-        });
+    // Check if PayPal is already loaded
+    if (window.paypal && window.paypal.Buttons) {
+      setIsPaypalLoaded(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://www.paypal.com/sdk/js?client-id=AXIggvGGvXozbZhdkvizPLd89nVYW8KoyNlHO0gHx7hjY_Ah_IfgXihUQGf7T2HUUVYx-D5SNncM0CtU&currency=USD";
+    script.async = true;
+    
+    script.onload = () => {
+      // Small delay to ensure PayPal is fully initialized
+      setTimeout(() => {
+        if (window.paypal && window.paypal.Buttons) {
+          setIsPaypalLoaded(true);
+          console.log("PayPal SDK loaded successfully");
+        } else {
+          console.error("PayPal Buttons not available after script load");
+        }
+      }, 500);
+    };
+    
+    script.onerror = (error) => {
+      console.error("Failed to load PayPal SDK:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to load PayPal. Please check your internet connection.",
+        icon: "error",
+        confirmButtonText: "OK",
       });
+    };
+    
+    document.body.appendChild(script);
+    
+    return () => {
+      // Cleanup
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, []);
 
-  // Create order function (shared across all payment methods)
-  const createOrder = (data, actions) => {
+  // Create order function
+  const createOrder = async (data, actions) => {
     return actions.order.create({
       purchase_units: [
         {
+          description: `${getPlanName(price)} VIP Subscription`,
           amount: {
             value: price.toFixed(2),
             currency_code: "USD",
           },
-          description: `${getPlanName(price)} VIP Subscription`,
         },
       ],
     });
   };
 
-  // On approve function (shared across all payment methods)
-  const onApprove = (data, actions) => {
-    return actions.order.capture().then((details) => {
+  // On approve function
+  const onApprove = async (data, actions) => {
+    setIsProcessing(true);
+    try {
+      const details = await actions.order.capture();
       console.log("Payment completed:", details);
-      handleUpgrade(currentUser, price, setUserData);
+      await handleUpgrade(currentUser, price, setUserData);
       
       Swal.fire({
-        title: "Payment Successful!",
+        title: "Payment Successful! 🎉",
         text: `You've upgraded to ${getPlanName(price)} VIP!`,
         icon: "success",
+        confirmButtonText: "Continue",
+        confirmButtonColor: "#00ae58",
       });
-    });
-  };
-
-  // On error function (shared)
-  const onError = (err) => {
-    console.error("Payment error:", err);
-    Swal.fire({
-      title: "Payment Failed",
-      text: "Please try again.",
-      icon: "error",
-    });
-  };
-
-  // Render PayPal buttons
-  useEffect(() => {
-    if (!isPaypalLoaded || !buttonContainerRef.current || !window.paypal) {
-      return;
-    }
-
-    // Clear existing buttons
-    if (paypalButtonsRef.current) {
-      return;
-    }
-
-    // Render PayPal button
-    if (eligiblePaymentMethods.paypal) {
-      try {
-        const paypalButtons = window.paypal.Buttons({
-          style: {
-            layout: "horizontal",
-            color: "gold",
-            shape: "pill",
-            label: "pay",
-          },
-          createOrder: createOrder,
-          onApprove: onApprove,
-          onError: onError,
-        });
-        
-        paypalButtons.render(buttonContainerRef.current);
-        paypalButtonsRef.current = paypalButtons;
-      } catch (error) {
-        console.error("Failed to render PayPal buttons:", error);
-      }
-    }
-  }, [isPaypalLoaded, eligiblePaymentMethods]);
-
-  // Function to render Venmo button separately
-  const renderVenmoButton = (containerId) => {
-    if (!window.paypal || !eligiblePaymentMethods.venmo) return;
-    
-    try {
-      const venmoButtons = window.paypal.Buttons({
-        style: {
-          layout: "horizontal",
-          color: "blue",
-          shape: "pill",
-          label: "venmo",
-        },
-        fundingSource: window.paypal.FUNDING.VENMO,
-        createOrder: createOrder,
-        onApprove: onApprove,
-        onError: onError,
-      });
-      
-      venmoButtons.render(`#${containerId}`);
-      venmoButtonsRef.current = venmoButtons;
     } catch (error) {
-      console.error("Failed to render Venmo buttons:", error);
+      console.error("Payment capture error:", error);
+      Swal.fire({
+        title: "Payment Failed",
+        text: "There was an error processing your payment. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  // Function to render PayLater button
-  const renderPayLaterButton = (containerId) => {
-    if (!window.paypal || !eligiblePaymentMethods.paylater) return;
-    
+  // On error function
+  const onError = (err) => {
+    console.error("PayPal error:", err);
+    setIsProcessing(false);
+    Swal.fire({
+      title: "Payment Error",
+      text: "An error occurred with PayPal. Please try again.",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  };
+
+  // Render PayPal buttons when loaded
+  useEffect(() => {
+    if (!isPaypalLoaded || !buttonContainerRef.current || isProcessing) {
+      return;
+    }
+
+    // Clear previous buttons
+    if (paypalButtonsRef.current) {
+      try {
+        paypalButtonsRef.current.close();
+      } catch (e) {
+        console.log("Error closing previous buttons:", e);
+      }
+      paypalButtonsRef.current = null;
+    }
+
+    // Clear container
+    if (buttonContainerRef.current) {
+      buttonContainerRef.current.innerHTML = "";
+    }
+
+    // Create new buttons
     try {
-      const paylaterButtons = window.paypal.Buttons({
+      const paypalButtons = window.paypal.Buttons({
         style: {
-          layout: "horizontal",
+          layout: "vertical",
           color: "gold",
           shape: "pill",
-          label: "paylater",
+          label: "paypal",
+          height: 40,
         },
-        fundingSource: window.paypal.FUNDING.PAYLATER,
         createOrder: createOrder,
         onApprove: onApprove,
         onError: onError,
+        onCancel: () => {
+          console.log("Payment cancelled");
+          Swal.fire({
+            title: "Payment Cancelled",
+            text: "You cancelled the payment process.",
+            icon: "info",
+            confirmButtonText: "OK",
+          });
+        },
       });
       
-      paylaterButtons.render(`#${containerId}`);
-      paylaterButtonsRef.current = paylaterButtons;
+      if (buttonContainerRef.current) {
+        paypalButtons.render(buttonContainerRef.current);
+        paypalButtonsRef.current = paypalButtons;
+      }
     } catch (error) {
-      console.error("Failed to render PayLater buttons:", error);
+      console.error("Failed to render PayPal buttons:", error);
     }
-  };
-
-  // Render Venmo and PayLater buttons when eligible
-  useEffect(() => {
-    if (isPaypalLoaded && eligiblePaymentMethods.venmo) {
-      renderVenmoButton("venmo-button-container");
-    }
-    if (isPaypalLoaded && eligiblePaymentMethods.paylater) {
-      renderPayLaterButton("paylater-button-container");
-    }
-  }, [isPaypalLoaded, eligiblePaymentMethods, price]);
+  }, [isPaypalLoaded, price, isProcessing]);
 
   const handlePlanSelect = (planValue) => {
     setPrice(planValue);
@@ -229,31 +207,19 @@ export default function PaypalPayments({ setUserData }) {
           GET {getPlanName(price).toUpperCase()} VIP FOR ${price}
         </h3>
         
-        {/* PayPal Button */}
         <div className="paypal-buttons-container">
           {!isPaypalLoaded ? (
-            <div className="paypal-loading">Loading PayPal...</div>
+            <div className="paypal-loading">
+              <div className="loader-spinner"></div>
+              <p>Loading PayPal...</p>
+            </div>
           ) : (
             <div ref={buttonContainerRef}></div>
           )}
         </div>
 
-        {/* Venmo Button (only if eligible) */}
-        {eligiblePaymentMethods.venmo && (
-          <div className="venmo-buttons-container" style={{ marginTop: '10px' }}>
-            <div id="venmo-button-container"></div>
-          </div>
-        )}
-
-        {/* PayLater Button (only if eligible) */}
-        {eligiblePaymentMethods.paylater && (
-          <div className="paylater-buttons-container" style={{ marginTop: '10px' }}>
-            <div id="paylater-button-container"></div>
-          </div>
-        )}
-
-        <p style={{ textAlign: 'center', marginTop: '10px', fontSize: '14px', opacity: 0.8 }}>
-          Paying: ${price} for {getPlanName(price)} VIP
+        <p className="payment-note">
+          Secure payment powered by PayPal
         </p>
       </div>
     </div>

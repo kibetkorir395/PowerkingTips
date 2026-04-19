@@ -1,16 +1,16 @@
-import React, { useContext } from 'react'
-import './Pricing.scss'
-import { PriceContext } from '../../PriceContext';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, Star, TrendingUp, AccessTime, EmojiEvents } from '@mui/icons-material';
+import { usePrice } from '../../context/PriceContext';
+import './Pricing.scss';
 
 export default function Pricing() {
     const navigate = useNavigate();
-    const { setPrice } = useContext(PriceContext);
+    const { setPrice } = usePrice();
 
     const handleClick = (price) => {
-        setPrice(price)
-        navigate('/pay')
+        setPrice(price);
+        navigate('/pay');
     }
     
     const plans = [

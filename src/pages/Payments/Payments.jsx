@@ -1,9 +1,41 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, Component } from "react";
 import CryptoPayments from "./CryptoPayments";
 import PaypalPayments from "./PaypalPayments";
 import KoraPayments from "./KoraPayments";
 import AppHelmet from "../../components/AppHelmet";
 import "./Payments.scss";
+
+// Simple Error Boundary Component
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Payment component error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="payment-error-boundary">
+          <i className="fas fa-exclamation-circle"></i>
+          <h3>Something went wrong</h3>
+          <p>Please try refreshing the page or select another payment method.</p>
+          <button onClick={() => window.location.reload()} className="btn">
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export default function Payments({ setUserData }) {
   const [paymentType, setPaymentType] = useState("mpesa");
@@ -13,18 +45,31 @@ export default function Payments({ setUserData }) {
   }, []);
 
   const renderPaymentType = useCallback(() => {
-    // Add a key to force re-render when payment type changes
-    const key = paymentType;
-    
     switch (paymentType) {
       case "paypal":
-        return <PaypalPayments key={key} setUserData={setUserData} />;
+        return (
+          <ErrorBoundary key="paypal">
+            <PaypalPayments setUserData={setUserData} />
+          </ErrorBoundary>
+        );
       case "crypto":
-        return <CryptoPayments key={key} setUserData={setUserData} />;
+        return (
+          <ErrorBoundary key="crypto">
+            <CryptoPayments setUserData={setUserData} />
+          </ErrorBoundary>
+        );
       case "mpesa":
-        return <KoraPayments key={key} setUserData={setUserData} />;
+        return (
+          <ErrorBoundary key="mpesa">
+            <KoraPayments setUserData={setUserData} />
+          </ErrorBoundary>
+        );
       default:
-        return <KoraPayments key={key} setUserData={setUserData} />;
+        return (
+          <ErrorBoundary key="default">
+            <KoraPayments setUserData={setUserData} />
+          </ErrorBoundary>
+        );
     }
   }, [paymentType, setUserData]);
 

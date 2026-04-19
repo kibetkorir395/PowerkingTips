@@ -83,7 +83,7 @@
           }
         }
 
-        * {
+        svg {
           font-size: 24px;
           transition: var(--transition-smooth);
         }
@@ -104,7 +104,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
     padding: 10px 20px;
@@ -167,7 +167,7 @@
         transform: translateY(0);
       }
       
-      * {
+      svg {
         font-size: 20px;
       }
     }
@@ -191,7 +191,7 @@
           width: 40px;
           height: 40px;
           
-          * {
+          svg {
             font-size: 20px;
           }
         }
@@ -203,7 +203,7 @@
         width: 35px;
         height: 35px;
         
-        * {
+        svg {
           font-size: 18px;
         }
       }
@@ -225,7 +225,7 @@
           width: 35px;
           height: 35px;
           
-          * {
+          svg {
             font-size: 18px;
           }
         }
@@ -241,7 +241,7 @@
         width: 30px;
         height: 30px;
         
-        * {
+        svg {
           font-size: 16px;
         }
       }

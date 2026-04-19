@@ -44,7 +44,6 @@ html {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   margin-top: 95px;
   color: var(--dark);
@@ -169,15 +168,16 @@ html {
 .jobs-flyer {
   width: 100%;
   background: var(--gradient-primary);
-  padding: 30px 10px;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
   position: relative;
   overflow: hidden;
-  
+  gap: 15px;
+
   &::before {
     content: '';
     position: absolute;
@@ -194,22 +194,17 @@ html {
     font-size: 28px;
     position: relative;
     z-index: 1;
+    margin: 0;
+    text-align: center;
     
     &:first-of-type {
       font-size: 22px;
-      margin-top: 0;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
-  }
-  
-  @media screen and (max-width: 576px) {
-    h1 {
-      font-size: 18px;
-      margin-top: 0;
-      &:first-of-type {
-        font-size: 14px;
-        margin-bottom: 5px;
-      }
+    
+    &:last-of-type {
+      font-size: 24px;
+      font-weight: 600;
     }
   }
   
@@ -217,10 +212,71 @@ html {
     background: var(--black);
     position: relative;
     z-index: 1;
+    margin-top: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     
     &:hover {
       background: var(--dark);
       transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      color: var(--lite);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    padding: 30px 15px;
+    
+    h1 {
+      font-size: 24px;
+      
+      &:first-of-type {
+        font-size: 20px;
+      }
+      
+      &:last-of-type {
+        font-size: 20px;
+      }
+    }
+    
+    .btn {
+      padding: 10px 25px;
+      font-size: 14px;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    padding: 25px 15px;
+    gap: 12px;
+    
+    h1 {
+      font-size: 18px;
+      
+      &:first-of-type {
+        font-size: 16px;
+        margin-bottom: 3px;
+      }
+      
+      &:last-of-type {
+        font-size: 16px;
+      }
+    }
+    
+    .btn {
+      padding: 8px 20px;
+      font-size: 13px;
+      color: var(--lite);
+      text-decoration: none;
     }
   }
 }
@@ -519,7 +575,7 @@ html {
     
     &:nth-of-type(even), &.tables {
       > h1, h2 {
-        color: var(--lite);
+        color: var(--dark-blue);
       }
       
       background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
@@ -571,8 +627,8 @@ html {
       background: var(--gradient-primary);
       
       &.selected {
-        background: #FFFF33;
-        color: var(--dark-blue);
+        background: linear-gradient(135deg, #eac90e, #FFA500);
+        
       }
     }
   }
@@ -990,6 +1046,429 @@ html {
   }
 }
 
+// Tips Header Styles
+.tips-header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 0 10px;
+
+  h2 {
+    color: var(--lite);
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    @media screen and (max-width: 768px) {
+      font-size: 20px;
+    }
+  }
+
+  .upgrade-banner {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+    animation: glowPulse 2s ease-in-out infinite;
+
+    span:first-child {
+      font-size: 20px;
+      animation: bounce 1s ease-in-out infinite;
+    }
+
+    span:nth-child(2) {
+      color: var(--lite);
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .upgrade-link {
+      background: var(--gradient-primary);
+      color: var(--lite);
+      padding: 6px 16px;
+      border-radius: 25px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      white-space: nowrap;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow);
+      }
+    }
+
+    @media screen and (max-width: 576px) {
+      flex-direction: column;
+      text-align: center;
+      
+      span:nth-child(2) {
+        font-size: 12px;
+      }
+      
+      .upgrade-link {
+        font-size: 12px;
+        padding: 4px 12px;
+      }
+    }
+  }
+
+  .category-selector {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 5px;
+
+    .category-btn {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 24px;
+      border-radius: 30px;
+      color: var(--lite);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      &.active {
+        background: var(--gradient-primary);
+        border-color: transparent;
+        box-shadow: var(--card-shadow);
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      gap: 8px;
+      
+      .category-btn {
+        padding: 6px 16px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+// Date Filter Styles
+.date-filter {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 10px;
+  margin-bottom: 20px;
+  scroll-behavior: smooth;
+  
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 10px;
+  }
+
+  .date-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: var(--lite);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: var(--gradient-primary);
+      border-color: transparent;
+      box-shadow: var(--card-shadow);
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .date-btn {
+      padding: 6px 14px;
+      font-size: 11px;
+    }
+  }
+}
+
+
+// Add to your existing Tips.scss
+
+.tips-header {
+  margin-bottom: 20px;
+  
+  h2 {
+    color: var(--lite);
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .upgrade-banner {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+
+    span:first-child {
+      font-size: 18px;
+    }
+
+    span:nth-child(2) {
+      color: var(--lite);
+      font-size: 13px;
+    }
+
+    .upgrade-link {
+      background: var(--gradient-primary);
+      color: var(--lite);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      text-decoration: none;
+      
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
+  }
+  
+  .category-selector {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    
+    .category-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      padding: 6px 20px;
+      border-radius: 25px;
+      color: var(--lite);
+      cursor: pointer;
+      
+      &.active {
+        background: var(--gradient-primary);
+      }
+    }
+  }
+}
+
+.date-filter {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 0;
+  margin-bottom: 15px;
+  
+  .date-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    padding: 6px 15px;
+    border-radius: 20px;
+    color: var(--lite);
+    white-space: nowrap;
+    cursor: pointer;
+    
+    &.active {
+      background: var(--gradient-primary);
+    }
+  }
+}
+
+// Tips Table Container
+/*.tips-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  margin-top: 10px;
+  
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 10px;
+  }
+}
+
+// Tips Table Enhancements
+.tips-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+
+  th, td {
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  th {
+    background: var(--gradient-primary);
+    color: var(--lite);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  tr {
+    transition: var(--transition-smooth);
+    cursor: pointer;
+
+    &:nth-child(even) {
+      background: var(--grey);
+    }
+
+    &:nth-child(odd) {
+      background: var(--dark-blue);
+    }
+
+    &:hover {
+      transform: scale(1.01);
+      background: var(--lite);
+      
+      td {
+        color: var(--dark);
+        
+        .result.won {
+          color: var(--blue);
+        }
+        
+        .result.lost {
+          color: var(--even);
+        }
+      }
+    }
+
+    &.locked {
+      opacity: 0.7;
+      cursor: not-allowed;
+      
+      &:hover {
+        transform: none;
+        background: inherit;
+      }
+    }
+  }
+
+  td {
+    color: var(--lite);
+    
+    &.blurred {
+      filter: blur(3px);
+      user-select: none;
+    }
+    
+    .result {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      
+      &.won {
+        color: var(--neon-blue);
+      }
+      
+      &.lost {
+        color: var(--even);
+      }
+    }
+  }
+}
+
+// Premium Tip Indicator
+.premium-tip {
+  position: relative;
+  
+  &::before {
+    content: '⭐';
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    font-size: 10px;
+  }
+}
+
+// No Tips Message
+.no-tips {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  margin: 20px 0;
+  
+  p {
+    color: var(--lite);
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+// Upgrade Banner Animation
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    border-color: rgba(255, 215, 0, 0.6);
+  }
+}
+
+// Existing animations reused
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+    //transform: translateY(-2px);
+  }
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -1004,16 +1483,7 @@ html {
     box-shadow: 0 0 0 0 rgba(0, 174, 88, 0);
   }
 }
-
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
-}
+*/
 
 // Enhanced tables
 table {

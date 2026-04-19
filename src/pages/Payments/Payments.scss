@@ -730,14 +730,13 @@
     }
 
     .confirm-payment-btn {
-      padding: 14px 28px;
+      padding: 12px 28px;
       font-size: 16px;
       font-weight: 600;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
+      color: var(--lite);
       width: 100%;
       max-width: 250px;
       transition: all 0.3s ease;

@@ -11,7 +11,7 @@
     box-shadow: var(--card-hover-shadow);
     transition: var(--transition-smooth);
     animation: slideIn 0.3s ease-out;
-    z-index: 10001; // Higher than navbar (100)
+    z-index: 101; // Higher than navbar (100)
     
     @media screen and (max-width: 768px) {
         width: 90%;
@@ -21,7 +21,7 @@
         top: 55% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
-        z-index: 10001; // Very high to be above everything
+        z-index: 101; // Very high to be above everything
         max-height: 85vh;
         overflow-y: auto;
         margin: 0;
@@ -50,7 +50,7 @@
         color: var(--grey);
         transition: var(--transition-smooth);
         display: block;
-        z-index: 100002;
+        z-index: 102;
         
         &:hover {
             color: var(--even);
@@ -395,7 +395,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 10002;
+        z-index: 102;
         
         .vip-message {
             text-align: center;
@@ -477,7 +477,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 10000;
+            z-index: 100;
         }
     }
 }

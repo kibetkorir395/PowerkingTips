@@ -1,8 +1,8 @@
 import React, { useLayoutEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import AppHelmet from '../components/AppHelmet';
+import AppHelmet from '../../components/AppHelmet';
 
-export default function Error() {
+export default function NotFound() {
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   });

@@ -1,100 +1,85 @@
-import { ArrowUpward, Facebook, Telegram, WhatsApp, X, Instagram } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { socialLinks } from '../../data/mockData';
+import { ArrowUpward, Telegram, WhatsApp, Facebook, X, Instagram } from '@mui/icons-material';
 import './Footer.scss';
-import { Link, NavLink } from 'react-router-dom';
-import { socialLinks } from '../../data';
 
-const Footer = ({ user }) => {
+export default function Footer() {
+  const { isAdmin, currentUser } = useAuth();
 
-    const [isAdmin, setIsAdmin] = useState(null);
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-    const handleScroll = (e) => {
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        })
-    }
-
-    useEffect(() => {
-        if (user !== null) {
-            if (user.email === 'kkibetkkoir@gmail.com' || user.email === 'arovanzgamez@gmail.com') {
-                setIsAdmin(true)
-            } else {
-                setIsAdmin(false)
-            }
-        }
-    }, [user])
-
-    return (
-        <div className="footer">
-            <div className="social">
-                <h2>Follow us</h2>
-                <div className="wrapper">
-                    <Link
-                        to={socialLinks.telegramChannel}
-                        title="@powerkingtips"
-                        target="_blank"
-                        className="social-link telegram"
-                    >
-                        <Telegram />
-                    </Link>
-                    <Link
-                        to={socialLinks.whatsappChannel}
-                        title="whatsapp"
-                        target="_blank"
-                        className="social-link whatsapp"
-                    >
-                        <WhatsApp />
-                    </Link>
-                    <Link
-                        to={socialLinks.facebookPage}
-                        title="facebook"
-                        target="_blank"
-                        className="social-link facebook"
-                    >
-                        <Facebook />
-                    </Link>
-                    <Link
-                        to={socialLinks.xPage}
-                        title="twitter"
-                        target="_blank"
-                        className="social-link twitter"
-                    >
-                        <X />
-                    </Link>
-                    <Link
-                        to={socialLinks.instagramPage}
-                        title="instagram"
-                        target="_blank"
-                        className="social-link instagram"
-                    >
-                        <Instagram />
-                    </Link>
-                </div>
-            </div>
-            <hr />
-            <div className="footer-bottom">
-                <p>&copy; Powerking Tips {new Date().getFullYear()}</p>
-                <NavLink to="/about#faq" title="what people ask" className="footer-link">
-                    FAQ
-                </NavLink>
-                {isAdmin && (
-                    <>
-                        <NavLink to="/admin/tips" title="add tip" className="footer-link">
-                            ADD TIP
-                        </NavLink>
-                        <NavLink to="/users" title="users" className="footer-link">
-                            USERS
-                        </NavLink>
-                    </>
-                )}
-                <button className="btn-top" onClick={() => handleScroll()} title="Back to top">
-                    <ArrowUpward />
-                </button>
-            </div>
+  return (
+    <div className="footer">
+      <div className="social">
+        <h2>Follow us</h2>
+        <div className="wrapper">
+          <a href={socialLinks.telegramChannel} target="_blank" rel="noopener noreferrer" className="telegram">
+            <Telegram />
+          </a>
+          <a href={socialLinks.whatsappChannel} target="_blank" rel="noopener noreferrer" className="whatsapp">
+            <WhatsApp />
+          </a>
+          <a href={socialLinks.facebookPage} target="_blank" rel="noopener noreferrer" className="facebook">
+            <Facebook />
+          </a>
+          <a href={socialLinks.xPage} target="_blank" rel="noopener noreferrer" className="twitter">
+            <X />
+          </a>
+          <a href={socialLinks.instagramPage} target="_blank" rel="noopener noreferrer" className="instagram">
+            <Instagram />
+          </a>
         </div>
-    );
-}
+      </div>
 
-export default Footer;
+      <hr />
+
+      <div className="footer-bottom">
+        <p>&copy; PowerKing Tips {new Date().getFullYear()}</p>
+        
+        <NavLink to="/about#faq" className="footer-link">
+          FAQ
+        </NavLink>
+        
+        {!currentUser && (
+          <>
+            <NavLink to="/login" className="footer-link">
+              Login
+            </NavLink>
+            <NavLink to="/register" className="footer-link">
+              Register
+            </NavLink>
+          </>
+        )}
+        
+        <NavLink to="/pay" className="footer-link">
+          Upgrade to VIP
+        </NavLink>
+        
+        {currentUser && (
+          <NavLink to={`/profile/${currentUser.email}`} className="footer-link">
+            My Profile
+          </NavLink>
+        )}
+        
+        {isAdmin && (
+          <>
+            <NavLink to="/users" className="footer-link">
+              Users
+            </NavLink>
+            <NavLink to="/admin/tips" className="footer-link">
+              Add Tip
+            </NavLink>
+          </>
+        )}
+        
+        <button className="btn-top" onClick={handleScrollToTop} aria-label="Back to top">
+          <ArrowUpward />
+        </button>
+      </div>
+    </div>
+  );
+}

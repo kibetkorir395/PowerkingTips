@@ -1,51 +1,50 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './PostDetails.scss';
-import Profile from '../../assets/vip.jpg';
-import Logo from '../../assets/logo.png';
-import { Close, ErrorTwoTone, Verified, Lock, Stars, EmojiEvents } from '@mui/icons-material';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { Close, ErrorTwoTone, Verified, Lock, Stars, EmojiEvents, TrendingUp } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { PriceContext } from '../../PriceContext';
-import { AuthContext } from '../../AuthContext';
+import { useAuth } from '../../context/AuthContext';
+import './PostDetails.scss'
 
-export default function PostDetail({ data, userData }) {
-  const { setPrice } = useContext(PriceContext);
-  const { currentUser } = useContext(AuthContext);
-  const [isPremium, setIsPremium] = useState(false);
-  var x = window.matchMedia("(min-width: 576px)")
-  const [isAdmin, setIsAdmin] = useState(null);
+export default function PostDetail({ data, onClose, hasPremiumAccess: propHasPremiumAccess }) {
+  const { isPremium, isAdmin, userData, currentUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = () => {
-    document.querySelector(".post-detail").classList.remove("active")
-  }
-
-  useEffect(() => {
-    if (currentUser !== null) {
-      if (currentUser.email === 'kkibetkkoir@gmail.com' || currentUser.email === 'arovanzgamez@gmail.com') {
-        setIsAdmin(true)
-        setIsPremium(true)
-      } else {
-        setIsAdmin(false)
-        setIsPremium(userData?.isPremium || false)
-      }
-    }
-  }, [currentUser, userData])
+  const hasAccess = isAdmin || isPremium || propHasPremiumAccess;
 
   function formatDate() {
     const date = new Date();
     return date.toLocaleDateString('en-US');
   }
 
-  const isLocked = data.premium && (data.status !== 'finished') && (!isPremium && data.date === formatDate());
-  const showLockedContent = isLocked;
+  const isLocked = useCallback(() => {
+    if (isAdmin) return false;
+    if (!data.premium) return false;
+    if (hasAccess) return false;
+    
+    const today = formatDate();
+    const isTodayTip = data.date === today;
+    const isPending = data.status !== 'finished';
+    
+    return data.premium && !hasAccess && isTodayTip && isPending;
+  }, [data, hasAccess, isAdmin]);
+
+  const handleClose = (e) => {
+    e?.stopPropagation();
+    onClose?.();
+  };
+
+  const locked = isLocked();
 
   return (
-    <div className={`post-detail ${x.matches && "active"}`}>
-      <Close className='close' onClick={handleClick} />
+    <div className="post-detail active">
+      <Close className='close' onClick={handleClose} />
       
       <div className="detail-header">
         <div className="header-badge">
           {data.premium && <Stars className="premium-icon" />}
-          <img src={data.premium ? Profile : Logo} alt="powerking_vip" />
+          <img 
+            src={data.premium ? "https://i.imgur.com/Qv1WDJq.jpg" : "/logo192.png"} 
+            alt="powerking_vip" 
+          />
           {data.premium && <div className="premium-label">VIP</div>}
         </div>
         <h3>{data.date} - {data.time}</h3>
@@ -68,7 +67,7 @@ export default function PostDetail({ data, userData }) {
         <div className="match-row">
           <div className="team home-team">
             <span className="team-name">
-              {showLockedContent ? "🔒 VIP Content" : data.home}
+              {locked ? "🔒 VIP Content" : data.home}
             </span>
             <span className="team-score">{data.results ? data.results.split('-')[0] : "?"}</span>
           </div>
@@ -79,7 +78,7 @@ export default function PostDetail({ data, userData }) {
         <div className="match-row">
           <div className="team away-team">
             <span className="team-name">
-              {showLockedContent ? "🔒 VIP Content" : data.away}
+              {locked ? "🔒 VIP Content" : data.away}
             </span>
             <span className="team-score">{data.results ? data.results.split('-')[1] : "?"}</span>
           </div>
@@ -91,7 +90,7 @@ export default function PostDetail({ data, userData }) {
       <div className="pick-container">
         <div className="pick-label">PREDICTION</div>
         <div className="pick-value">
-          {showLockedContent ? (
+          {locked ? (
             <div className="locked-content">
               <Lock className="lock-icon" />
               <span>Join VIP to view prediction</span>
@@ -105,11 +104,11 @@ export default function PostDetail({ data, userData }) {
       <div className="detail-btn">
         <button className="btn premium-btn" disabled aria-label="premium">
           <EmojiEvents className="btn-icon" />
-          {showLockedContent ? "Locked" : data.pick}
+          {locked ? "Locked" : data.pick}
         </button>
         
-        {(data.premium && !isPremium) && (
-          <Link to={'/pay'} className='btn vip-btn' onClick={() => setPrice(850)}>
+        {data.premium && !hasAccess && !isLoading && (
+          <Link to={'/pay'} className='btn vip-btn' onClick={() => setIsLoading(true)}>
             <Stars className="btn-icon" />
             GET VIP
             <span className="btn-glow"></span>
@@ -123,18 +122,19 @@ export default function PostDetail({ data, userData }) {
         )}
       </div>
 
-      {showLockedContent && (
+      {locked && (
         <div className="vip-overlay">
           <div className="vip-message">
             <Lock className="vip-lock" />
             <h4>Premium Content</h4>
             <p>Upgrade to VIP to see predictions and tips</p>
-            <Link to={'/pay'} className='btn upgrade-btn' onClick={() => setPrice(850)}>
+            <Link to={'/pay'} className='btn upgrade-btn'>
+              <TrendingUp className="btn-icon" />
               Upgrade Now
             </Link>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
