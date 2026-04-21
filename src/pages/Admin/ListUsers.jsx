@@ -28,7 +28,7 @@ export default function ListUsers() {
     // Use null lastDoc for first page or when filter changes
     const currentLastDoc = isNewFilter ? null : lastDoc;
     
-    const result = await userService.getAllUsers(page, 20, filters, currentLastDoc);
+    const result = await userService.getAllUsers(page, 20, filters, currentLastDoc, debouncedSearch);// Pass search term
     
     if (isNewFilter || page === 1) {
       setUsers(result.users);

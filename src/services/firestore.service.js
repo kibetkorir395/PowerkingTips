@@ -62,7 +62,7 @@ export const userService = {
     return true;
   },
 
-  async getAllUsers(page = 1, pageSize = 20, filters = {}, lastDoc = null) {
+  async getAllUsers(page = 1, pageSize = 20, filters = {}, lastDoc = null, searchTerm = '') {
     try {
       // Base query - ordering by createdAt descending (newest first)
       // This works fine alone but requires composite index when combined with where clause
@@ -76,6 +76,17 @@ export const userService = {
       // Without the composite index, this query will fail silently or return no results
       if (filters.isPremium !== undefined) {
         q = query(q, where('isPremium', '==', filters.isPremium));
+      }
+
+      // Add search functionality (searches email and username)
+      if (searchTerm && searchTerm.trim()) {
+        const searchLower = searchTerm.toLowerCase();
+        // Firestore doesn't support partial search, so we need to use startAt/endAt
+        // This searches for emails/usernames that start with the search term
+        q = query(q, 
+            where('email', '>=', searchLower),
+            where('email', '<=', searchLower + '\uf8ff')
+        );
       }
   
       // Add pagination using startAfter for "Load More" functionality

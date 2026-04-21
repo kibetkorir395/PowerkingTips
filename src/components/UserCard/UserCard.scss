@@ -417,13 +417,13 @@
 // Dark mode support
 @media (prefers-color-scheme: dark) {
   .user-card-minimal {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); 
     
     .card-body-minimal {
       .user-info-compact .plan-name,
       .details-compact .detail-line .text-email,
       .details-compact .detail-line .text-date {
-        color: var(--lite);
+        color: var(--dark);
       }
       
       .user-info-compact {

@@ -116,7 +116,7 @@ export default function PostDetail({ data, onClose, hasPremiumAccess: propHasPre
         )}
 
         {isAdmin && (
-          <Link to={'/edit'} className='btn edit-btn' state={data}>
+          <Link to={'/admin/tips/edit'} className='btn edit-btn' state={data}>
             Edit Match
           </Link>
         )}
