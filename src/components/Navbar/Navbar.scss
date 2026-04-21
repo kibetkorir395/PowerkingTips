@@ -208,15 +208,41 @@ header {
                 color: var(--dark-blue);
                 font-size: 14px;
                 font-weight: 600;
+                cursor: pointer;
+                transition: var(--transition-smooth);
                 
                 .user-icon {
-                    font-size: 18px;
+                  font-size: 18px;
+                }
+                
+                &:hover {
+                  background: rgba(0, 174, 88, 0.2);
+                  transform: translateY(-2px);
+                  box-shadow: var(--card-shadow);
+                }
+                
+                &:active {
+                  transform: translateY(0);
                 }
                 
                 @media screen and (max-width: 768px) {
-                    width: fit-content;
+                  width: fit-content;
                 }
-            }
+              }
+              
+              // Optional: Add a subtle indicator that it's clickable
+              .user-greeting::after {
+                content: '→';
+                opacity: 0;
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                font-size: 12px;
+                margin-left: 4px;
+              }
+              
+              .user-greeting:hover::after {
+                opacity: 1;
+                transform: translateX(2px);
+              }
             
             .btn {
                 display: inline-flex;
@@ -374,3 +400,88 @@ header.scrolled {
         }
     }
 }
+
+// Add to your existing Navbar.scss
+
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  // Enhanced mobile menu button with aria-expanded support
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--dark-blue);
+    transition: var(--transition-smooth);
+    z-index: 101;
+    position: relative;
+    
+    svg {
+      font-size: 28px;
+      transition: transform 0.2s ease;
+    }
+    
+    &:hover {
+      color: var(--blue);
+      
+      svg {
+        transform: scale(1.1);
+      }
+    }
+    
+    &[aria-expanded="true"] {
+      color: var(--blue);
+      
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+    
+    @media screen and (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  
+  // Mobile menu active state improvements
+  @media screen and (max-width: 768px) {
+    nav.active {
+      transform: translateX(0);
+      box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+      
+      .nav-link, .btn-wrapper {
+        animation: slideInFromRight 0.3s ease forwards;
+        opacity: 0;
+        
+        @for $i from 1 through 10 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * 0.05}s;
+          }
+        }
+      }
+    }
+  }
+  
+  // Prevent body scroll when menu is open
+  body.menu-open {
+    overflow: hidden;
+  }

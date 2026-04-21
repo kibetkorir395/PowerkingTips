@@ -367,7 +367,7 @@ export default function KoraPayments({ setUserData }) {
             </span>
           ) : (
             <span>
-              <i className="fas fa-credit-card"></i> Pay Now
+              {/*<i className="fas fa-credit-card"></i>*/}💳 Pay Now
             </span>
           )}
         </button>

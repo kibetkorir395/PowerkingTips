@@ -132,7 +132,7 @@ export default function Home() {
         {filteredTips.length > 0 && (
           <>
             <h1>WINNING HISTORY</h1>
-            <span className='btn-holder'>
+            {/*<span className='btn-holder'>
               <div 
                 className={`btn ${!status && "selected"}`} 
                 onClick={() => handleFilterChange(false)}
@@ -145,7 +145,7 @@ export default function Home() {
               >
                 Premium VIP
               </div>
-            </span>
+            </span>*/}
           </>
         )}
         

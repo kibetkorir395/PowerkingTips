@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <url>
+    <loc>https://powerking-tips.onrender.com/</loc>
+    <image:image>
+      <image:loc>https://powerking-tips.onrender.com/logo512.png</image:loc>
+      <image:title>PowerKing Tips Logo</image:title>
+      <image:caption>Official logo of PowerKing Tips football prediction platform</image:caption>
+      <image:license>https://powerking-tips.onrender.com</image:license>
+    </image:image>
+    <image:image>
+      <image:loc>https://powerking-tips.onrender.com/logo192.png</image:loc>
+      <image:title>PowerKing Tips Icon</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://powerking-tips.onrender.com/favicon.ico</image:loc>
+      <image:title>Favicon</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://powerking-tips.onrender.com/tips</loc>
+    <image:image>
+      <image:loc>https://powerking-tips.onrender.com/assets/l4.jpg</image:loc>
+      <image:title>Football Stadium Background</image:title>
+      <image:caption>Background image for tips page showing football stadium</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://powerking-tips.onrender.com/about</loc>
+    <image:image>
+      <image:loc>https://powerking-tips.onrender.com/assets/l3.jpg</image:loc>
+      <image:title>Football Action</image:title>
+      <image:caption>Exciting football match action background</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://powerking-tips.onrender.com/assets/l1.jpg</image:loc>
+      <image:title>VIP Badge</image:title>
+    </image:image>
+  </url>
+</urlset>

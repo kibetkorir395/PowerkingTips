@@ -142,12 +142,12 @@ export default function Tips() {
             </div>
           )}
           <div className="category-selector">
-            <button
+            {/*<button
               className={`category-btn ${category === 'free' ? 'active' : ''}`}
               onClick={() => setCategory('free')}
             >
               Free Tips
-            </button>
+            </button>*/}
             <button
               className={`category-btn ${
                 category === 'premium' ? 'active' : ''

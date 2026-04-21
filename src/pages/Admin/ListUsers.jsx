@@ -103,7 +103,7 @@ export default function ListUsers() {
 
       <div className="users-grid">
         {filteredUsers.map((user) => (
-          <UserCard key={user.id || user.email} user={user} />
+          <UserCard key={user.email} user={user} />
         ))}
       </div>
 

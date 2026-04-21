@@ -1,6 +1,7 @@
 import { useState, useCallback, Component } from "react";
 import CryptoPayments from "./CryptoPayments";
 import PaypalPayments from "./PaypalPayments";
+import GooglePayments from "./GooglePayments";
 import KoraPayments from "./KoraPayments";
 import AppHelmet from "../../components/AppHelmet";
 import "./Payments.scss";
@@ -58,6 +59,12 @@ export default function Payments({ setUserData }) {
             <CryptoPayments setUserData={setUserData} />
           </ErrorBoundary>
         );
+      case "googlepay":
+        return (
+          <ErrorBoundary key="googlepay">
+            <GooglePayments setUserData={setUserData} />
+          </ErrorBoundary>
+        );
       case "mpesa":
         return (
           <ErrorBoundary key="mpesa">
@@ -88,7 +95,7 @@ export default function Payments({ setUserData }) {
               checked={paymentType === "mpesa"}
               onChange={handlePaymentChange}
             />
-            <label htmlFor="mpesa">Mobile Payments 📲</label>
+            <label htmlFor="mpesa"><div class="icons8-mpesa"></div> <img width="20" height="20" src="https://img.icons8.com/nolan/64/airtel.png" alt="airtel"/> Mobile </label>
           </fieldset>
           <fieldset>
             <input
@@ -99,7 +106,18 @@ export default function Payments({ setUserData }) {
               checked={paymentType === "paypal"}
               onChange={handlePaymentChange}
             />
-            <label htmlFor="paypal">PayPal 💳</label>
+            <label htmlFor="paypal"><div class="icons8-paypal-logo"/>PayPal</label>
+          </fieldset>
+          <fieldset>
+            <input
+              name="payment-method"
+              type="radio"
+              value="googlepay"
+              id="googlepay"
+              checked={paymentType === "googlepay"}
+              onChange={handlePaymentChange}
+            />
+            <label htmlFor="googlepay"><div className="icons8-google"></div>Pay</label>
           </fieldset>
           <fieldset>
             <input
@@ -110,7 +128,7 @@ export default function Payments({ setUserData }) {
               checked={paymentType === "crypto"}
               onChange={handlePaymentChange}
             />
-            <label htmlFor="crypto">Crypto ₿</label>
+            <label htmlFor="crypto"><div className="icons8-tether"></div> Crypto</label>
           </fieldset>
         </form>
       </div>

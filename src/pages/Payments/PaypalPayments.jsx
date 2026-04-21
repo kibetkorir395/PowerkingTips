@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { usePrice } from "../../context/PriceContext";
 import {
@@ -14,8 +14,11 @@ export default function PaypalPayments({ setUserData }) {
   const { currentUser } = useAuth();
   const [isPaypalLoaded, setIsPaypalLoaded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const buttonContainerRef = useRef(null);
   const paypalButtonsRef = useRef(null);
+  const scriptRef = useRef(null);
 
   const subscriptionPlans = SUBSCRIPTION_PLANS.dollars;
 
@@ -24,32 +27,54 @@ export default function PaypalPayments({ setUserData }) {
     setPrice(subscriptionPlans[0].value);
   }, []);
 
-  // Load PayPal script properly
-  useEffect(() => {
-    // Check if PayPal is already loaded
-    if (window.paypal && window.paypal.Buttons) {
-      setIsPaypalLoaded(true);
-      return;
+  // Cleanup function for PayPal buttons
+  const cleanupPayPalButtons = useCallback(() => {
+    if (paypalButtonsRef.current) {
+      try {
+        paypalButtonsRef.current.close();
+      } catch (e) {
+        console.log("Error closing PayPal buttons:", e);
+      }
+      paypalButtonsRef.current = null;
+    }
+    if (buttonContainerRef.current) {
+      buttonContainerRef.current.innerHTML = "";
+    }
+  }, []);
+
+  // Load PayPal script
+  const loadPayPalScript = useCallback(() => {
+    // Remove existing script if any
+    if (scriptRef.current) {
+      scriptRef.current.remove();
+      scriptRef.current = null;
     }
 
     const script = document.createElement("script");
-    script.src = "https://www.paypal.com/sdk/js?client-id=AXIggvGGvXozbZhdkvizPLd89nVYW8KoyNlHO0gHx7hjY_Ah_IfgXihUQGf7T2HUUVYx-D5SNncM0CtU&currency=USD";
+    script.src = "https://www.paypal.com/sdk/js?client-id=AXIggvGGvXozbZhdkvizPLd89nVYW8KoyNlHO0gHx7hjY_Ah_IfgXihUQGf7T2HUUVYx-D5SNncM0CtU&currency=USD&components=buttons";
     script.async = true;
     
     script.onload = () => {
-      // Small delay to ensure PayPal is fully initialized
-      setTimeout(() => {
+      // Wait for PayPal to be fully initialized
+      let attempts = 0;
+      const checkInterval = setInterval(() => {
+        attempts++;
         if (window.paypal && window.paypal.Buttons) {
+          clearInterval(checkInterval);
           setIsPaypalLoaded(true);
+          setLoadError(false);
           console.log("PayPal SDK loaded successfully");
-        } else {
-          console.error("PayPal Buttons not available after script load");
+        } else if (attempts > 20) {
+          clearInterval(checkInterval);
+          setLoadError(true);
+          console.error("PayPal Buttons not available after timeout");
         }
-      }, 500);
+      }, 250);
     };
     
     script.onerror = (error) => {
       console.error("Failed to load PayPal SDK:", error);
+      setLoadError(true);
       Swal.fire({
         title: "Error",
         text: "Failed to load PayPal. Please check your internet connection.",
@@ -59,17 +84,24 @@ export default function PaypalPayments({ setUserData }) {
     };
     
     document.body.appendChild(script);
-    
-    return () => {
-      // Cleanup
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
+    scriptRef.current = script;
   }, []);
 
+  // Load script on mount
+  useEffect(() => {
+    loadPayPalScript();
+    
+    return () => {
+      // Cleanup on unmount
+      if (scriptRef.current) {
+        scriptRef.current.remove();
+      }
+      cleanupPayPalButtons();
+    };
+  }, [loadPayPalScript, cleanupPayPalButtons]);
+
   // Create order function
-  const createOrder = async (data, actions) => {
+  const createOrder = useCallback(async (data, actions) => {
     return actions.order.create({
       purchase_units: [
         {
@@ -81,38 +113,49 @@ export default function PaypalPayments({ setUserData }) {
         },
       ],
     });
-  };
+  }, [price]);
 
   // On approve function
-  const onApprove = async (data, actions) => {
+  const onApprove = useCallback(async (data, actions) => {
     setIsProcessing(true);
     try {
       const details = await actions.order.capture();
       console.log("Payment completed:", details);
+      
       await handleUpgrade(currentUser, price, setUserData);
       
       Swal.fire({
         title: "Payment Successful! 🎉",
-        text: `You've upgraded to ${getPlanName(price)} VIP!`,
+        html: `
+          <div style="text-align: center;">
+            <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981;"></i>
+            <h3 style="margin: 15px 0;">${getPlanName(price)} VIP Activated!</h3>
+            <p>Transaction ID: ${details.id}</p>
+            <p>Amount: $${price}</p>
+          </div>
+        `,
         icon: "success",
         confirmButtonText: "Continue",
         confirmButtonColor: "#00ae58",
+      }).then(() => {
+        window.location.href = "/";
       });
     } catch (error) {
       console.error("Payment capture error:", error);
       Swal.fire({
         title: "Payment Failed",
-        text: "There was an error processing your payment. Please try again.",
+        text: error.message || "There was an error processing your payment. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
+        confirmButtonColor: "#d33",
       });
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [currentUser, price, setUserData]);
 
   // On error function
-  const onError = (err) => {
+  const onError = useCallback((err) => {
     console.error("PayPal error:", err);
     setIsProcessing(false);
     Swal.fire({
@@ -120,8 +163,22 @@ export default function PaypalPayments({ setUserData }) {
       text: "An error occurred with PayPal. Please try again.",
       icon: "error",
       confirmButtonText: "OK",
+      confirmButtonColor: "#d33",
     });
-  };
+  }, []);
+
+  // On cancel function
+  const onCancel = useCallback(() => {
+    console.log("Payment cancelled");
+    setIsProcessing(false);
+    Swal.fire({
+      title: "Payment Cancelled",
+      text: "You cancelled the payment process.",
+      icon: "info",
+      confirmButtonText: "OK",
+      confirmButtonColor: "#00ae58",
+    });
+  }, []);
 
   // Render PayPal buttons when loaded
   useEffect(() => {
@@ -129,20 +186,8 @@ export default function PaypalPayments({ setUserData }) {
       return;
     }
 
-    // Clear previous buttons
-    if (paypalButtonsRef.current) {
-      try {
-        paypalButtonsRef.current.close();
-      } catch (e) {
-        console.log("Error closing previous buttons:", e);
-      }
-      paypalButtonsRef.current = null;
-    }
-
-    // Clear container
-    if (buttonContainerRef.current) {
-      buttonContainerRef.current.innerHTML = "";
-    }
+    // Cleanup existing buttons
+    cleanupPayPalButtons();
 
     // Create new buttons
     try {
@@ -157,15 +202,7 @@ export default function PaypalPayments({ setUserData }) {
         createOrder: createOrder,
         onApprove: onApprove,
         onError: onError,
-        onCancel: () => {
-          console.log("Payment cancelled");
-          Swal.fire({
-            title: "Payment Cancelled",
-            text: "You cancelled the payment process.",
-            icon: "info",
-            confirmButtonText: "OK",
-          });
-        },
+        onCancel: onCancel,
       });
       
       if (buttonContainerRef.current) {
@@ -174,12 +211,66 @@ export default function PaypalPayments({ setUserData }) {
       }
     } catch (error) {
       console.error("Failed to render PayPal buttons:", error);
+      setLoadError(true);
     }
-  }, [isPaypalLoaded, price, isProcessing]);
+  }, [isPaypalLoaded, price, isProcessing, createOrder, onApprove, onError, onCancel, cleanupPayPalButtons]);
+
+  // Handle retry
+  const handleRetry = () => {
+    setLoadError(false);
+    setIsPaypalLoaded(false);
+    setRetryCount(prev => prev + 1);
+    cleanupPayPalButtons();
+    loadPayPalScript();
+  };
 
   const handlePlanSelect = (planValue) => {
     setPrice(planValue);
   };
+
+  // Show loading state while script is loading
+  if (!isPaypalLoaded && !loadError) {
+    return (
+      <div className="paypal-payment-wrapper">
+        <div className="plan-selector">
+          {subscriptionPlans.map((plan) => (
+            <label key={plan.id} className="plan-option">
+              <span className="plan-label">{plan.label}</span>
+              <span className="plan-price">{plan.price}</span>
+            </label>
+          ))}
+        </div>
+        <div className="paypal-loading-state">
+          <div className="loader-spinner"></div>
+          <p>Loading PayPal...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (loadError) {
+    return (
+      <div className="paypal-payment-wrapper">
+        <div className="plan-selector">
+          {subscriptionPlans.map((plan) => (
+            <label key={plan.id} className="plan-option">
+              <span className="plan-label">{plan.label}</span>
+              <span className="plan-price">{plan.price}</span>
+            </label>
+          ))}
+        </div>
+        <div className="paypal-error-state">
+          <i className="fas fa-exclamation-triangle"></i>
+          <h3>PayPal Failed to Load</h3>
+          <p>Please check your internet connection and try again.</p>
+          <button onClick={handleRetry} className="btn">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="paypal-payment-wrapper">
@@ -208,18 +299,11 @@ export default function PaypalPayments({ setUserData }) {
         </h3>
         
         <div className="paypal-buttons-container">
-          {!isPaypalLoaded ? (
-            <div className="paypal-loading">
-              <div className="loader-spinner"></div>
-              <p>Loading PayPal...</p>
-            </div>
-          ) : (
-            <div ref={buttonContainerRef}></div>
-          )}
+          <div ref={buttonContainerRef}></div>
         </div>
 
         <p className="payment-note">
-          Secure payment powered by PayPal
+          <i className="fas fa-lock"></i> Secure payment powered by PayPal
         </p>
       </div>
     </div>

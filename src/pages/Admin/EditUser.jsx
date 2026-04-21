@@ -3,12 +3,13 @@ import { useAuth } from '../../context/AuthContext';
 import { userService } from '../../services/firestore.service';
 import Loader from '../../components/Loader/Loader';
 import AppHelmet from '../../components/AppHelmet';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export default function EditUser({ setUserData }) {
     const location = useLocation();
     const navigate = useNavigate();
+    const { id } = useParams(); // Get the email from URL params
     const [user, setUser] = useState(null);
     const { currentUser, isAdmin, refreshUserData } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -31,7 +32,36 @@ export default function EditUser({ setUserData }) {
     }
 
     useEffect(() => {
-        const userData = location.state;
+        // First try to get user from location.state (passed from UserCard)
+        let userData = location.state;
+        
+        // If no state, try to fetch by ID from URL params
+        if (!userData && id) {
+            const fetchUserByEmail = async () => {
+                try {
+                    const decodedEmail = decodeURIComponent(id);
+                    const fetchedUser = await userService.getUser(decodedEmail);
+                    if (fetchedUser) {
+                        userData = fetchedUser;
+                        setUser(userData);
+                    } else {
+                        throw new Error('User not found');
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'User not found',
+                        icon: 'error',
+                        confirmButtonText: 'Go Back'
+                    }).then(() => {
+                        navigate('/users');
+                    });
+                }
+            };
+            fetchUserByEmail();
+            return;
+        }
+        
         if (!userData) {
             Swal.fire({
                 title: 'Error',
@@ -39,10 +69,11 @@ export default function EditUser({ setUserData }) {
                 icon: 'error',
                 confirmButtonText: 'Go Back'
             }).then(() => {
-                navigate('/users');
+                navigate(isAdmin ? '/users' : '/');
             });
             return;
         }
+        
         setUser(userData);
         setEmail(userData.email);
         setUsername(userData.username || '');
@@ -57,8 +88,9 @@ export default function EditUser({ setUserData }) {
         if (userData.subDate) {
             setSubDate(toDateTimeLocal(userData.subDate));
         }
-    }, [location, navigate]);
+    }, [location, navigate, isAdmin, id]);
 
+    // Rest of your component remains the same...
     const hasChanges = () => {
         if (!isAdmin) {
             return username !== originalData.username;

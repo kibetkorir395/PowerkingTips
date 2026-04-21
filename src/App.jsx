@@ -32,7 +32,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 function App() {
   useEffect(() => {
     // Register service worker
-    /*if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker
           .register('/service-worker.js')
@@ -43,7 +43,7 @@ function App() {
             console.log('SW registration failed:', err);
           });
       });
-    }*/
+    }
   }, []);
 
   return (
@@ -54,12 +54,14 @@ function App() {
           <Navbar />
           <main>
             <Routes>
+              {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/tips" element={<Tips />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/about" element={<About />} />
 
+              {/* Protected Routes (Authenticated Users) */}
               <Route
                 path="/pay"
                 element={
@@ -69,8 +71,9 @@ function App() {
                 }
               />
 
+              {/* User Profile - View own profile or view by email */}
               <Route
-                path="/profile/:id?"
+                path="/profile/:email?"
                 element={
                   <ProtectedRoute>
                     <UserProfile />
@@ -78,6 +81,17 @@ function App() {
                 }
               />
 
+              {/* Edit Profile - For regular users to edit their own profile */}
+              <Route
+                path="/profile/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Routes */}
               <Route
                 path="/users"
                 element={
@@ -87,15 +101,17 @@ function App() {
                 }
               />
 
+              {/* Admin Edit User - Edit any user by email */}
               <Route
-                path="/users-edit"
+                path="/users/edit/:email"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute adminOnly>
                     <EditUser />
                   </ProtectedRoute>
                 }
               />
 
+              {/* Admin Tips Management */}
               <Route
                 path="/admin/tips"
                 element={
@@ -105,8 +121,9 @@ function App() {
                 }
               />
 
+              {/* Edit Tip - Pass tip data via state */}
               <Route
-                path="/admin/tips/edit/:id"
+                path="/admin/tips/edit"
                 element={
                   <ProtectedRoute adminOnly>
                     <EditTip />
@@ -114,6 +131,7 @@ function App() {
                 }
               />
 
+              {/* 404 Not Found */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

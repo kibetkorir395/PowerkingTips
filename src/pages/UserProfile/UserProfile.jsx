@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   userService,
   transactionService,
@@ -11,7 +11,8 @@ import './UserProfile.scss';
 
 export default function UserProfile() {
   const { id } = useParams();
-  const { currentUser, userData: currentUserData, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const { currentUser, isAdmin } = useAuth();
   const [profileUser, setProfileUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,9 @@ export default function UserProfile() {
     pageSize,
     hasMore,
     setHasMore,
+    loading: transLoading,
     setLoading: setTransLoading,
+    lastElementRef,
   } = usePagination(10);
 
   const isOwnProfile = currentUser?.email === (id || currentUser?.email);
@@ -63,84 +66,170 @@ export default function UserProfile() {
     }
   }, [profileUser, fetchTransactions]);
 
+  const handleEditClick = () => {
+    //navigate(`/profile/${profileUser.username}/edit`, { state: profileUser });
+    if (isAdmin) {
+      navigate(`/users/edit/${encodeURIComponent(profileUser.email)}`, { state: profileUser });
+    } else {
+      navigate('/profile/edit', { state: profileUser });
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    let day = date.getDate();
+    const suffix = (day) => {
+      if (day > 3 && day < 21) return 'th';
+      switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    };
+    return `${day}${suffix(day)} ${date.toLocaleString('en-GB', {
+      month: 'long',
+      year: 'numeric',
+    })}`;
+  };
+
   if (loading) return <Loader />;
   if (!profileUser) return <div className="error">User not found</div>;
 
   return (
     <div className="user-profile">
-      <div className="profile-header">
-        <div className="profile-avatar">
-          <img
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-              profileUser.username || profileUser.email
-            )}&background=00BFFF&color=fff`}
-            alt="Profile"
-          />
-          {profileUser.isPremium && (
-            <span className="premium-badge">⭐ VIP</span>
-          )}
+      <div className="user-header">
+        <div className="uh-left">
+          <div className="uh-image">
+            <img
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                profileUser.username || profileUser.email
+              )}&background=00BFFF&color=fff`}
+              alt="Profile"
+            />
+            <div className="gradient"></div>
+            {profileUser.isPremium && (
+              <span className="premium-badge">⭐</span>
+            )}
+          </div>
+          <div className="user-info">
+            <h2 className="user-name">
+              {profileUser.username || profileUser.email.split('@')[0]}
+            </h2>
+            <p className="user-email">{profileUser.email}</p>
+            {profileUser.isPremium && (
+              <span className="vip-tag">VIP Member</span>
+            )}
+          </div>
         </div>
-
-        <div className="profile-info">
-          <h1>{profileUser.username || profileUser.email.split('@')[0]}</h1>
-          <p className="email">{profileUser.email}</p>
-          <div className="stats">
+        
+        <div className="user-links">
+          <div className="user-stats">
             <div className="stat">
-              <span className="value">{transactions.length}</span>
-              <span className="label">Transactions</span>
+              <span className="stat-value">{transactions.length}</span>
+              <span className="stat-label">Transactions</span>
             </div>
             <div className="stat">
-              <span className="value">
-                {profileUser.isPremium ? 'Active' : 'Free'}
+              <span className="stat-value">
+                {profileUser.isPremium ? 'Active' : 'Inactive'}
               </span>
-              <span className="label">Status</span>
+              <span className="stat-label">Status</span>
             </div>
             {profileUser.subscription && (
               <div className="stat">
-                <span className="value">{profileUser.subscription}</span>
-                <span className="label">Plan</span>
+                <span className="stat-value">{profileUser.subscription}</span>
+                <span className="stat-label">Plan</span>
               </div>
             )}
           </div>
-          {canEdit && (
-            <button
-              className="edit-btn"
-              onClick={() => (window.location.href = '/users-edit')}
-            >
-              Edit Profile
-            </button>
-          )}
+          
+          <div className="user-actions">
+            {!profileUser.isPremium && isOwnProfile && (
+              <button className="btn vip-btn" onClick={() => navigate('/pay')}>
+                GET VIP
+              </button>
+            )}
+            {canEdit && (
+              <button className="btn edit-btn" onClick={handleEditClick}>
+                Edit Profile
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="transactions-section">
-        <h2>Transaction History</h2>
-        {transactions.length === 0 ? (
-          <p className="no-transactions">No transactions yet.</p>
+        <h2 className="section-title">Transaction History</h2>
+        {transactions.length === 0 && !transLoading ? (
+          <div className="no-transactions">
+            <div className="empty-icon">💰</div>
+            <h3>No Transactions Yet</h3>
+            <p>Your transaction history will appear here once you make a purchase.</p>
+            <p>(This feature is not available yet!)</p>
+            {isOwnProfile && (
+              <button className="btn" onClick={() => navigate('/pay')}>
+                Upgrade to VIP
+              </button>
+            )}
+          </div>
         ) : (
           <div className="transactions-list">
             {transactions.map((transaction) => (
-              <div key={transaction.id} className="transaction-item">
-                <div className="transaction-icon">
-                  {transaction.type === 'credit' ? '💰' : '💸'}
-                </div>
+              <details key={transaction.id} className="transaction-item">
+                <summary>
+                  <div className="transaction-summary">
+                    <span className="transaction-icon" style={{ backgroundColor: transaction.type === 'credit' ? '#e8f5e9' : '#fff3e0' }}>
+                      {transaction.type === 'credit' ? '💰' : '💸'}
+                    </span>
+                    <div className="transaction-info">
+                      <h3 className="transaction-name">{transaction.description || 'VIP Subscription'}</h3>
+                      <small className="transaction-category">
+                        {transaction.category || 'Subscription'}
+                      </small>
+                    </div>
+                    <span className={`transaction-amount ${transaction.type}`}>
+                      {transaction.type === 'credit' ? '+' : '-'}{' '}
+                      {transaction.currency || 'KES'} {transaction.amount}
+                    </span>
+                  </div>
+                </summary>
                 <div className="transaction-details">
-                  <h4>{transaction.description}</h4>
-                  <p className="date">
-                    {new Date(
-                      transaction.createdAt?.toDate()
-                    ).toLocaleDateString()}
-                  </p>
+                  <dl>
+                    <div>
+                      <dt>📅 Date & Time</dt>
+                      <dd>{formatDate(transaction.createdAt?.toDate?.() || transaction.createdAt)}</dd>
+                    </div>
+                    {transaction.paymentMethod && (
+                      <div>
+                        <dt>💳 Payment Method</dt>
+                        <dd>{transaction.paymentMethod}</dd>
+                      </div>
+                    )}
+                    <div>
+                      <dt>🆔 Reference ID</dt>
+                      <dd>{transaction.id || transaction.reference || 'N/A'}</dd>
+                    </div>
+                  </dl>
                 </div>
-                <div className={`transaction-amount ${transaction.type}`}>
-                  {transaction.type === 'credit' ? '+' : '-'}{' '}
-                  {transaction.currency || 'KES'} {transaction.amount}
-                </div>
-              </div>
+              </details>
             ))}
+            {transLoading && (
+              <div className="loading-more">
+                <Loader />
+              </div>
+            )}
+            {hasMore && !transLoading && (
+              <div ref={lastElementRef} className="load-more-trigger" />
+            )}
           </div>
         )}
-        {hasMore && <div ref={lastElementRef} className="load-more-trigger" />}
+      </div>
+      
+      <div className="explore">
+        <button className="explore-btn" onClick={() => navigate('/')}>
+          EXPLORE MORE
+        </button>
       </div>
     </div>
   );

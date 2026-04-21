@@ -49,6 +49,44 @@ export const SUBSCRIPTION_PLANS = {
   ],
 };
 
+// Exchange rates relative to KES (1 KES = X units of foreign currency)
+export const EXCHANGE_RATES = {
+  KES: 1,
+  NGN: 10.63,
+  ZAR: 0.22,
+  GHS: 0.06,
+  UGX: 1.5,
+  TZS: 1.15,
+  USD: 0.0077,
+  GBP: 0.006,
+  EUR: 0.0072,
+};
+
+// Currency symbols mapping
+export const CURRENCY_SYMBOLS = {
+  KES: "KSH",
+  NGN: "₦",
+  ZAR: "R",
+  GHS: "₵",
+  UGX: "USh",
+  TZS: "TSh",
+  USD: "$",
+  GBP: "£",
+  EUR: "€",
+};
+
+// Country to currency mapping
+export const COUNTRY_CURRENCY = {
+  Kenya: { code: "KE", currency: "KES", symbol: "KSH", flag: "🇰🇪", rate: 1 },
+  Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 10.63 },
+  SouthAfrica: { code: "ZA", currency: "ZAR", symbol: "R", flag: "🇿🇦", rate: 0.22 },
+  Ghana: { code: "GH", currency: "GHS", symbol: "₵", flag: "🇬🇭", rate: 0.06 },
+  Uganda: { code: "UG", currency: "UGX", symbol: "USh", flag: "🇺🇬", rate: 1.5 },
+  Tanzania: { code: "TZ", currency: "TZS", symbol: "TSh", flag: "🇹🇿", rate: 1.15 },
+  US: { code: "US", currency: "USD", symbol: "$", flag: "🇺🇸", rate: 0.0077 },
+  UK: { code: "GB", currency: "GBP", symbol: "£", flag: "🇬🇧", rate: 0.006 },
+};
+
 // Get subscription period based on price
 export const getSubscriptionPeriod = (price) => {
   if (price === 250 || price === 2) return "Daily";
@@ -108,7 +146,9 @@ export const handleUpgrade = async (currentUser, price, setUserData) => {
       confirmButtonText: "Continue",
       confirmButtonColor: "#00ae58",
     }).then(() => {
-      window.location.href = "/";
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000)
     });
   } catch (error) {
     console.error("Upgrade error:", error);
@@ -194,4 +234,195 @@ export const addTransaction = async (userEmail, transactionData) => {
     console.error("Error adding transaction:", error);
     return null;
   }
+};
+
+// ============================================
+// CURRENCY CONVERSION UTILITIES
+// ============================================
+
+/**
+ * Convert amount from KES to target currency
+ * @param {number} amount - Amount in KES
+ * @param {string} targetCurrency - Target currency code (e.g., "USD", "NGN")
+ * @returns {number} - Converted amount
+ */
+export const convertCurrency = (amount, targetCurrency) => {
+  const rate = EXCHANGE_RATES[targetCurrency] || 1;
+  return Math.round(amount * rate);
+};
+
+/**
+ * Get exchange rate for a currency
+ * @param {string} currencyCode - Currency code (e.g., "USD", "NGN")
+ * @returns {number} - Exchange rate relative to KES
+ */
+export const getExchangeRate = (currencyCode) => {
+  return EXCHANGE_RATES[currencyCode] || 1;
+};
+
+/**
+ * Format price with currency symbol
+ * @param {number} amount - Amount to format
+ * @param {string} currencyCode - Currency code
+ * @returns {string} - Formatted price string
+ */
+export const formatPrice = (amount, currencyCode) => {
+  const symbol = CURRENCY_SYMBOLS[currencyCode] || currencyCode;
+  return `${symbol} ${amount.toLocaleString()}`;
+};
+
+/**
+ * Get user's country from IP (async)
+ * @returns {Promise<Object>} - Country info
+ */
+export const detectUserCountry = async () => {
+  try {
+    const response = await fetch("https://ipapi.co/json/");
+    if (response.ok) {
+      const data = await response.json();
+      const countryCode = data.country_code;
+      
+      // Find matching country in our list
+      const matched = Object.entries(COUNTRY_CURRENCY).find(
+        ([_, config]) => config.code === countryCode
+      );
+      
+      if (matched) {
+        return { country: matched[0], ...matched[1] };
+      }
+    }
+    return COUNTRY_CURRENCY.Kenya;
+  } catch (error) {
+    console.error("Country detection error:", error);
+    return COUNTRY_CURRENCY.Kenya;
+  }
+};
+
+/**
+ * Get subscription plan details with converted price
+ * @param {number} priceKES - Price in KES
+ * @param {string} targetCurrency - Target currency
+ * @returns {Object} - Plan details with converted price
+ */
+export const getPlanWithConvertedPrice = (priceKES, targetCurrency) => {
+  const period = getSubscriptionPeriod(priceKES);
+  const convertedPrice = convertCurrency(priceKES, targetCurrency);
+  const symbol = CURRENCY_SYMBOLS[targetCurrency] || targetCurrency;
+  
+  return {
+    period,
+    originalPriceKES: priceKES,
+    convertedPrice,
+    formattedPrice: `${symbol} ${convertedPrice}`,
+    currency: targetCurrency,
+  };
+};
+
+// ============================================
+// RECURRING SUBSCRIPTION UTILITIES
+// ============================================
+
+/**
+ * Calculate subscription end date based on period
+ * @param {string} period - "Daily", "Weekly", "Monthly", "Yearly"
+ * @returns {Date} - End date
+ */
+export const calculateSubscriptionEndDate = (period) => {
+  const now = new Date();
+  switch (period) {
+    case "Daily":
+      return new Date(now.setDate(now.getDate() + 1));
+    case "Weekly":
+      return new Date(now.setDate(now.getDate() + 7));
+    case "Monthly":
+      return new Date(now.setMonth(now.getMonth() + 1));
+    case "Yearly":
+      return new Date(now.setFullYear(now.getFullYear() + 1));
+    default:
+      return new Date(now.setDate(now.getDate() + 7));
+  }
+};
+
+/**
+ * Check if subscription is still valid
+ * @param {Object} userData - User data object
+ * @returns {boolean} - True if subscription is valid
+ */
+export const isSubscriptionValid = (userData) => {
+  if (!userData?.isPremium || !userData?.subDate || !userData?.subscription) {
+    return false;
+  }
+  
+  const currentTime = new Date();
+  const subDate = new Date(userData.subDate);
+  const timeDiff = currentTime - subDate;
+  const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+  
+  switch (userData.subscription) {
+    case "Daily":
+      return daysDiff <= 1;
+    case "Weekly":
+      return daysDiff <= 7;
+    case "Monthly":
+      return daysDiff <= 30;
+    case "Yearly":
+      return daysDiff <= 365;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Get remaining days for subscription
+ * @param {Object} userData - User data object
+ * @returns {number} - Remaining days (0 if expired or not premium)
+ */
+export const getRemainingSubscriptionDays = (userData) => {
+  if (!userData?.isPremium || !userData?.subDate || !userData?.subscription) {
+    return 0;
+  }
+  
+  const currentTime = new Date();
+  const subDate = new Date(userData.subDate);
+  const timeDiff = currentTime - subDate;
+  const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+  
+  switch (userData.subscription) {
+    case "Daily":
+      return Math.max(0, 1 - daysDiff);
+    case "Weekly":
+      return Math.max(0, 7 - daysDiff);
+    case "Monthly":
+      return Math.max(0, 30 - daysDiff);
+    case "Yearly":
+      return Math.max(0, 365 - daysDiff);
+    default:
+      return 0;
+  }
+};
+
+/**
+ * Auto-update expired subscriptions
+ * @param {Object} userData - User data object
+ * @param {Function} updateCallback - Callback to update user data
+ */
+export const autoUpdateExpiredSubscription = async (userData, updateCallback) => {
+  if (!isSubscriptionValid(userData) && userData?.isPremium) {
+    try {
+      const { userService } = await import("../../services/firestore.service");
+      await userService.updateUser(userData.email, {
+        isPremium: false,
+        subscription: null,
+        subDate: null,
+      });
+      if (updateCallback) {
+        await updateCallback();
+      }
+      return true;
+    } catch (error) {
+      console.error("Error updating expired subscription:", error);
+      return false;
+    }
+  }
+  return false;
 };

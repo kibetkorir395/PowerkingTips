@@ -1,12 +1,35 @@
-# Allow all bots
+# Allow all bots to crawl
 User-agent: *
-Disallow:
+Allow: /
 
 # Specify the sitemap location
 Sitemap: https://powerking-tips.onrender.com/sitemap.xml
+Sitemap: Sitemap: https://powerking-tips.onrender.com/image-sitemap.xml
 
-# (Optional) Restrict access to certain areas
+# Disallow admin and user management pages (keep these private)
 Disallow: /admin/
 Disallow: /admin/tips/
+Disallow: /admin/tips/edit
 Disallow: /users/
-Disallow: /users-edit/
+Disallow: /users/edit/
+Disallow: /profile/edit
+Disallow: /edit-user/
+
+# Disallow dynamic/parameterized URLs to prevent duplicate content
+Disallow: /*?*
+Disallow: /*/edit
+
+# Allow public pages
+Allow: /$
+Allow: /tips$
+Allow: /about$
+Allow: /login$
+Allow: /register$
+Allow: /pay$
+Allow: /profile/*
+
+# Crawl delay to be respectful to the server (optional)
+Crawl-delay: 1
+
+# Specify host (optional but recommended)
+Host: https://powerking-tips.onrender.com

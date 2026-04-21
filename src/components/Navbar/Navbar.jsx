@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/firebase";
@@ -11,14 +11,78 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef(null);
+  const menuBtnRef = useRef(null);
 
+  // Handle scroll to close mobile menu and change header style
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
+      // Close mobile menu when scrolling
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [mobileMenuOpen]);
+
+  // Handle click outside to close mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if menu is open and click is outside nav and outside menu button
+      if (
+        mobileMenuOpen &&
+        navRef.current &&
+        !navRef.current.contains(event.target) &&
+        menuBtnRef.current &&
+        !menuBtnRef.current.contains(event.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    // Add event listener when menu is open
+    if (mobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
+
+  // Handle escape key to close menu
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscKey);
+    return () => document.removeEventListener('keydown', handleEscKey);
+  }, [mobileMenuOpen]);
+
+  // Optional: Add a class to body when menu opens
+  // In your Navbar component, add this to the existing useEffect:
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+        document.body.classList.add('menu-open');
+    } else {
+        document.body.classList.remove('menu-open');
+    }
+    
+    return () => {
+        document.body.classList.remove('menu-open');
+    };
+  }, [mobileMenuOpen]);
 
   const handleLogout = async () => {
     try {
@@ -40,6 +104,14 @@ export default function Navbar() {
 
   const username = currentUser?.email?.split('@')[0] || userData?.username;
 
+  const handleProfileClick = () => {
+    const email = currentUser?.email;
+    if (email) {
+      navigate(`/profile/${encodeURIComponent(email)}`);
+      closeMobileMenu();
+    }
+  };
+
   return (
     <header className={`${scrolled ? 'scrolled' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}>
       <div className="header-container">
@@ -48,11 +120,17 @@ export default function Navbar() {
           <span className="logo-text">PowerKing Tips</span>
         </NavLink>
         
-        <button className="mobile-menu-btn" onClick={toggleMobileMenu} aria-label="Menu">
+        <button 
+          ref={menuBtnRef}
+          className="mobile-menu-btn" 
+          onClick={toggleMobileMenu} 
+          aria-label="Menu"
+          aria-expanded={mobileMenuOpen}
+        >
           {mobileMenuOpen ? <Close /> : <Menu />}
         </button>
         
-        <nav className={mobileMenuOpen ? "active" : ""}>
+        <nav ref={navRef} className={mobileMenuOpen ? "active" : ""}>
           <NavLink to="/" className="nav-link" onClick={closeMobileMenu}>
             Home
           </NavLink>
@@ -66,7 +144,17 @@ export default function Navbar() {
           <div className="btn-wrapper">
             {currentUser ? (
               <>
-                <div className="user-greeting">
+                <div 
+                  className="user-greeting" 
+                  onClick={handleProfileClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleProfileClick();
+                    }
+                  }}
+                >
                   <Person className="user-icon" />
                   <span>Hi, {username}</span>
                   {isPremium && !loading && <span className="vip-badge" style={{ marginLeft: '5px', fontSize: '12px' }}>⭐</span>}
@@ -97,6 +185,9 @@ export default function Navbar() {
           </div>
         </nav>
       </div>
+      
+      {/* Overlay for mobile menu */}
+      {mobileMenuOpen && <div className="mobile-overlay" onClick={closeMobileMenu} />}
     </header>
   );
 }
