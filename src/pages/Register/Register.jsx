@@ -3,6 +3,7 @@ import './Register.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../../services/auth.service';
 import { Visibility, VisibilityOff, Google } from '@mui/icons-material';
+import GoogleButton from 'react-google-button';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -144,7 +145,7 @@ export default function Register() {
             <span>or</span>
           </div>
 
-          <button 
+          {/*<button 
             type="button" 
             className="btn-google"
             onClick={handleGoogleSignIn}
@@ -152,7 +153,13 @@ export default function Register() {
           >
             <Google />
             <span>{googleLoading ? 'Signing in...' : 'Sign up with Google'}</span>
-          </button>
+          </button>*/}
+          <GoogleButton
+            style={{width: "100%", borderRadius: "50px"}}
+            type="dark"
+            onClick={handleGoogleSignIn}
+            disabled={loading || googleLoading}
+          />
 
           <div className="form-footer">
             Already have an account? <Link to="/login">Login →</Link>

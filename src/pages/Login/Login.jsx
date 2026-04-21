@@ -5,6 +5,7 @@ import { authService } from '../../services/auth.service';
 import { useAuth } from '../../context/AuthContext';
 import ForgotPassword from '../../components/ForgotPassword/ForgotPassword';
 import { Visibility, VisibilityOff, Google } from '@mui/icons-material';
+import GoogleButton from 'react-google-button';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -99,7 +100,7 @@ export default function Login() {
             <span>or</span>
           </div>
 
-          <button 
+          {/*<button 
             type="button" 
             className="btn-google"
             onClick={handleGoogleSignIn}
@@ -107,7 +108,14 @@ export default function Login() {
           >
             <Google />
             <span>{googleLoading ? 'Signing in...' : 'Sign in with Google'}</span>
-          </button>
+          <//button>*/}
+
+          <GoogleButton
+            style={{width: "100%", borderRadius: "50px"}}
+            type="dark"
+            onClick={handleGoogleSignIn}
+            disabled={loading || googleLoading}
+          />
 
           <div className="form-footer">
             <button 

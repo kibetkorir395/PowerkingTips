@@ -178,9 +178,13 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
+              <>
               <NavLink className="btn login-btn" to="/login" onClick={closeMobileMenu}>
                 Log In
               </NavLink>
+              <NavLink className="btn login-btn" to="/register" onClick={closeMobileMenu}>
+                Regsiter
+              </NavLink></>
             )}
           </div>
         </nav>

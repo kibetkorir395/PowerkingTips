@@ -80,6 +80,7 @@ class AuthService {
       
       return { success: true, user };
     } catch (error) {
+      console.log(error)
       let errorMessage = this.getErrorMessage(error.code);
       
       // Handle specific Google auth errors

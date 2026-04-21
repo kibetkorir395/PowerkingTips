@@ -108,11 +108,11 @@ export default function Tips() {
       // Lock premium tips for non-premium users
       const today = getCurrentDateInUserTimezone();
       const tipDate = new Date(tip.date).toLocaleDateString('en-US');
-      const isTodayTip = tipDate === today;
+      //const isTodayTip = tipDate === today;
       const isPending = tip.status !== 'finished';
 
       // Lock today's pending premium tips for non-premium users
-      return tip.premium && !hasPremiumAccess && isTodayTip && isPending;
+      return tip.premium && !hasPremiumAccess/* && isTodayTip */&& isPending;
     },
     [hasPremiumAccess, isAdmin, getCurrentDateInUserTimezone]
   );
