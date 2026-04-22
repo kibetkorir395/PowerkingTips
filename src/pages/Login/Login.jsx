@@ -43,28 +43,7 @@ export default function Login() {
     
     if (result.success) {
       await refreshUserData();
-      try {
-        await emailjs.send(
-          'service_zwhtzn9',
-          'template_jweon7f',
-          {
-            "username" : "Mr. Mark",
-            "dashboardLink" : "https://powerking-tips.onrender.com/"
-          },
-          {
-            publicKey: 'K32761TM8kHb3S7Di',
-          },
-        );
-        console.log('SUCCESS!');
-      } catch (err) {
-        if (err instanceof EmailJSResponseStatus) {
-          console.log('EMAILJS FAILED...', err);
-          return;
-        }
-      
-        console.log('ERROR', err);
-      }
-      //navigate('/');
+      navigate('/');
     } else {
       setError(result.error);
     }
