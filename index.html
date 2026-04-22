@@ -31,11 +31,10 @@
     <!-- ============================================= -->
     <meta name="theme-color" content="#00BFFF" />
     <meta name="background-color" content="#ebf4fc" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" /><!--black-translucent/black/default-->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="POWERKING TIPS" />
-
     <!-- ============================================= -->
     <!-- SEO & SEARCH ENGINE META TAGS                  -->
     <!-- ============================================= -->
@@ -124,7 +123,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="/logo152.png" />
     <link rel="apple-touch-icon" sizes="167x167" href="/logo167.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo180.png" />
-
+    <link rel="apple-touch-startup-image" href="/logo512.png" />
     <!-- ============================================= -->
     <!-- PWA MANIFEST                                   -->
     <!-- ============================================= -->
@@ -206,6 +205,28 @@
       gtag('js', new Date());
       gtag('config', 'AW-16766305770');
     </script>
+
+    <!-- ============================================= -->
+    <!-- Apple Pay Integration --> 
+    <!--you need to set up the Payment Request API along with the appropriate Apple Pay configuration  -->
+    <!-- ============================================= -->
+    <!--<script>
+      if (window.ApplePaySession) {
+        const paymentRequest = {
+          countryCode: 'US',
+          currencyCode: 'USD',
+          total: {
+            label: 'Your App',
+            amount: '10.00',
+          },
+          supportedNetworks: ['visa', 'masterCard'],
+          merchantCapabilities: ['supports3DS'],
+        };
+  
+        const session = new ApplePaySession(3, paymentRequest);
+        session.begin();
+      }
+    </script>-->
 
     <!-- ============================================= -->
     <!-- EMAILJS SDK                                    -->

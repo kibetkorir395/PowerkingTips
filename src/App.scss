@@ -1311,114 +1311,10 @@ html {
   }
 }
 
-// Tips Table Container
-/*.tips-table-container {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: 12px;
-  margin-top: 10px;
-  
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: var(--gradient-primary);
-    border-radius: 10px;
-  }
-}
 
-// Tips Table Enhancements
-.tips-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
-
-  th, td {
-    padding: 12px 8px;
-    text-align: center;
-    font-size: 13px;
-  }
-
-  th {
-    background: var(--gradient-primary);
-    color: var(--lite);
-    font-weight: 600;
-    font-size: 13px;
-  }
-
-  tr {
-    transition: var(--transition-smooth);
-    cursor: pointer;
-
-    &:nth-child(even) {
-      background: var(--grey);
-    }
-
-    &:nth-child(odd) {
-      background: var(--dark-blue);
-    }
-
-    &:hover {
-      transform: scale(1.01);
-      background: var(--lite);
-      
-      td {
-        color: var(--dark);
-        
-        .result.won {
-          color: var(--blue);
-        }
-        
-        .result.lost {
-          color: var(--even);
-        }
-      }
-    }
-
-    &.locked {
-      opacity: 0.7;
-      cursor: not-allowed;
-      
-      &:hover {
-        transform: none;
-        background: inherit;
-      }
-    }
-  }
-
-  td {
-    color: var(--lite);
-    
-    &.blurred {
-      filter: blur(3px);
-      user-select: none;
-    }
-    
-    .result {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-weight: 600;
-      
-      &.won {
-        color: var(--neon-blue);
-      }
-      
-      &.lost {
-        color: var(--even);
-      }
-    }
-  }
-}
 
 // Premium Tip Indicator
-.premium-tip {
+/*.premium-tip {
   position: relative;
   
   &::before {
@@ -1485,6 +1381,29 @@ html {
 }
 
 
+// Tips Table Container
+/*.tips-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  margin-top: 10px;
+  
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 10px;
+  }
+}*/
+
+
 // Enhanced tables
 table {
   color: var(--lite);
@@ -1539,11 +1458,33 @@ table {
   }
 }
 
+
+
 .tips-table {
   border-radius: 10px;
   
+
+  /*width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+
+
+  th, tr{
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 13px;
+  }
+  th {
+    background: var(--gradient-primary);
+    color: var(--lite);
+    font-weight: 600;
+    font-size: 13px;
+  }*/
+
   tr {
     transition: var(--transition-smooth);
+
+    /*cursor: pointer;*/
     
     &:nth-child(even) {
       background: var(--grey);
@@ -1559,6 +1500,41 @@ table {
         }
       }
     }
+
+    /*&:nth-child(even) {
+      background: var(--grey);
+    }
+
+    &:nth-child(odd) {
+      background: var(--dark-blue);
+    }
+
+    &:hover {
+      transform: scale(1.01);
+      background: var(--lite);
+      
+      td {
+        color: var(--dark);
+        
+        .result.won {
+          color: var(--blue);
+        }
+        
+        .result.lost {
+          color: var(--even);
+        }
+      }
+    }
+
+    &.locked {
+      opacity: 0.7;
+      cursor: not-allowed;
+      
+      &:hover {
+        transform: none;
+        background: inherit;
+      }
+    }*/
     
     &:nth-child(odd) {
       background: var(--dark-blue);
@@ -1574,6 +1550,30 @@ table {
         }
       }
     }
+
+    /*td{
+      color: var(--lite);
+    
+    &.blurred {
+      filter: blur(3px);
+      user-select: none;
+    }
+    
+    .result {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      
+      &.won {
+        color: var(--neon-blue);
+      }
+      
+      &.lost {
+        color: var(--even);
+      }
+    }
+    }*/
   }
 }
 

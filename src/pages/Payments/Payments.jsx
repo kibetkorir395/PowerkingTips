@@ -5,6 +5,7 @@ import GooglePayments from "./GooglePayments";
 import KoraPayments from "./KoraPayments";
 import AppHelmet from "../../components/AppHelmet";
 import "./Payments.scss";
+import GoogleLogo from '../../assets/GPay_Acceptance_Mark_800.png';
 
 // Simple Error Boundary Component
 class ErrorBoundary extends Component {
@@ -117,7 +118,16 @@ export default function Payments({ setUserData }) {
               checked={paymentType === "googlepay"}
               onChange={handlePaymentChange}
             />
-            <label htmlFor="googlepay"><div className="icons8-google"></div>Pay</label>
+            <label htmlFor="googlepay">
+              <img 
+                src={GoogleLogo} 
+                alt="Google Pay" 
+                width="40" 
+                height="20" 
+                style={{ marginRight: "4px", verticalAlign: "middle"}}
+              />
+              <span className="google-label">Google Pay</span>
+            </label>
           </fieldset>
           <fieldset>
             <input

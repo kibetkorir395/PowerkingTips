@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import ForgotPassword from '../../components/ForgotPassword/ForgotPassword';
 import { Visibility, VisibilityOff, Google } from '@mui/icons-material';
 import GoogleButton from 'react-google-button';
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -42,7 +43,28 @@ export default function Login() {
     
     if (result.success) {
       await refreshUserData();
-      navigate('/');
+      try {
+        await emailjs.send(
+          'service_zwhtzn9',
+          'template_jweon7f',
+          {
+            "username" : "Mr. Mark",
+            "dashboardLink" : "https://powerking-tips.onrender.com/"
+          },
+          {
+            publicKey: 'K32761TM8kHb3S7Di',
+          },
+        );
+        console.log('SUCCESS!');
+      } catch (err) {
+        if (err instanceof EmailJSResponseStatus) {
+          console.log('EMAILJS FAILED...', err);
+          return;
+        }
+      
+        console.log('ERROR', err);
+      }
+      //navigate('/');
     } else {
       setError(result.error);
     }
