@@ -424,7 +424,7 @@ export default function GooglePayments({ setUserData }) {
       ],
       merchantInfo: {
         merchantId: "BCR2DN5TU36KB6YI",//"12345678901234567890"
-        merchantName: "Daddy Market",
+        merchantName: "Powerking Tips",
       },
       transactionInfo: {
         totalPriceStatus: "FINAL",

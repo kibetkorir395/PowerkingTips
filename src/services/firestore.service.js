@@ -69,7 +69,7 @@ export const userService = {
       //let q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
       
       // Alternative: Use document ID which is always indexed (no composite index needed)
-       let q = query(collection(db, 'users'), orderBy('__name__'));
+       let q = query(collection(db, 'users'), )//orderBy('__name__'));
   
       // Apply isPremium filter if specified
       // ⚠️ This creates a composite index requirement: isPremium + createdAt
@@ -79,22 +79,82 @@ export const userService = {
       }
 
       // Add search functionality (searches email and username)
-      if (searchTerm && searchTerm.trim()) {
-        const searchLower = searchTerm.toLowerCase();
-        // Firestore doesn't support partial search, so we need to use startAt/endAt
-        // This searches for emails/usernames that start with the search term
-        q = query(q, 
-            where('email', '>=', searchLower),
-            where('email', '<=', searchLower + '\uf8ff')
-        );
-      }
+// Add search functionality (searches email OR username)
+if (searchTerm && searchTerm.trim()) {
+  const searchLower = searchTerm.toLowerCase().trim();
   
-      // Add pagination using startAfter for "Load More" functionality
-      // startAfter tells Firestore to start from the last document we already have
-      if (lastDoc) {
-        q = query(q, startAfter(lastDoc), limit(pageSize));
-      } else {
-        q = query(q, limit(pageSize));
+  // Option A: Search username only (current behavior)
+  // q = query(q, 
+  //   where('username', '>=', searchLower),
+  //   where('username', '<=', searchLower + '\uf8ff')
+  // );
+  
+  // Option B: Search email only (uncomment to use)
+  
+  q = query(q, 
+    where('email', '>=', searchLower),
+    where('email', '<=', searchLower + '\uf8ff')
+  );
+  
+  
+  // Option C: For exact email match (uncomment to use)
+  /*
+  q = query(q, 
+    where('email', '==', searchLower)
+  );
+  */
+  
+  // Option D: Search both email AND username using parallel queries
+  // Store the original query
+  /*const baseQuery = q;
+  
+  // Create email query
+  const emailQuery = query(baseQuery,
+    where('email', '>=', searchLower),
+    where('email', '<=', searchLower + '\uf8ff')
+  );
+  
+  // Create username query
+  const usernameQuery = query(baseQuery,
+    where('username', '>=', searchLower),
+    where('username', '<=', searchLower + '\uf8ff')
+  );
+  
+  // Run both queries and combine results
+  const [emailSnapshot, usernameSnapshot] = await Promise.all([
+    getDocs(emailQuery),
+    getDocs(usernameQuery)
+  ]);
+    // Combine and deduplicate results
+    const usersMap = new Map();
+    emailSnapshot.forEach(doc => usersMap.set(doc.id, { id: doc.id, ...doc.data() }));
+    usernameSnapshot.forEach(doc => {
+      if (!usersMap.has(doc.id)) {
+        usersMap.set(doc.id, { id: doc.id, ...doc.data() });
+      }
+    });
+    
+    // Convert to array and apply pagination
+    const combinedUsers = Array.from(usersMap.values());
+    const startIndex = (page - 1) * pageSize;
+    const paginatedUsers = combinedUsers.slice(startIndex, startIndex + pageSize);
+    
+    return { 
+      users: paginatedUsers, 
+      hasMore: startIndex + pageSize < combinedUsers.length,
+      lastDoc: null
+    };
+  */
+  }
+
+      if(!searchTerm) {
+        // Add pagination using startAfter for "Load More" functionality
+        // startAfter tells Firestore to start from the last document we already have
+        if (lastDoc) {
+          q = query(q, startAfter(lastDoc), limit(pageSize));
+        } else {
+          q = query(q, limit(pageSize));
+        }
       }
   
       const snapshot = await getDocs(q);
@@ -124,6 +184,37 @@ export const userService = {
       return { users: [], hasMore: false, lastDoc: null };
     }
   },
+
+  async getAllUserss(page = 1, pageSize = 20, filters = {}) {
+    let q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+    
+    if (filters.isPremium !== undefined) {
+      q = query(q, where("isPremium", "==", filters.isPremium));
+    }
+    
+    const snapshot = await getDocs(query(q, limit(pageSize)));
+    const users = [];
+    snapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+    
+    return { users, hasMore: users.length === pageSize };
+  },
+
+  async getAllUsersss(page = 1, pageSize = 20, filters = {}) {
+    let q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+    
+    if (filters.isPremium !== undefined) {
+      q = query(q, where("isPremium", "==", filters.isPremium));
+    }
+    
+    const startAt = (page - 1) * pageSize;
+    const limitedQuery = query(q, limit(pageSize));
+    
+    const snapshot = await getDocs(limitedQuery);
+    const users = [];
+    snapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+    
+    return { users, hasMore: users.length === pageSize };
+  }
 };
 
 // Tips Service
@@ -153,6 +244,14 @@ export const tipsService = {
 
     return { tips, hasMore: tips.length === pageSize };
   },
+
+  /*async getAllTips(page = 1, pageSize = 20) {
+    const q = query(collection(db, "tips"), orderBy("date", "desc"), limit(pageSize));
+    const snapshot = await getDocs(q);
+    const tips = [];
+    snapshot.forEach(doc => tips.push({ id: doc.id, ...doc.data() }));
+    return { tips, hasMore: tips.length === pageSize };
+  },*/
 
   /*async getAllTips(limit_count = 100) {
     const q = query(collection(db, "tips"), orderBy("date", "desc"), limit(limit_count));

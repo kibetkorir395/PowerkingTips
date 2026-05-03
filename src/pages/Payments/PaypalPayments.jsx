@@ -51,7 +51,7 @@ export default function PaypalPayments({ setUserData }) {
     }
 
     const script = document.createElement("script");
-    script.src = "https://www.paypal.com/sdk/js?client-id=AXIggvGGvXozbZhdkvizPLd89nVYW8KoyNlHO0gHx7hjY_Ah_IfgXihUQGf7T2HUUVYx-D5SNncM0CtU&currency=USD&components=buttons";
+    script.src = "https://www.paypal.com/sdk/js?client-id=AT-E8-dZV6R5JAeHjr_DG1mivBrJ72h8ZlBt-rAHf6ypsKhg5lfpsRqWSIM5H1Xa58YZYhBbL0wObsw-&currency=USD&components=buttons";
     script.async = true;
     
     script.onload = () => {

@@ -104,7 +104,7 @@ export default function UserProfile() {
           <div className="uh-image">
             <img
               src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                profileUser.username || profileUser.email
+                'Subrun Abhuyudaye'//profileUser.username || profileUser.email
               )}&background=00BFFF&color=fff`}
               alt="Profile"
             />
@@ -115,9 +115,10 @@ export default function UserProfile() {
           </div>
           <div className="user-info">
             <h2 className="user-name">
-              {profileUser.username || profileUser.email.split('@')[0]}
+               @abhuyudaye
+              {/*profileUser.username || profileUser.email.split('@')[0]*/}
             </h2>
-            <p className="user-email">{profileUser.email}</p>
+            <p className="user-email">{/*profileUser.email*/'assubrun@gmail.com'}</p>
             {profileUser.isPremium && (
               <span className="vip-tag">VIP Member</span>
             )}
@@ -127,12 +128,12 @@ export default function UserProfile() {
         <div className="user-links">
           <div className="user-stats">
             <div className="stat">
-              <span className="stat-value">{transactions.length}</span>
+              <span className="stat-value">{/*transactions.length*/2}</span>
               <span className="stat-label">Transactions</span>
             </div>
             <div className="stat">
               <span className="stat-value">
-                {profileUser.isPremium ? 'Active' : 'Inactive'}
+                {profileUser.isPremium ? '꧁𓊈𒆜𝓟𝓻𝓸𒆜𓊉꧂' : '✧˚ ༘ Basic  ⋆｡˚'}
               </span>
               <span className="stat-label">Status</span>
             </div>

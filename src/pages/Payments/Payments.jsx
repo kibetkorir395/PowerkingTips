@@ -3,8 +3,10 @@ import CryptoPayments from "./CryptoPayments";
 import PaypalPayments from "./PaypalPayments";
 import GooglePayments from "./GooglePayments";
 import KoraPayments from "./KoraPayments";
+import CashiaPaymentsV2 from "./CashiaPaymentsV2";
 import AppHelmet from "../../components/AppHelmet";
 import "./Payments.scss";
+import CashiaLogo from '../../assets/cashia-logo.png';
 import GoogleLogo from '../../assets/GPay_Acceptance_Mark_800.png';
 
 // Simple Error Boundary Component
@@ -72,6 +74,12 @@ export default function Payments({ setUserData }) {
             <KoraPayments setUserData={setUserData} />
           </ErrorBoundary>
         );
+      case "cashia":
+        return (
+          <ErrorBoundary key="cashia">
+            <CashiaPaymentsV2 setUserData={setUserData} />
+          </ErrorBoundary>
+        );
       default:
         return (
           <ErrorBoundary key="default">
@@ -98,6 +106,26 @@ export default function Payments({ setUserData }) {
             />
             <label htmlFor="mpesa"><div class="icons8-mpesa"></div> <img width="20" height="20" src="https://img.icons8.com/nolan/64/airtel.png" alt="airtel"/> Mobile </label>
           </fieldset>
+          {/*<fieldset>
+            <input
+              name="payment-method"
+              type="radio"
+              value="cashia"
+              id="cashia"
+              checked={paymentType === "cashia"}
+              onChange={handlePaymentChange}
+            />
+            <label htmlFor="cashia">
+              <img 
+                src={CashiaLogo} 
+                alt="Cashia Payments" 
+                width="20" 
+                height="20" 
+                style={{ marginRight: "4px", verticalAlign: "middle"}}
+              />
+              <span className="cashia-label">Cashia</span>
+            </label>
+          </fieldset>*/}
           <fieldset>
             <input
               name="payment-method"

@@ -14,7 +14,9 @@ export default function ListUsers() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [lastDoc, setLastDoc] = useState(null); // Track last document for pagination
+  const [pageSize, setPageSize] = useState(60);
   const debouncedSearch = useDebounce(searchQuery, 300);
+  const debouncedPageSize = useDebounce(pageSize, 1000); // Added debounce for pageSize
   const isInitialMount = useRef(true);
 
   const fetchUsers = useCallback(async (isNewFilter = false) => {
@@ -28,7 +30,7 @@ export default function ListUsers() {
     // Use null lastDoc for first page or when filter changes
     const currentLastDoc = isNewFilter ? null : lastDoc;
     
-    const result = await userService.getAllUsers(page, 20, filters, currentLastDoc, debouncedSearch);// Pass search term
+    const result = await userService.getAllUsers(page, debouncedPageSize, filters, currentLastDoc, debouncedSearch);// Pass search term
     
     if (isNewFilter || page === 1) {
       setUsers(result.users);
@@ -38,7 +40,7 @@ export default function ListUsers() {
     setHasMore(result.hasMore);
     setLastDoc(result.lastDoc);
     setLoading(false);
-  }, [page, filter, isAdmin, lastDoc]);
+  }, [pageSize, page, filter, isAdmin, lastDoc]);
 
   // Reset pagination when filter changes
   useEffect(() => {
@@ -48,14 +50,14 @@ export default function ListUsers() {
       fetchUsers(true);
     }
     isInitialMount.current = false;
-  }, [filter, isAdmin]);
+  }, [debouncedPageSize, filter, isAdmin]); // Added debouncedPageSize dependency
 
   // Fetch users when page changes
   useEffect(() => {
     if (isAdmin && page > 1) {
       fetchUsers(false);
     }
-  }, [page, isAdmin]);
+  }, [debouncedPageSize, page, isAdmin]); // Added debouncedPageSize dependency
 
   // Initial load
   useEffect(() => {
@@ -93,6 +95,12 @@ export default function ListUsers() {
           placeholder="Search by username, email or subscription..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="20"
+          value={pageSize}
+          onChange={(e) => setPageSize(e.target.value)}
         />
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="all">All Users</option>

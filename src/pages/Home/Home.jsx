@@ -5,9 +5,11 @@ import { useAuth } from '../../context/AuthContext';
 import { usePrice } from '../../context/PriceContext';
 import { tipsService } from '../../services/firestore.service';
 import AppHelmet from '../../components/AppHelmet';
+import { WhatsAppWidget } from 'react-whatsapp-widget';
 import Tips from '../Tips/Tips';
 import Pricing from '../../components/Pricing/Pricing';
 import Testimonials from '../../components/Testimonials/Testimonials';
+import 'react-whatsapp-widget/dist/index.css';
 
 export default function Home() {
   const { userData, isPremium, isAdmin } = useAuth();
@@ -221,6 +223,16 @@ export default function Home() {
           </NavLink>
         </div>
       </section>
+      <WhatsAppWidget 
+        phoneNumber="+254706313993" // Your number with country code
+        companyName="Powerking Tips"
+        CompanyIcon={""}
+        message="Hi there! 👋 How can we help you?"
+        replyTimeText="Typically replies within a day"
+        position="left" // 'left' or 'right'
+        sendButtonText="Get Help Now"
+        open={false}
+      />
     </div>
   );
 }

@@ -1738,7 +1738,7 @@ table {
   flex-wrap: wrap;
 }
 
-.list-users .header input[type="search"] {
+.list-users .header input/*[type="search"]*/ {
   flex: 1;
   min-width: 250px;
   padding: 10px 15px;

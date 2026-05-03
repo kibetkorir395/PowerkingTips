@@ -16,6 +16,7 @@ const Payments = lazy(() => import('./pages/Payments/Payments'));
 const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
 const ListUsers = lazy(() => import('./pages/Admin/ListUsers'));
 const EditUser = lazy(() => import('./pages/Admin/EditUser'));
+const SendEmail = lazy(() => import('./pages/Admin/SendEmail'));
 const AdminTips = lazy(() => import('./pages/Admin/AdminTips'));
 const EditTip = lazy(() => import('./pages/Admin/EditTip'));
 const About = lazy(() => import('./pages/About/About'));
@@ -107,6 +108,15 @@ function App() {
                 element={
                   <ProtectedRoute adminOnly>
                     <EditUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/send-email"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <SendEmail />
                   </ProtectedRoute>
                 }
               />

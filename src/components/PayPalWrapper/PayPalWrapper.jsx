@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const paypalInitialOptions = {
-  "client-id": "AXIggvGGvXozbZhdkvizPLd89nVYW8KoyNlHO0gHx7hjY_Ah_IfgXihUQGf7T2HUUVYx-D5SNncM0CtU",
+  "client-id": "AT-E8-dZV6R5JAeHjr_DG1mivBrJ72h8ZlBt-rAHf6ypsKhg5lfpsRqWSIM5H1Xa58YZYhBbL0wObsw-",
   currency: "USD",
   intent: "capture",
   components: "buttons",

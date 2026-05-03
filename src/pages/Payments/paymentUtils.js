@@ -78,7 +78,7 @@ export const CURRENCY_SYMBOLS = {
 // Country to currency mapping
 export const COUNTRY_CURRENCY = {
   Kenya: { code: "KE", currency: "KES", symbol: "KSH", flag: "🇰🇪", rate: 1 },
-  Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 10.63 },
+  Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 12.63 },
   SouthAfrica: { code: "ZA", currency: "ZAR", symbol: "R", flag: "🇿🇦", rate: 0.22 },
   Ghana: { code: "GH", currency: "GHS", symbol: "₵", flag: "🇬🇭", rate: 0.06 },
   Uganda: { code: "UG", currency: "UGX", symbol: "USh", flag: "🇺🇬", rate: 1.5 },

@@ -2,6 +2,7 @@ import React, { useLayoutEffect } from 'react'
 import FaqItem from '../../components/FaqItem/FaqItem';
 import { faqs } from '../../data';
 import AppHelmet from '../../components/AppHelmet';
+import Testimonials2 from '../../components/Testimonials2/Testimonials2';
 
 export default function About() {
   useLayoutEffect(() => {
@@ -39,6 +40,7 @@ export default function About() {
           })
         }
       </div>
+      <Testimonials2 />
     </div>
   )
 }

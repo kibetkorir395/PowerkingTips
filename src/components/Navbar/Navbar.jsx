@@ -172,7 +172,11 @@ export default function Navbar() {
                     Add Tip
                   </NavLink>
                 )}
-                
+                {isAdmin && (
+                  <NavLink to="/send-email" className="btn admin-btn" onClick={closeMobileMenu}>
+                    Send Email
+                  </NavLink>
+                )}
                 <button className="btn logout-btn" onClick={handleLogout}>
                   Logout
                 </button>
