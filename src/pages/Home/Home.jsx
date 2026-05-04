@@ -224,7 +224,7 @@ export default function Home() {
         </div>
       </section>
       <WhatsAppWidget 
-        phoneNumber="+254706313993" // Your number with country code
+        phoneNumber="+254143198366" // Your number with country code
         companyName="Powerking Tips"
         CompanyIcon={""}
         message="Hi there! 👋 How can we help you?"
