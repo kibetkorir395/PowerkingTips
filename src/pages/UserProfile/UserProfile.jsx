@@ -115,10 +115,9 @@ export default function UserProfile() {
           </div>
           <div className="user-info">
             <h2 className="user-name">
-               @abhuyudaye
-              {/*profileUser.username || profileUser.email.split('@')[0]*/}
+              {profileUser.username || profileUser.email.split('@')[0]}
             </h2>
-            <p className="user-email">{/*profileUser.email*/'assubrun@gmail.com'}</p>
+            <p className="user-email">{profileUser.email}</p>
             {profileUser.isPremium && (
               <span className="vip-tag">VIP Member</span>
             )}
@@ -128,7 +127,7 @@ export default function UserProfile() {
         <div className="user-links">
           <div className="user-stats">
             <div className="stat">
-              <span className="stat-value">{/*transactions.length*/2}</span>
+              <span className="stat-value">{transactions.length}</span>
               <span className="stat-label">Transactions</span>
             </div>
             <div className="stat">

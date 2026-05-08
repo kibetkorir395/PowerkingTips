@@ -9,9 +9,9 @@ import AppHelmet from '../../components/AppHelmet';
 import './SendEmail.scss';
 
 // EmailJS configuration
-const EMAILJS_SERVICE_ID = 'service_sqf7j84';
-const EMAILJS_TEMPLATE_ID = 'template_2i8jyq2';
-const EMAILJS_PUBLIC_KEY = 'FSTno5mOQr5Fbfp4J';
+const EMAILJS_SERVICE_ID = 'service_kzq0n7r';
+const EMAILJS_TEMPLATE_ID = 'template_o3zvvf8';
+const EMAILJS_PUBLIC_KEY = 'X32w0MhX9-WuqvZ4e';
 
 // Initialize EmailJS once outside component
 emailjs.init({
