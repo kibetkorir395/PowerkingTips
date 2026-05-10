@@ -138,7 +138,16 @@ export default function CryptoPayments({ setUserData }) {
           icon: "success",
           confirmButtonText: "Activate Subscription",
         }).then(() => {
-          handleUpgrade(currentUser, price, setUserData);
+          const transactionData = {
+            type : 'credit',
+            amount : price,
+            description : `${getPlanName(price)} VIP Subscription`,
+            category : 'Subscription',
+            currency : 'usd',
+            paymentMethod: selectedCurrency.toLowerCase(),
+            reference: `VIP-${getPlanName(price)}-${Date.now()}`,
+          }
+          handleUpgrade(currentUser, transactionData, setUserData);
         });
         return true;
       } else if (

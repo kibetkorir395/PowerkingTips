@@ -31,7 +31,7 @@ export default function Pricing() {
         {
             id: 2,
             title: "Gold",
-            price: 850,
+            price: 800,
             duration: "/Week",
             icon: <Star />,
             color: "#FFD700",
@@ -45,7 +45,7 @@ export default function Pricing() {
         {
             id: 3,
             title: "Platinum",
-            price: 3000,
+            price: 2500,
             duration: "/Month",
             icon: <EmojiEvents />,
             color: "#00ae58",

@@ -113,7 +113,7 @@ export default function Home() {
 
   // Handle subscribe click
   const handleSubscribeClick = useCallback(() => {
-    setPrice(3000);
+    setPrice(2500);
   }, [setPrice]);
 
   return (
@@ -217,7 +217,7 @@ export default function Home() {
       <section>
         <div className="jobs-flyer" style={{ width: '100%', padding: '5px' }}>
           <h1>Join The Winning Team</h1>
-          <h1>Get VIP membership for 1 month with as little as KSH 3000.</h1>
+          <h1>Get VIP membership for 1 month with as little as KSH 2500.</h1>
           <NavLink to="/pay" className='btn' onClick={handleSubscribeClick}>
             Subscribe Now
           </NavLink>

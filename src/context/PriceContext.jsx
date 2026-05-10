@@ -9,7 +9,7 @@ export const usePrice = () => {
 };
 
 export const PriceProvider = ({ children }) => {
-  const [price, setPrice] = useState(850);
+  const [price, setPrice] = useState(800);
   const [plan, setPlan] = useState('weekly');
 
   const updatePlan = useCallback((newPrice, newPlan) => {

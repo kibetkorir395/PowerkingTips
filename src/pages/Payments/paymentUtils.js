@@ -15,23 +15,23 @@ export const SUBSCRIPTION_PLANS = {
     },
     {
       id: "weekly",
-      value: 850,
+      value: 800,
       label: "7 Days VIP",
-      price: "KSH 850",
+      price: "KSH 800",
       period: "Weekly",
     },
     {
       id: "monthly",
-      value: 3000,
+      value: 2500,
       label: "30 Days VIP",
-      price: "KSH 3000",
+      price: "KSH 2500",
       period: "Monthly",
     },
     {
       id: "yearly",
-      value: 8500,
+      value: 8000,
       label: "1 Year VIP",
-      price: "KSH 8500",
+      price: "KSH 8000",
       period: "Yearly",
     },
   ],
@@ -39,8 +39,8 @@ export const SUBSCRIPTION_PLANS = {
     { id: "2", value: 2, label: "Daily", price: "$2", period: "Daily" },
     { id: "7", value: 7, label: "Weekly", price: "$7", period: "Weekly" },
     {
-      id: "23",
-      value: 23,
+      id: "20",
+      value: 20,
       label: "Monthly",
       price: "$23",
       period: "Monthly",
@@ -52,7 +52,7 @@ export const SUBSCRIPTION_PLANS = {
 // Exchange rates relative to KES (1 KES = X units of foreign currency)
 export const EXCHANGE_RATES = {
   KES: 1,
-  NGN: 10.63,
+  NGN: 11.63,
   ZAR: 0.22,
   GHS: 0.06,
   UGX: 1.5,
@@ -78,7 +78,7 @@ export const CURRENCY_SYMBOLS = {
 // Country to currency mapping
 export const COUNTRY_CURRENCY = {
   Kenya: { code: "KE", currency: "KES", symbol: "KSH", flag: "🇰🇪", rate: 1 },
-  Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 12.63 },
+  Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 11.63 },
   SouthAfrica: { code: "ZA", currency: "ZAR", symbol: "R", flag: "🇿🇦", rate: 0.22 },
   Ghana: { code: "GH", currency: "GHS", symbol: "₵", flag: "🇬🇭", rate: 0.06 },
   Uganda: { code: "UG", currency: "UGX", symbol: "USh", flag: "🇺🇬", rate: 1.5 },
@@ -90,23 +90,23 @@ export const COUNTRY_CURRENCY = {
 // Get subscription period based on price
 export const getSubscriptionPeriod = (price) => {
   if (price === 250 || price === 2) return "Daily";
-  if (price === 850 || price === 7) return "Weekly";
-  if (price === 3000 || price === 23) return "Monthly";
-  if (price === 8500 || price === 65) return "Yearly";
+  if (price === 800 || price === 7) return "Weekly";
+  if (price === 2500 || price === 20) return "Monthly";
+  if (price === 8000 || price === 65) return "Yearly";
   return "Weekly";
 };
 
 // Get plan name based on price
 export const getPlanName = (price) => {
   if (price === 250 || price === 2) return "Daily";
-  if (price === 850 || price === 7) return "Weekly";
-  if (price === 3000 || price === 23) return "Monthly";
-  if (price === 8500 || price === 65) return "Yearly";
+  if (price === 800 || price === 7) return "Weekly";
+  if (price === 2500 || price === 20) return "Monthly";
+  if (price === 8000 || price === 65) return "Yearly";
   return "Weekly";
 };
 
 // Handle user upgrade after successful payment
-export const handleUpgrade = async (currentUser, price, setUserData) => {
+export const handleUpgrade = async (currentUser, transactionData, setUserData) => {
   if (!currentUser || !currentUser.email) {
     Swal.fire({
       title: "Error",
@@ -117,14 +117,14 @@ export const handleUpgrade = async (currentUser, price, setUserData) => {
   }
 
   try {
-    const subscriptionPeriod = getSubscriptionPeriod(price);
+    const subscriptionPeriod = getSubscriptionPeriod(transactionData.amount);
     const userDocRef = doc(db, "users", currentUser.email);
     
     await setDoc(
       userDocRef,
       {
-        email: currentUser.email,
-        username: currentUser.email.split('@')[0],
+        //email: currentUser.email,
+        //username: currentUser.email.split('@')[0],
         isPremium: true,
         subscription: subscriptionPeriod,
         subDate: new Date().toISOString(),
@@ -146,9 +146,11 @@ export const handleUpgrade = async (currentUser, price, setUserData) => {
       confirmButtonText: "Continue",
       confirmButtonColor: "#00ae58",
     }).then(() => {
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 3000)
+      addTransaction(currentUser.email, transactionData).then(() => {
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 3000)
+      })
     });
   } catch (error) {
     console.error("Upgrade error:", error);

@@ -95,7 +95,7 @@ export default function SendTipsEmail() {
         freeTipsCount: freeTips.length,
         todayMatches: uniqueMatches,
         avgOdds: avgOdds,
-        confidenceRate: 85,
+        confidenceRate: 92,
         hasVipTips: premiumTips.length > 0,
         topLeagues: topLeagues,
         proTip: PRO_TIPS[Math.floor(Math.random() * PRO_TIPS.length)],

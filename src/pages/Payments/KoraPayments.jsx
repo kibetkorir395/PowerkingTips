@@ -16,9 +16,9 @@ export default function KoraPayments({ setUserData }) {
   const [selectedCountry, setSelectedCountry] = useState("Kenya");
   const [convertedPrices, setConvertedPrices] = useState({
     daily: 250,
-    weekly: 850,
-    monthly: 3000,
-    yearly: 8500,
+    weekly: 800,
+    monthly: 2500,
+    yearly: 8000,
   });
   const [isLoadingRate, setIsLoadingRate] = useState(false);
   const [userCountry, setUserCountry] = useState(null);
@@ -35,9 +35,9 @@ export default function KoraPayments({ setUserData }) {
   // Price options in KES (base currency)
   const priceOptions = {
     Daily: 250,
-    Weekly: 850,
-    Monthly: 3000,
-    Yearly: 8500,
+    Weekly: 800,
+    Monthly: 2500,
+    Yearly: 8000,
   };
 
   // Subscription plans
@@ -51,23 +51,23 @@ export default function KoraPayments({ setUserData }) {
     },
     {
       id: "weekly",
-      value: 850,
+      value: 800,
       label: "7 Days VIP",
-      price: "KSH 850",
+      price: "KSH 800",
       period: "Weekly",
     },
     {
       id: "monthly",
-      value: 3000,
+      value: 2500,
       label: "30 Days VIP",
-      price: "KSH 3000",
+      price: "KSH 2500",
       period: "Monthly",
     },
     {
       id: "yearly",
-      value: 8500,
+      value: 8000,
       label: "1 Year VIP",
-      price: "KSH 8500",
+      price: "KSH 8000",
       period: "Yearly",
     },
   ];
@@ -234,8 +234,17 @@ export default function KoraPayments({ setUserData }) {
       },
       onSuccess: (data) => {
         console.log("Payment successful:", data);
+        const transactionData = {
+          type : 'credit',
+          amount : getCurrentConvertedPrice(),
+          description : `${getPlanName(price)} VIP Subscription`,
+          category : 'Subscription',
+          currency : getCurrencySymbol(),
+          paymentMethod: "Mobile",
+          reference,
+        }
         setProcessing(false);
-        handleUpgrade(currentUser, price, setUserData);
+        handleUpgrade(currentUser, transactionData, setUserData);
       },
       onFailed: (data) => {
         console.error("Payment failed:", data);

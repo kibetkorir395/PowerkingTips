@@ -18,9 +18,9 @@ export default function GooglePayments({ setUserData }) {
   const [selectedCountry, setSelectedCountry] = useState("Kenya");
   const [convertedPrices, setConvertedPrices] = useState({
     daily: 250,
-    weekly: 850,
-    monthly: 3000,
-    yearly: 8500,
+    weekly: 800,
+    monthly: 2500,
+    yearly: 8000,
   });
   const [isLoadingRate, setIsLoadingRate] = useState(false);
   const [userCountry, setUserCountry] = useState(null);
@@ -42,17 +42,17 @@ export default function GooglePayments({ setUserData }) {
   // Base price options in KES
   const priceOptions = {
     Daily: 250,
-    Weekly: 850,
-    Monthly: 3000,
-    Yearly: 8500,
+    Weekly: 800,
+    Monthly: 2500,
+    Yearly: 8000,
   };
 
   // Subscription plans display
   const subscriptionPlans = [
     { id: "daily", value: 250, label: "Daily VIP", period: "Daily" },
-    { id: "weekly", value: 850, label: "Weekly VIP", period: "Weekly" },
-    { id: "monthly", value: 3000, label: "Monthly VIP", period: "Monthly" },
-    { id: "yearly", value: 8500, label: "Yearly VIP", period: "Yearly" },
+    { id: "weekly", value: 800, label: "Weekly VIP", period: "Weekly" },
+    { id: "monthly", value: 2500, label: "Monthly VIP", period: "Monthly" },
+    { id: "yearly", value: 8000, label: "Yearly VIP", period: "Yearly" },
   ];
 
   // Initialize price
@@ -338,25 +338,17 @@ export default function GooglePayments({ setUserData }) {
     setProcessing(true);
 
     try {
-      await handleUpgrade(currentUser, price, setUserData);
-      
-      Swal.fire({
-        title: "Payment Successful! 🎉",
-        html: `
-          <div style="text-align: center;">
-            <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981;"></i>
-            <h3 style="margin: 15px 0;">${getPlanName(price)} VIP Activated!</h3>
-            <p>Amount: ${getCurrencySymbol()} ${getCurrentConvertedPrice()}</p>
-          </div>
-        `,
-        icon: "success",
-        confirmButtonText: "Continue",
-        confirmButtonColor: "#00ae58",
-      }).then(() => {
-        setTimeout(() => {
-          window.location.href = "/tips";
-        }, 3000)
-      });
+      const transactionData = {
+        type : 'credit',
+        amount : getCurrentConvertedPrice(),
+        description : `${getPlanName(price)} VIP Subscription`,
+        category : 'Subscription',
+        currency : getCurrencyCode(),
+        paymentMethod: "GPay",
+        reference: `VIP-${getPlanName(price)}-${Date.now()}`,
+      }
+      await handleUpgrade(currentUser, transactionData, setUserData);
+    
     } catch (error) {
       console.error("Upgrade error:", error);
       Swal.fire({

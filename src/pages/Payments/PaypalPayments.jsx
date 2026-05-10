@@ -121,25 +121,18 @@ export default function PaypalPayments({ setUserData }) {
     try {
       const details = await actions.order.capture();
       console.log("Payment completed:", details);
+
+      const transactionData = {
+        type : 'credit',
+        amount : price,
+        description : `${getPlanName(price)} VIP Subscription`,
+        category : 'Subscription',
+        currency : 'usd',
+        paymentMethod: "PayPal",
+        reference: `VIP-${getPlanName(price)}-${Date.now()}`,
+      }
       
-      await handleUpgrade(currentUser, price, setUserData);
-      
-      Swal.fire({
-        title: "Payment Successful! 🎉",
-        html: `
-          <div style="text-align: center;">
-            <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981;"></i>
-            <h3 style="margin: 15px 0;">${getPlanName(price)} VIP Activated!</h3>
-            <p>Transaction ID: ${details.id}</p>
-            <p>Amount: $${price}</p>
-          </div>
-        `,
-        icon: "success",
-        confirmButtonText: "Continue",
-        confirmButtonColor: "#00ae58",
-      }).then(() => {
-        window.location.href = "/";
-      });
+      await handleUpgrade(currentUser, transactionData, setUserData);
     } catch (error) {
       console.error("Payment capture error:", error);
       Swal.fire({
