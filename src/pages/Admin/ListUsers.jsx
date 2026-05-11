@@ -50,14 +50,14 @@ export default function ListUsers() {
       fetchUsers(true);
     }
     isInitialMount.current = false;
-  }, [debouncedPageSize, filter, isAdmin]); // Added debouncedPageSize dependency
+  }, [debouncedPageSize, debouncedSearch, filter, isAdmin]);
 
   // Fetch users when page changes
   useEffect(() => {
     if (isAdmin && page > 1) {
       fetchUsers(false);
     }
-  }, [debouncedPageSize, page, isAdmin]); // Added debouncedPageSize dependency
+  }, [debouncedPageSize, debouncedSearch, page, isAdmin]);
 
   // Initial load
   useEffect(() => {
@@ -68,7 +68,9 @@ export default function ListUsers() {
     }
   }, [isAdmin]);
 
-  const filteredUsers = useMemo(() => {
+
+  // Remove client-side filtering since search is now server-side
+  /*const filteredUsers = useMemo(() => {
     if (!debouncedSearch) return users;
     const search = debouncedSearch.toLowerCase();
     return users.filter(
@@ -77,7 +79,10 @@ export default function ListUsers() {
         user.username?.toLowerCase().includes(search) ||
         user.subscription?.toLowerCase().includes(search)
     );
-  }, [users, debouncedSearch]);
+  }, [users, debouncedSearch]);*/
+
+  // Just use users directly
+const filteredUsers = users;
 
   const loadMore = () => {
     if (!loading && hasMore) {

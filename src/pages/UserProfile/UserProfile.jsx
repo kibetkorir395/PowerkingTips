@@ -132,7 +132,7 @@ export default function UserProfile() {
             </div>
             <div className="stat">
               <span className="stat-value">
-                {profileUser.isPremium ? '꧁𓊈𒆜𝓟𝓻𝓸𒆜𓊉꧂' : '✧˚ ༘ Basic  ⋆｡˚'}
+                {profileUser.isPremium ? '𝓟𝓻𝓸 🏆' : '𝓑𝓪𝓼𝓲𝓬 🥉'}
               </span>
               <span className="stat-label">Status</span>
             </div>
