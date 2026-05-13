@@ -147,11 +147,11 @@ export const handleUpgrade = async (currentUser, transactionData, setUserData) =
       confirmButtonColor: "#00ae58",
     }).then(() => {
       // Remove this line - transaction already recorded elsewhere
-      // addTransaction(currentUser.email, transactionData).then(() => {
+      transactionService.addTransaction(currentUser.email, transactionData).then(() => {
       setTimeout(() => {
         window.location.href = "/";
       }, 3000)
-      //})
+      })
     });
   } catch (error) {
     console.error("Upgrade error:", error);
@@ -229,7 +229,7 @@ export const getDefaultPlan = (paymentType) => {
 };
 
 // Add transaction record
-export const addTransaction = async (userEmail, transactionData) => {
+/*export const addTransaction = async (userEmail, transactionData) => {
   try {
     const { transactionService } = await import("../../services/firestore.service");
     return await transactionService.addTransaction(userEmail, transactionData);
@@ -237,7 +237,7 @@ export const addTransaction = async (userEmail, transactionData) => {
     console.error("Error adding transaction:", error);
     return null;
   }
-};
+};*/
 
 // ============================================
 // CURRENCY CONVERSION UTILITIES
