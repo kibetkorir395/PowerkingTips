@@ -84,7 +84,7 @@ export default function Payments({ setUserData }) {
       case "mpesa":
         return (
           <ErrorBoundary key="mpesa">
-            <KoraPaymentsV1 setUserData={setUserData} />{/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : <KoraPaymentsV1 setUserData={setUserData} />*/}
+            {getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : <KoraPaymentsV1 setUserData={setUserData} />}
           </ErrorBoundary>
         );
       case "cashia":
@@ -96,7 +96,7 @@ export default function Payments({ setUserData }) {
       default:
         return (
           <ErrorBoundary key="default">
-            <KoraPaymentsV1 setUserData={setUserData} />{/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : <KoraPaymentsV1 setUserData={setUserData} />*/}
+            {getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : <KoraPaymentsV1 setUserData={setUserData} />}
           </ErrorBoundary>
         );
     }
