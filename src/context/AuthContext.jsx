@@ -10,6 +10,7 @@ import { auth } from '../config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { useCurrency } from './CurrencyContext.jsx';
 
 const AuthContext = createContext(null);
 
@@ -27,6 +28,13 @@ export const AuthProvider = ({ children }) => {
   const [isPremium, setIsPremium] = useState(false);
   const [isTelegramUser, setIsTelegramUser] = useState(false);
   const unsubscribeRef = useRef(null);
+  const { locality, loading: currencyLoading } = useCurrency();
+  const localityRef = useRef(locality);
+
+  // Keep localityRef updated with latest locality value
+  useEffect(() => {
+    localityRef.current = locality;
+  }, [locality]);
 
   // Check if user is admin
   const checkAdminStatus = useCallback((email) => {
@@ -59,6 +67,31 @@ export const AuthProvider = ({ children }) => {
         return false;
     }
   }, []);
+  
+  // Device Detection
+  function getUserPlatform() {
+    const ua = navigator.userAgent;
+    
+    // Test for mobile platforms first
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+      return { platform: 'ios', isMobile: true };
+    }
+    if (/Android/.test(ua)) {
+      return { platform: 'android', isMobile: true };
+    }
+    
+    // Test for desktop platforms
+    if (/Windows/.test(ua)) {
+      return { platform: 'windows', isMobile: false };
+    }
+    if (/Macintosh/.test(ua)) {
+      return { platform: 'mac', isMobile: false };
+    }
+    
+    // Default fallback
+    return { platform: 'pwa', isMobile: false };
+  }
+  
 
   // Get Telegram user from localStorage
   const getTelegramUser = useCallback(() => {
@@ -120,6 +153,8 @@ export const AuthProvider = ({ children }) => {
           if (doc.exists()) {
             const data = { id: doc.id, ...doc.data() };
 
+            console.log(data)
+
             // Check subscription validity
             const isValidSubscription = checkSubscriptionValidity(data);
 
@@ -138,6 +173,39 @@ export const AuthProvider = ({ children }) => {
               data.isPremium = false;
               data.subscription = null;
               data.subDate = null;
+            }
+
+            // Update locality if not set - using ref to get latest value
+            if (data && !data.locality) {
+              const currentLocality = localityRef.current;
+              if (currentLocality) {
+                import('../services/firestore.service').then(
+                  ({ userService }) => {
+                    userService.updateUserLocality(email, currentLocality);
+                  }
+                );
+              }
+            }
+
+            const device = getUserPlatform();
+
+            // Check if this website is already recorded recently
+            const lastVisit = data.visitedWebsites?.[window.location.hostname.replace(/\./g, '_')];
+            const shouldRecord = !lastVisit || (Date.now() - lastVisit.lastVisitedAt?.toMillis?.() || 0) > 3600000; // 1 hour
+
+            if (data && navigator.userAgentData && shouldRecord) {
+              navigator.userAgentData.getHighEntropyValues([
+                "architecture", 
+                "model", 
+                "platformVersion", 
+                "fullVersionList"
+              ]).then(info => {
+                import('../services/firestore.service').then(
+                  ({ userService }) => {
+                    userService.recordWebsiteVisit(email, window.location.hostname, {device,...info});
+                  }
+                );
+              });
             }
 
             setUserData(data);
@@ -199,6 +267,21 @@ export const AuthProvider = ({ children }) => {
       }
     };
   }, [subscribeToUserData, getTelegramUser, setTelegramUserAsCurrent]);
+
+  // Update locality when currency loads and user exists
+  useEffect(() => {
+    if (!currencyLoading && locality && currentUser?.email) {
+      const userEmail = currentUser.email;
+      // Check if user has locality set, if not - update it
+      import('../services/firestore.service').then(({ userService }) => {
+        userService.getUser(userEmail).then((userData) => {
+          if (userData && !userData.locality) {
+            userService.updateUserLocality(userEmail, locality);
+          }
+        });
+      });
+    }
+  }, [currencyLoading, locality, currentUser]);
 
   // Manual refresh function (works for both auth methods)
   const refreshUserData = useCallback(async () => {

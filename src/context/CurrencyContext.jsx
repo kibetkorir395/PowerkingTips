@@ -29,6 +29,7 @@ export const CurrencyProvider = ({ children }) => {
     const [showCountrySelector, setShowCountrySelector] = useState(false);
     const [isLoadingRate, setIsLoadingRate] = useState(false);
     const [detectionFailed, setDetectionFailed] = useState(false);
+    const [locality, setLocality] = useState(null);
 
     // Detect country from browser timezone
     const detectCountryFromBrowser = () => {
@@ -84,6 +85,7 @@ export const CurrencyProvider = ({ children }) => {
             
             if (response.ok) {
                 const data = await response.json();
+                //setLocality(data);
                 const countryCode = data.country_code;
                 
                 const codeMap = {
@@ -116,6 +118,7 @@ export const CurrencyProvider = ({ children }) => {
             
             if (response.ok) {
                 const data = await response.json();
+                //setLocality(data);
                 const countryCode = data.countryCode;
                 
                 const codeMap = {
@@ -144,6 +147,7 @@ export const CurrencyProvider = ({ children }) => {
             const response = await fetch("https://ipapi.co/json/");
             if (response.ok) {
                 const data = await response.json();
+                setLocality(data);
                 const countryCode = data.country_code;
                 
                 const matchedCountry = Object.entries(COUNTRIES).find(
@@ -188,7 +192,7 @@ export const CurrencyProvider = ({ children }) => {
         setDetectionFailed(false);
         
         // Check localStorage first
-        const storedCountry = getStoredCountry();
+        /*const storedCountry = getStoredCountry();
         if (storedCountry) {
             setSelectedCountry(storedCountry);
             setUserCountry(storedCountry);
@@ -202,7 +206,7 @@ export const CurrencyProvider = ({ children }) => {
             setUserCountry(browserCountry);
             saveCountryToStorage(browserCountry);
             return;
-        }
+        }*/
         
         // Try IPAPI.co
         try {
@@ -321,6 +325,7 @@ export const CurrencyProvider = ({ children }) => {
         showCountrySelector,
         isLoadingRate,
         detectionFailed,
+        locality,
         
         // Methods
         setSelectedCountry,

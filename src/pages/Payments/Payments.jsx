@@ -5,6 +5,7 @@ import GooglePayments from "./GooglePayments";
 import KoraPaymentsV1 from "./KoraPaymentsV1";
 import PaystackPaymentsV1 from "./PaystackPaymentsV1";
 import CashiaPaymentsV2 from "./CashiaPaymentsV2";
+import FlutterwavePayments from "./FlutterwavePayments";
 import AppHelmet from "../../components/AppHelmet";
 import "./Payments.scss";
 import CashiaLogo from '../../assets/cashia-logo.png';
@@ -84,7 +85,7 @@ export default function Payments({ setUserData }) {
       case "mpesa":
         return (
           <ErrorBoundary key="mpesa">
-            {/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : */<KoraPaymentsV1 setUserData={setUserData} />}
+            {getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setUserData={setUserData} /> : <FlutterwavePayments setUserData={setUserData} />)}
           </ErrorBoundary>
         );
       case "cashia":
@@ -96,7 +97,7 @@ export default function Payments({ setUserData }) {
       default:
         return (
           <ErrorBoundary key="default">
-            {/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : */<KoraPaymentsV1 setUserData={setUserData} />}
+            {getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setUserData={setUserData} /> : <FlutterwavePayments setUserData={setUserData} />)}
           </ErrorBoundary>
         );
     }

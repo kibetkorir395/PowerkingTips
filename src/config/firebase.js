@@ -8,13 +8,14 @@ import {
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyANFhP14_BJOaImr50PiFoychlbR88JeXU",
+  authDomain: "powerking-betting-tips.firebaseapp.com",
+  databaseURL: "https://powerking-betting-tips-default-rtdb.firebaseio.com",
+  projectId: "powerking-betting-tips",
+  storageBucket: "powerking-betting-tips.appspot.com",
+  messagingSenderId: "617291483997",
+  appId: "1:617291483997:web:e3114cc5c5fa03d9d7b6b4",
+  measurementId: "G-57VGM61EY8"
 };
 
 // Initialize Firebase

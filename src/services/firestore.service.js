@@ -10,6 +10,7 @@ import {
   where,
   orderBy,
   limit,
+  serverTimestamp,
   startAfter,
   writeBatch,
   Timestamp,
@@ -45,6 +46,49 @@ export const userService = {
     await updateDoc(userRef, { ...data, updatedAt: Timestamp.now() });
     queryCache.delete(`user_${email}`);
     return true;
+  },
+
+
+  async updateUserLocality (userId, locality) {
+    const usercollref = doc(db, 'users', userId)
+    updateDoc(usercollref, {
+      'locality' : locality
+    }).then(response => {
+      /*setNotification({
+        isVisible: true,
+        type: 'success',
+        message: "user data updated!",
+      });*/
+    }).catch(error => {
+      /*setNotification({
+        isVisible: true,
+        type: 'error',
+        message: "An Unkown Error Occurred" + error.message,
+      });*/
+    })
+  },
+  
+  async recordWebsiteVisit(userId, websiteUrl, device) {
+    if (!userId || !websiteUrl) return;
+  
+    // Clean the URL string so it doesn't contain '.' characters in the key name 
+    // (Firestore uses dots for nested paths, so we replace them or encode them)
+    const safeWebKey = websiteUrl.replace(/\./g, '_'); 
+  
+    const userDocRef = doc(db, 'users', userId);
+  
+    try {
+      await updateDoc(userDocRef, {
+        // Overwrites or creates 'visitedWebsites.example_com' with the current time
+        [`visitedWebsites.${safeWebKey}`]: {
+          originalUrl: websiteUrl,
+          device,
+          lastVisitedAt: serverTimestamp() // Uses Firebase's server time
+        }
+      });
+    } catch (error) {
+      //console.error("Error recording website visit:", error);
+    }
   },
 
   async createUser(email, username, isPremium = false) {

@@ -18,13 +18,13 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <PriceProvider>
-          <CurrencyProvider>
+      <CurrencyProvider>
+        <AuthProvider>
+          <PriceProvider>
             <App />
-          </CurrencyProvider>
-        </PriceProvider>
-      </AuthProvider>
+          </PriceProvider>
+        </AuthProvider>
+      </CurrencyProvider>
     </BrowserRouter>
   </StrictMode>
 );
