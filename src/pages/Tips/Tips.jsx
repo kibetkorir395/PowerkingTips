@@ -82,7 +82,9 @@ export default function Tips() {
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
-      dates.push(date.toISOString().split('T')[0]);
+      //dates.push(date.toISOString().split('T')[0]); //converts your local to Coordinated Universal Time (UTC).
+
+      dates.push(date.toLocaleDateString('sv-SE'));
     }
     setDays(dates);
     setCurrentDate(dates[dates.length - 1]);
