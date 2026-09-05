@@ -26,12 +26,12 @@ export default function Footer() {
           <a href={socialLinks.facebookPage} target="_blank" rel="noopener noreferrer" className="facebook">
             <Facebook />
           </a>
-          <a href={socialLinks.xPage} target="_blank" rel="noopener noreferrer" className="twitter">
+          {/*<a href={socialLinks.xPage} target="_blank" rel="noopener noreferrer" className="twitter">
             <X />
           </a>
           <a href={socialLinks.instagramPage} target="_blank" rel="noopener noreferrer" className="instagram">
             <Instagram />
-          </a>
+          </a>*/}
         </div>
       </div>
 

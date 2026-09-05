@@ -33,12 +33,12 @@ export default function Topbar() {
           <a href={socialLinks.facebookPage} target="_blank" rel="noopener noreferrer" className="social-icon facebook">
             <Facebook />
           </a>
-          <a href={socialLinks.xPage} target="_blank" rel="noopener noreferrer" className="social-icon twitter">
+          {/*<a href={socialLinks.xPage} target="_blank" rel="noopener noreferrer" className="social-icon twitter">
             <X />
           </a>
           <a href={socialLinks.instagramPage} target="_blank" rel="noopener noreferrer" className="social-icon instagram">
             <Instagram />
-          </a>
+          </a>*/}
         </div>
         
         <div className="topbar-right">

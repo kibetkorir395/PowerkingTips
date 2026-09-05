@@ -124,11 +124,11 @@ export default function Pricing() {
                         {isLoadingRate ? '...' : convertedPrice.toLocaleString()}
                     </span>
                     <span className="duration">{data.duration}</span>
-                    {currencyCode !== "KES" && (
+                    {/*currencyCode !== "KES" && (
                         <div className="original-price">
                             ≈ KSH {data.basePrice.toLocaleString()}
                         </div>
-                    )}
+                    )*/}
                 </div>
                 
                 <ul className="features-list">
@@ -146,11 +146,11 @@ export default function Pricing() {
                     <span className="btn-glow"></span>
                 </button>
 
-                {currencyCode !== "KES" && (
+                {/*currencyCode !== "KES" && (
                     <div className="currency-note">
                         💱 Price shown in {currencyCode}
                     </div>
-                )}
+                )*/}
             </div>
         );
     };

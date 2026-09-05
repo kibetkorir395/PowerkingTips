@@ -54,8 +54,8 @@ export const faqs = [
 export const socialLinks = {
     telegramChannel: "https://t.me/powerkingtips",
     whatsappChannel: "https://whatsapp.com/channel/0029Vb3Louu9xVJktevbuZ2K",
-    facebookPage: "https://www.facebook.com/share/19RBCmmpTF/",
-    xPage: "https://www.x.com/@powerking_tips",
+    facebookPage: "https://www.facebook.com/profile.php?id=61565210344614",
+    xPage: "https://x.com/ancientpupy",
     instagramPage: "https://www.instagram.com/powerkingtips/",
     affliateLink: "https://spin-to-win.powerking-tips.com/",
     promotion: "https://refpa7921972.top/L?tag=d_3966788m_1573c_&site=3966788&ad=1573"
@@ -69,18 +69,18 @@ export const testimonials = [
     },
     {
         text: 'I was skeptical at first, but now I’m a believer. The predictions are solid, and I love that I can pay easily via M-Pesa.',
-        name: 'Brian',
-        country: 'Kenya'
+        name: 'Tunde',
+        country: 'Nigeria'
     },
     {
         text: 'Since I started using the VIP package, my betting strategy has improved. I’ve made more money than ever before.',
-        name: 'Mwangi',
-        country: 'Kenya'
+        name: 'Chukwuemeka',
+        country: 'Nigeria'
     },
     {
         text: 'The daily tips are on point. I check them every morning before placing any bets. Best decision I made!',
-        name: 'Sharon',
-        country: 'Kenya'
+        name: 'Kwadwo',
+        country: 'Ghana'
     },
     {
         text: 'The odds are crazy good, especially on combos. I’ve hit multiple wins since joining VIP. Keep it up!',
@@ -89,8 +89,8 @@ export const testimonials = [
     },
     {
         text: 'Very detailed analysis, even for local and international matches. You can tell they know what they’re doing.',
-        name: 'Mercy',
-        country: 'Kenya'
+        name: 'Kofi',
+        country: 'Ghana'
     },
     {
         text: 'My favorite thing is how simple the site is to use. Predictions are updated daily and are very accurate.',
@@ -99,8 +99,8 @@ export const testimonials = [
     },
     {
         text: 'This site has helped me turn betting into a proper income stream. I only follow their tips now.',
-        name: 'Faith',
-        country: 'Kenya'
+        name: 'Lubanzi',
+        country: 'South Africa'
     },
     {
         text: 'Love the layout and how fast the site loads, even on my phone. Very convenient for live betting.',
@@ -129,7 +129,7 @@ export const testimonials = [
     },
     {
         text: 'The first time I used the free tips, I won big. I subscribed to VIP the same day and haven’t looked back!',
-        name: 'Chebet',
-        country: 'Kenya'
+        name: 'Dlamini',
+        country: 'South Africa'
     }
 ];

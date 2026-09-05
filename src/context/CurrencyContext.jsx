@@ -3,14 +3,22 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Country configurations with exchange rates
 const COUNTRIES = {
-    Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 11.63 },
     Kenya: { code: "KE", currency: "KES", symbol: "KSH", flag: "🇰🇪", rate: 1 },
+    Nigeria: { code: "NG", currency: "NGN", symbol: "₦", flag: "🇳🇬", rate: 11.63 },
     SouthAfrica: { code: "ZA", currency: "ZAR", symbol: "R", flag: "🇿🇦", rate: 0.22 },
     Ghana: { code: "GH", currency: "GHS", symbol: "₵", flag: "🇬🇭", rate: 0.06 },
     Uganda: { code: "UG", currency: "UGX", symbol: "USh", flag: "🇺🇬", rate: 1.5 },
     Tanzania: { code: "TZ", currency: "TZS", symbol: "TSh", flag: "🇹🇿", rate: 1.15 },
     US: { code: "US", currency: "USD", symbol: "$", flag: "🇺🇸", rate: 0.0077 },
     UK: { code: "GB", currency: "GBP", symbol: "£", flag: "🇬🇧", rate: 0.006 },
+    Rwanda: { code: 'RW', currency: 'RWF', symbol: 'FRw', flag: "🇷🇼", rate: 10.1 },
+    Zambia: { code: 'ZM', currency: 'ZMW', symbol: 'ZK', flag: "🇿🇲", rate: 0.21 },
+    Malawi: { code: 'MW', currency: 'MWK', symbol: 'MK', flag: "🇲🇼", rate: 13.2 },
+    BurkinaFaso: { code: 'BF', currency: 'XOF', symbol: 'CFA', flag: "🇧🇫", rate: 4.6 },
+    CôtedIvoire: { code: 'CI', currency: 'XOF', symbol: 'CFA', flag: "🇨🇮", rate: 4.6 },
+    Senegal: { code: 'SN', currency: 'XOF', symbol: 'CFA', flag: "🇸🇳", rate: 4.6 },
+    Cameroon: { code: 'CM', currency: 'XAF', symbol: 'FCFA', flag: "🇨🇲", rate: 4.6 },
+    Eurozone: { code: 'EU', currency: 'EUR', symbol: '€', flag: "🇪🇺", rate: 0.007 }
 };
 
 const CurrencyContext = createContext();
@@ -151,7 +159,7 @@ export const CurrencyProvider = ({ children }) => {
                 const countryCode = data.country_code;
                 
                 const matchedCountry = Object.entries(COUNTRIES).find(
-                    ([_, config]) => config.code === countryCode
+                    ([_, config]) => config.code === countryCode || config.code === data.continent_code            
                 );
                 
                 if (matchedCountry) {
