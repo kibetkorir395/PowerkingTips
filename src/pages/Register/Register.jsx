@@ -205,7 +205,7 @@ export default function Register() {
           />
 
           {/* Fixed LoginButton - onAuthCallback must be a FUNCTION, not a string */}
-          <LoginButton
+          {/*<LoginButton
             botUsername={'powerking_tips_auth_bot'}
             onAuthCallback={handleTelegramAuth}
             buttonSize="large"
@@ -213,7 +213,7 @@ export default function Register() {
             showAvatar={true}
             lang="en"
             className="telegram-login-btn"
-          />
+          />*/}
 
           <div className="form-footer">
             Already have an account? <Link to="/login">Login →</Link>

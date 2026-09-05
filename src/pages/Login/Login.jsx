@@ -153,7 +153,7 @@ export default function Login() {
             disabled={loading || googleLoading}
           />
 
-          <LoginButton
+          {/*<LoginButton
             botUsername={'powerking_tips_auth_bot'}
             onAuthCallback={handleTelegramAuth}
             buttonSize="large"
@@ -161,7 +161,7 @@ export default function Login() {
             showAvatar={true}
             lang="en"
             className="telegram-login-btn"
-          />
+          />*/}
 
           <div className="form-footer">
             <button 
