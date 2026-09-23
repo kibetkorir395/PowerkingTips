@@ -164,7 +164,7 @@ export default function CashiaPaymentsV2({ setUserData }) {
           setPaymentStatus('completed');
           setShowIframe(false);
           
-          await handleUpgrade(currentUser, price, setUserData);
+          handleupgrade(currentUser, price, setUserData);
           
           Swal.fire({
             title: "Payment Successful! 🎉",

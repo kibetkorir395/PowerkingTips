@@ -269,7 +269,7 @@ export default function CashiaPayments({ setUserData }) {
           setPaymentStatus('paid');
           setPaymentStep('completed');
           
-          await handleUpgrade(currentUser, price, setUserData);
+          handleupgrade(currentUser, price, setUserData);
           
           Swal.fire({
             title: "Payment Successful! 🎉",

@@ -90,7 +90,7 @@ export default function KoraPaymentsV1({ setUserData }) {
 
     try {
       Swal.close();
-      await handleUpgrade(currentUser, price, setUserData);
+      handleupgrade(currentUser, price, setUserData);
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (error) {
       Swal.close();

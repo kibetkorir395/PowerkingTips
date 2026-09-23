@@ -101,7 +101,7 @@ export default function PaypalPayments1({ setUserData }) {
     try {
       const details = await actions.order.capture();
       console.log("Payment completed:", details);
-      await handleUpgrade();
+      handleupgrade();
       
       await Swal.fire({
         title: "Payment Successful! 🎉",

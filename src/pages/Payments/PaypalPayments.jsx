@@ -132,7 +132,7 @@ export default function PaypalPayments({ setUserData }) {
         reference: `VIP-${getPlanName(price)}-${Date.now()}`,
       }
       
-      await handleUpgrade(currentUser, transactionData, setUserData);
+      handleupgrade(currentUser, transactionData, setUserData);
     } catch (error) {
       console.error("Payment capture error:", error);
       Swal.fire({

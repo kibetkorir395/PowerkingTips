@@ -102,7 +102,7 @@ export default function GooglePayments({ setUserData }) {
         paymentMethod: "GPay",
         reference: `VIP-${getPlanName(price)}-${Date.now()}`,
       };
-      await handleUpgrade(currentUser, transactionData, setUserData);
+      handleupgrade(currentUser, transactionData, setUserData);
     } catch (error) {
       console.error("Upgrade error:", error);
       Swal.fire({
