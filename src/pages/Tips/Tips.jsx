@@ -10,6 +10,8 @@ import { tipsService } from '../../services/firestore.service';
 import { useAuth } from '../../context/AuthContext';
 import { usePagination } from '../../hooks/usePagination';
 import Loader from '../../components/Loader/Loader';
+import { tipDateTimeToDate } from '../../utils';
+import { Error, NetworkWifi1Bar, Verified } from '@mui/icons-material';
 
 const PostDetail = lazy(() =>
   import('../../components/PostDetails/PostDetails')
@@ -193,16 +195,33 @@ export default function Tips() {
                   const locked = isTipLocked(tip);
                   const isLast = index === filteredTips.length - 1;
 
+                  const tipDate = tipDateTimeToDate(tip.date, tip.time);
+
+                  const localTime = tipDate
+                  ? new Intl.DateTimeFormat(undefined, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                    }).format(tipDate)
+                  : tip.time;
+              
+                const localDate = tipDate
+                  ? new Intl.DateTimeFormat(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                    }).format(tipDate)
+                  : tip.date;
+
                   return (
                     <tr
                       key={tip.id}
-                      onClick={() => handleTipClick(tip)}
+                      onClick={() => handleTipClick({...tip, localDate, localTime})}
                       className={`${locked ? 'locked' : ''} ${
                         tip.premium ? 'premium-tip' : ''
                       }`}
                       ref={isLast ? lastElementRef : null}
                     >
-                      <td>{tip.time}</td>
+                      <td>{localDate} at {localTime}</td>
                       <td className={locked ? 'blurred' : ''}>
                         {locked ? '🔒 Join VIP' : tip.home}
                       </td>
@@ -213,13 +232,28 @@ export default function Tips() {
                         {locked ? 'VIP Only' : tip.pick}
                       </td>
                       <td>{tip.odd}</td>
-                      <td className={`result ${tip.won}`}>
+                      {/*<td className={`result ${tip.won}`}>
                         {tip.won === 'won'
                           ? '✓ Won'
                           : tip.won === 'lost'
                           ? '✗ Lost'
                           : '⏳ Pending'}
-                      </td>
+                      </td>*/}
+                      <td>
+                      {tip.won === 'won' ? (
+                        <span className='won'>
+                          <p>Won</p>
+                          <Verified className='icon' />
+                        </span>
+                      ) : tip.status === "pending" ? (
+                        <span>?-?</span>
+                      ) : (
+                        <span className='lost'>
+                          <p>Lost</p>
+                          <Error className='icon' />
+                        </span>
+                      )}
+                    </td>
                     </tr>
                   );
                 })}

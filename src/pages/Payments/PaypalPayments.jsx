@@ -3,13 +3,12 @@ import { useAuth } from "../../context/AuthContext";
 import { usePrice } from "../../context/PriceContext";
 import {
   SUBSCRIPTION_PLANS,
-  getPlanName,
-  handleUpgrade,
+  getSubscriptionPeriod,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 import "./Payments.scss";
 
-export default function PaypalPayments({ setUserData }) {
+export default function PaypalPayments({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const [isPaypalLoaded, setIsPaypalLoaded] = useState(false);
@@ -105,7 +104,7 @@ export default function PaypalPayments({ setUserData }) {
     return actions.order.create({
       purchase_units: [
         {
-          description: `${getPlanName(price)} VIP Subscription`,
+          description: `${getSubscriptionPeriod(price)} VIP Subscription`,
           amount: {
             value: price.toFixed(2),
             currency_code: "USD",
@@ -122,17 +121,16 @@ export default function PaypalPayments({ setUserData }) {
       const details = await actions.order.capture();
       console.log("Payment completed:", details);
 
-      const transactionData = {
+      setTransactionData({
         type : 'credit',
         amount : price,
-        description : `${getPlanName(price)} VIP Subscription`,
+        description : `${getSubscriptionPeriod(price)} VIP Subscription`,
         category : 'Subscription',
+        plan: getSubscriptionPeriod(price),
         currency : 'usd',
         paymentMethod: "PayPal",
-        reference: `VIP-${getPlanName(price)}-${Date.now()}`,
-      }
-      
-      handleupgrade(currentUser, transactionData, setUserData);
+        reference: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
+      });
     } catch (error) {
       console.error("Payment capture error:", error);
       Swal.fire({
@@ -145,7 +143,7 @@ export default function PaypalPayments({ setUserData }) {
     } finally {
       setIsProcessing(false);
     }
-  }, [currentUser, price, setUserData]);
+  }, [currentUser, price]);
 
   // On error function
   const onError = useCallback((err) => {
@@ -288,7 +286,7 @@ export default function PaypalPayments({ setUserData }) {
 
       <div className="paypal-payment">
         <h3>
-          GET {getPlanName(price).toUpperCase()} VIP FOR ${price}
+          GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR ${price}
         </h3>
         
         <div className="paypal-buttons-container">

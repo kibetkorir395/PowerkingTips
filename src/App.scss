@@ -1481,7 +1481,7 @@ table {
     font-size: 13px;
   }*/
 
-  tr {
+  tbody tr {
     transition: var(--transition-smooth);
 
     /*cursor: pointer;*/
@@ -1501,7 +1501,7 @@ table {
       }
     }
 
-    /*&:nth-child(even) {
+    &:nth-child(even) {
       background: var(--grey);
     }
 
@@ -1534,12 +1534,12 @@ table {
         transform: none;
         background: inherit;
       }
-    }*/
+    }
     
     &:nth-child(odd) {
       background: var(--dark-blue);
       
-      &:hover:not(:first-of-type) {
+      &:hover:not(tbody:first-of-type) {
         background: var(--lite);
         color: var(--grey);
         transform: scale(1.01);

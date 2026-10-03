@@ -3,8 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { usePrice } from '../../context/PriceContext';
 import {
   SUBSCRIPTION_PLANS,
-  getPlanName,
-  handleUpgrade,
+  getSubscriptionPeriod,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 import { Smartphone, Lock, Shield, CheckCircle, Warning, Phone, AttachMoney, AccessTime } from '@mui/icons-material';
@@ -37,7 +36,7 @@ const CASHIA_CONFIG = {
   successRedirectUrl: `${window.location.origin}/payment-success`,
 };
 
-export default function CashiaPayments({ setUserData }) {
+export default function CashiaPayments({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const [processing, setProcessing] = useState(false);
@@ -162,7 +161,7 @@ export default function CashiaPayments({ setUserData }) {
         amount: price,
         merchantStika: "KES_123456",
         orderId: newOrderId,
-        description: `${getPlanName(price)} VIP Subscription`,
+        description: `${getSubscriptionPeriod(price)} VIP Subscription`,
         payer: {
           method: "phone",
           value: formattedPhone
@@ -268,25 +267,19 @@ export default function CashiaPayments({ setUserData }) {
           clearInterval(pollInterval);
           setPaymentStatus('paid');
           setPaymentStep('completed');
-          
-          handleupgrade(currentUser, price, setUserData);
-          
-          Swal.fire({
-            title: "Payment Successful! 🎉",
-            html: `
-              <div style="text-align: center;">
-                <div class="payment-success-icon">✅</div>
-                <h3 style="margin: 15px 0;">${getPlanName(price)} VIP Activated!</h3>
-                <p>Payment of KSH ${price} was successful</p>
-                <p style="font-size: 12px; color: #666; margin-top: 10px;">Transaction ID: ${data.transactionId || identifier}</p>
-              </div>
-            `,
-            icon: "success",
-            confirmButtonText: "Continue",
-            confirmButtonColor: "#00ae58"
-          }).then(() => {
-            window.location.href = "/tips";
+
+          setTransactionData({
+            type: 'credit',
+            amount: price,
+            description: `${getSubscriptionPeriod(price)} VIP Subscription`,
+            category: 'Subscription',
+            plan: getSubscriptionPeriod(price),
+            currency: 'KES',
+            paymentMethod: "Cashia",
+            reference: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
           });
+          
+          setTransactionData(null); //price
         } else if (data.status === 'failed' || data.status === 'declined') {
           clearInterval(pollInterval);
           setPaymentStatus('failed');
@@ -313,7 +306,7 @@ export default function CashiaPayments({ setUserData }) {
     }, 5000);
     
     setPollingInterval(pollInterval);
-  }, [price, currentUser, setUserData, generateNonce, generateBodyHash, generateSignature]);
+  }, [price, currentUser, generateNonce, generateBodyHash, generateSignature]);
 
   // Cleanup polling on unmount
   useEffect(() => {
@@ -371,7 +364,7 @@ export default function CashiaPayments({ setUserData }) {
           <div className="info-row">
             <AccessTime size={18} />
             <span>Service:</span>
-            <strong>{getPlanName(price)} VIP Subscription</strong>
+            <strong>{getSubscriptionPeriod(price)} VIP Subscription</strong>
           </div>
         </div>
 

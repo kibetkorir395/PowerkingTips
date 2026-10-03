@@ -153,8 +153,6 @@ export const AuthProvider = ({ children }) => {
           if (doc.exists()) {
             const data = { id: doc.id, ...doc.data() };
 
-            console.log(data)
-
             // Check subscription validity
             const isValidSubscription = checkSubscriptionValidity(data);
 

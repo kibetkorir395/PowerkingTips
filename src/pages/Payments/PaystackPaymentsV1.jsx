@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 import {
   SUBSCRIPTION_PLANS,
   getSubscriptionPeriod,
-  getPlanName,
-  handleUpgrade,
   formatPhoneNumber,
   isValidPhoneNumber,
 } from "./paymentUtils";
@@ -17,7 +15,7 @@ import "./Payments.scss";
 // API Configuration
 const API_BASE_URL = import.meta.env.VITE_PAYSTACK_API_BASE_URL;
 
-export default function PaystackPaymentsV1({ setUserData }) {
+export default function PaystackPaymentsV1() {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const { 
@@ -130,16 +128,16 @@ export default function PaystackPaymentsV1({ setUserData }) {
               icon: "success",
               confirmButtonText: "Activate Subscription",
             }).then(() => {
-              const transactionData = {
+              setTransactionData({
                 type: 'credit',
                 amount: getCurrentConvertedPrice(),
-                description: `${getPlanName(price)} VIP Subscription`,
+                description: `${getSubscriptionPeriod(price)} VIP Subscription`,
                 category: 'Subscription',
+                plan: getSubscriptionPeriod(price),
                 currency: getCurrencyCode(),
                 paymentMethod: "Paystack",
                 reference: reference,
-              };
-              handleUpgrade(currentUser, transactionData, setUserData);
+              });
             });
             return;
           }
@@ -243,16 +241,16 @@ export default function PaystackPaymentsV1({ setUserData }) {
             icon: "success",
             confirmButtonText: "Activate Subscription",
           }).then(() => {
-            const transactionData = {
+            setTransactionData({
               type: 'credit',
               amount: getCurrentConvertedPrice(),
-              description: `${getPlanName(price)} VIP Subscription`,
+              description: `${getSubscriptionPeriod(price)} VIP Subscription`,
               category: 'Subscription',
+              plan: getSubscriptionPeriod(price),
               currency: getCurrencyCode(),
               paymentMethod: "Paystack",
               reference: data.reference || `ref-${Date.now()}`,
-            };
-            handleUpgrade(currentUser, transactionData, setUserData);
+            });
           });
         } else if (data.requires_authorization) {
           Swal.fire({
@@ -448,7 +446,7 @@ export default function PaystackPaymentsV1({ setUserData }) {
       {/* Payment Section */}
       <div className="kora-payment">
         <h3>
-          GET {getPlanName(price).toUpperCase()} VIP FOR{" "}
+          GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR{" "}
           {isLoadingRate
             ? "Loading..."
             : `${getSymbol()} ${Math.round(getCurrentConvertedPrice())}`}

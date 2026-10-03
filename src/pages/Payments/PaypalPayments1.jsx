@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useAuth } from "../../context/AuthContext";
 import { usePrice } from "../../context/PriceContext";
+import {
+  getSubscriptionPeriod,
+} from "./paymentUtils";
 import Swal from "sweetalert2";
 import "./Payments.scss";
 
@@ -13,7 +16,7 @@ const paypalOptions = {
   components: "buttons",
 };
 
-export default function PaypalPayments1({ setUserData }) {
+export default function PaypalPayments1({setUserData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -52,45 +55,11 @@ export default function PaypalPayments1({ setUserData }) {
     };
   }, []);
 
-  const getSubscriptionPeriod = () => {
-    if (price === 2) return "Daily";
-    if (price === 7) return "Weekly";
-    if (price === 16) return "Monthly";
-    if (price === 50) return "Yearly";
-    return "Weekly";
-  };
-
-  const handleUpgrade = async () => {
-    try {
-      const { doc, setDoc } = await import("firebase/firestore");
-      const { db } = await import("../../config/firebase");
-      const { userService } = await import("../../services/firestore.service");
-      
-      const userDocRef = doc(db, "users", currentUser.email);
-      await setDoc(userDocRef, {
-        email: currentUser.email,
-        username: currentUser.email.split('@')[0],
-        isPremium: true,
-        subscription: getSubscriptionPeriod(),
-        subDate: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
-      
-      if (setUserData) {
-        const updatedUser = await userService.getUser(currentUser.email);
-        setUserData(updatedUser);
-      }
-      return true;
-    } catch (error) {
-      console.error("Upgrade error:", error);
-      throw error;
-    }
-  };
 
   const createOrder = async (data, actions) => {
     return actions.order.create({
       purchase_units: [{
-        description: `${getSubscriptionPeriod()} VIP Subscription`,
+        description: `${getSubscriptionPeriod(price)} VIP Subscription`,
         amount: { value: price.toFixed(2), currency_code: "USD" },
       }],
     });
@@ -101,23 +70,8 @@ export default function PaypalPayments1({ setUserData }) {
     try {
       const details = await actions.order.capture();
       console.log("Payment completed:", details);
-      handleupgrade();
-      
-      await Swal.fire({
-        title: "Payment Successful! 🎉",
-        html: `
-          <div style="text-align: center;">
-            <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981;"></i>
-            <h3 style="margin: 15px 0;">${getSubscriptionPeriod()} VIP Activated!</h3>
-            <p>Amount: $${price}</p>
-          </div>
-        `,
-        icon: "success",
-        confirmButtonText: "Continue",
-        confirmButtonColor: "#00ae58",
-      });
-      
-      window.location.href = "/";
+      setTransactionData(null);
+
     } catch (error) {
       Swal.fire({
         title: "Payment Failed",
@@ -212,7 +166,7 @@ export default function PaypalPayments1({ setUserData }) {
         </div>
 
         <div className="paypal-payment">
-          <h3>GET {getSubscriptionPeriod().toUpperCase()} VIP FOR ${price}</h3>
+          <h3>GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR ${price}</h3>
           
           <div className="paypal-buttons-container">
             <PayPalButtons

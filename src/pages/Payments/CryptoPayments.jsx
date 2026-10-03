@@ -6,15 +6,13 @@ import { usePrice } from "../../context/PriceContext";
 import {
   SUBSCRIPTION_PLANS,
   getSubscriptionPeriod,
-  getPlanName,
-  handleUpgrade,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 import "./Payments.scss";
 
 const npApi = new NowPaymentsApi({ apiKey: import.meta.env.VITE_NOWPAYMENTS_API_KEY });
 
-export default function CryptoPayments({ setUserData }) {
+export default function CryptoPayments({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const [currenciesArr, setCurrenciesArr] = useState(null);
@@ -57,8 +55,8 @@ export default function CryptoPayments({ setUserData }) {
         price_amount: parseFloat(price),
         price_currency: "usd",
         pay_currency: selectedCurrency.toLowerCase(),
-        order_id: `VIP-${getPlanName(price)}-${Date.now()}`,
-        order_description: `${getPlanName(price)} VIP Subscription`,
+        order_id: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
+        order_description: `${getSubscriptionPeriod(price)} VIP Subscription`,
       };
 
       console.log("Creating payment with params:", params);
@@ -138,16 +136,16 @@ export default function CryptoPayments({ setUserData }) {
           icon: "success",
           confirmButtonText: "Activate Subscription",
         }).then(() => {
-          const transactionData = {
+          setTransactionData({
             type : 'credit',
             amount : price,
-            description : `${getPlanName(price)} VIP Subscription`,
+            description : `${getSubscriptionPeriod(price)} VIP Subscription`,
             category : 'Subscription',
+            plan: getSubscriptionPeriod(price),
             currency : 'usd',
-            paymentMethod: selectedCurrency.toLowerCase(),
-            reference: `VIP-${getPlanName(price)}-${Date.now()}`,
-          }
-          handleUpgrade(currentUser, transactionData, setUserData);
+            paymentMethod: selectedCurrency.charAt(0).toUpperCase() + selectedCurrency.slice(1).toLowerCase(),
+            reference: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
+          })
         });
         return true;
       } else if (

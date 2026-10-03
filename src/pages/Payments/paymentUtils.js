@@ -59,14 +59,6 @@ export const getSubscriptionPeriod = (price) => {
   return "Weekly";
 };
 
-// Get plan name based on price
-export const getPlanName = (price) => {
-  if (price === 250 || price === 2) return "Daily";
-  if (price === 800 || price === 7) return "Weekly";
-  if (price === 2500 || price === 20) return "Monthly";
-  if (price === 8000 || price === 65) return "Yearly";
-  return "Weekly";
-};
 
 // Add transaction record
 export const addTransaction = async (userEmail, transactionData) => {
@@ -86,7 +78,7 @@ export const addTransaction = async (userEmail, transactionData) => {
 
 // Handle user upgrade after successful payment
 export const handleUpgrade = async (currentUser, transactionData, setUserData) => {
-  if (!currentUser || !currentUser.email) {
+  if (!currentUser || !currentUser.uid) {
     Swal.fire({
       title: "Error",
       text: "User not found. Please login again.",
@@ -99,39 +91,29 @@ export const handleUpgrade = async (currentUser, transactionData, setUserData) =
     const subscriptionPeriod = getSubscriptionPeriod(transactionData.amount);
     const userDocRef = doc(db, "users", currentUser.email);
     
-    await setDoc(
-      userDocRef,
-      {
-        isPremium: true,
-        subscription: subscriptionPeriod,
-        subDate: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      { merge: true }
-    );
-    
+    const newSubData = {
+      isPremium: true,
+      subscription: subscriptionPeriod,
+      subDate: new Date().toISOString(),
+    };
+
+    // Update Firestore
+    await setDoc(userDocRef, newSubData, { merge: true });
+
     // Refresh user data
+    let updatedUser = null;
     if (setUserData) {
-      const updatedUser = await userService.getUser(currentUser.email);
+      updatedUser = await userService.getUser(currentUser.uid);
       setUserData(updatedUser);
     }
 
     // Add transaction record (non-blocking)
-    addTransaction(currentUser.email, transactionData).catch(error => {
+    addTransaction(currentUser.uid, transactionData).catch((error) => {
       console.warn("Transaction logging failed:", error);
     });
 
-    Swal.fire({
-      title: "Upgrade Successful! 🎉",
-      html: `You have upgraded to <strong>${subscriptionPeriod} VIP</strong> plan!`,
-      icon: "success",
-      confirmButtonText: "Continue",
-      confirmButtonColor: "#00ae58",
-    }).then(() => {
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 2000);
-    });
+    // Return the fetched user or the merged data instead of the void setDoc result
+    return updatedUser || newSubData;
   } catch (error) {
     console.error("Upgrade error:", error);
     Swal.fire({
@@ -140,8 +122,10 @@ export const handleUpgrade = async (currentUser, transactionData, setUserData) =
       icon: "error",
       confirmButtonText: "OK",
     });
+    throw error;
   }
 };
+
 
 // Format phone number for M-Pesa
 export const formatPhoneNumber = (phone) => {
@@ -174,38 +158,6 @@ export const isValidPhoneNumber = (phone) => {
   return isValidKenyan;
 };
 
-// Generate random email (fallback)
-export const generateRandomEmail = () => {
-  const letters = "abcdefghijklmnopqrstuvwxyz";
-  const numbers = "0123456789";
-  const domains = ["gmail.com", "yahoo.com", "outlook.com"];
-
-  let username = "";
-  const usernameLength = Math.floor(Math.random() * 5) + 8;
-
-  for (let i = 0; i < usernameLength; i++) {
-    if (i < 6) {
-      username += letters.charAt(Math.floor(Math.random() * letters.length));
-    } else {
-      if (Math.random() < 0.6) {
-        username += letters.charAt(Math.floor(Math.random() * letters.length));
-      } else {
-        username += numbers.charAt(Math.floor(Math.random() * numbers.length));
-      }
-    }
-  }
-
-  const domain = domains[Math.floor(Math.random() * domains.length)];
-  return `${username}@${domain}`;
-};
-
-// Get default plan for payment type
-export const getDefaultPlan = (paymentType) => {
-  if (paymentType === "crypto" || paymentType === "paypal") {
-    return SUBSCRIPTION_PLANS.dollars[0];
-  }
-  return SUBSCRIPTION_PLANS.shillings[0];
-};
 
 // ============================================
 // RECURRING SUBSCRIPTION UTILITIES

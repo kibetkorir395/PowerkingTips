@@ -5,14 +5,12 @@ import { usePrice } from "../../context/PriceContext";
 import { useCurrency } from "../../context/CurrencyContext.jsx";
 import GooglePayButton from "@google-pay/button-react";
 import {
-  getPlanName,
-  getSubscriptionPeriod,
-  handleUpgrade,
+  getSubscriptionPeriod
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 import "./Payments.scss";
 
-export default function GooglePayments({ setUserData }) {
+export default function GooglePayments({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const { 
@@ -93,16 +91,16 @@ export default function GooglePayments({ setUserData }) {
     setProcessing(true);
 
     try {
-      const transactionData = {
+      setTransactionData({
         type: 'credit',
         amount: getCurrentConvertedPrice(),
-        description: `${getPlanName(price)} VIP Subscription`,
+        description: `${getSubscriptionPeriod(price)} VIP Subscription`,
         category: 'Subscription',
+        plan: getSubscriptionPeriod(price),
         currency: getCurrencyCode(),
         paymentMethod: "GPay",
-        reference: `VIP-${getPlanName(price)}-${Date.now()}`,
-      };
-      handleupgrade(currentUser, transactionData, setUserData);
+        reference: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
+      });
     } catch (error) {
       console.error("Upgrade error:", error);
       Swal.fire({
@@ -261,7 +259,7 @@ export default function GooglePayments({ setUserData }) {
       {/* Google Pay Button */}
       <div className="google-pay">
         <h3>
-          GET {getPlanName(price).toUpperCase()} VIP FOR{" "}
+          GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR{" "}
           {isLoadingRate
             ? "Loading..."
             : `${getSymbol()} ${Math.round(getCurrentConvertedPrice())}`}

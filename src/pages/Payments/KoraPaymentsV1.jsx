@@ -6,13 +6,11 @@ import { useCurrency } from "../../context/CurrencyContext";
 import {
   SUBSCRIPTION_PLANS,
   getSubscriptionPeriod,
-  getPlanName,
-  handleUpgrade,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 import "./Payments.scss";
 
-export default function KoraPaymentsV1({ setUserData }) {
+export default function KoraPaymentsV1({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const { 
@@ -90,7 +88,16 @@ export default function KoraPaymentsV1({ setUserData }) {
 
     try {
       Swal.close();
-      handleupgrade(currentUser, price, setUserData);
+      setTransactionData({
+        type: 'credit',
+        amount: getCurrentConvertedPrice(),
+        description: `${getSubscriptionPeriod(price)} VIP Subscription`,
+        category: 'Subscription',
+        plan: getSubscriptionPeriod(price),
+        currency: getCurrencyCode(),
+        paymentMethod: "Kora",
+        reference
+    });
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (error) {
       Swal.close();
@@ -137,16 +144,16 @@ export default function KoraPaymentsV1({ setUserData }) {
 
       const paymentData = {
         amount: amountToPay,
-        redirect_url: `${currentUrl}?reference=`,
+        redirect_url: `${currentUrl}`,
         currency: countryConfig.currency,
         reference: reference,
-        narration: `${getPlanName(price)} VIP Subscription`,
+        narration: `${getSubscriptionPeriod(price)} VIP Subscription`,
         customer: {
-          name: currentUser.email?.split("@")[0] || "Customer",
+          name: currentUser.email/*?.split("@")[0]*/ || "Customer",
           email: currentUser.email,
         },
         metadata: {
-          plan: getPlanName(price),
+          plan: getSubscriptionPeriod(price),
           user_id: currentUser.email,
         },
       };
@@ -263,7 +270,7 @@ export default function KoraPaymentsV1({ setUserData }) {
 
       <div className="kora-payment">
         <h3>
-          GET {getPlanName(price).toUpperCase()} VIP FOR{" "}
+          GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR{" "}
           {isLoadingRate
             ? "Loading..."
             : `${getSymbol()} ${Math.round(

@@ -32,6 +32,7 @@ export default function PostDetail({ data, onClose, hasPremiumAccess: propHasPre
     onClose?.();
   };
 
+
   const locked = isLocked();
 
   return (
@@ -47,7 +48,7 @@ export default function PostDetail({ data, onClose, hasPremiumAccess: propHasPre
           />
           {data.premium && <div className="premium-label">VIP</div>}
         </div>
-        <h3>{data.date} - {data.time}</h3>
+        <h3>{data.localDate} - {data.localTime}</h3>
         {data.won && data.won !== 'pending' && (
           <div className={`status-badge ${data.won === 'won' ? 'won' : 'lost'}`}>
             {data.won === 'won' ? <Verified /> : <ErrorTwoTone />}

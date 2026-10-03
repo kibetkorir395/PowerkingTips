@@ -3,8 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { usePrice } from '../../context/PriceContext';
 import {
   SUBSCRIPTION_PLANS,
-  getPlanName,
-  handleUpgrade,
+  getSubscriptionPeriod,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 import { Smartphone, Lock, Shield, CheckCircle, Phone, AttachMoney, AccessTime, CreditCard } from '@mui/icons-material';
@@ -27,7 +26,7 @@ const CASHIA_CONFIG = {
   errorRedirectUrl: `${window.location.origin}/payment-error`,
 };
 
-export default function CashiaPaymentsV2({ setUserData }) {
+export default function CashiaPaymentsV2({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const [processing, setProcessing] = useState(false);
@@ -100,9 +99,9 @@ export default function CashiaPaymentsV2({ setUserData }) {
       errorRedirectUrl: `${CASHIA_CONFIG.errorRedirectUrl}?requestId=${newRequestId}`,
       orderDetails: [
         {
-          name: `${getPlanName(price)} VIP Subscription`,
+          name: `${getSubscriptionPeriod(price)} VIP Subscription`,
           quantity: 1,
-          description: `VIP Subscription - ${getPlanName(price)}`,
+          description: `VIP Subscription - ${getSubscriptionPeriod(price)}`,
           price: price,
           currency: "KES"
         }
@@ -163,23 +162,16 @@ export default function CashiaPaymentsV2({ setUserData }) {
           clearInterval(pollInterval);
           setPaymentStatus('completed');
           setShowIframe(false);
-          
-          handleupgrade(currentUser, price, setUserData);
-          
-          Swal.fire({
-            title: "Payment Successful! 🎉",
-            html: `
-              <div style="text-align: center;">
-                <div class="payment-success-icon">✅</div>
-                <h3 style="margin: 15px 0;">${getPlanName(price)} VIP Activated!</h3>
-                <p>Payment of KSH ${price} was successful</p>
-              </div>
-            `,
-            icon: "success",
-            confirmButtonText: "Continue",
-            confirmButtonColor: "#00ae58"
-          }).then(() => {
-            window.location.href = "/tips";
+
+          setTransactionData({
+            type: 'credit',
+            amount: price,
+            description: `${getSubscriptionPeriod(price)} VIP Subscription`,
+            category: 'Subscription',
+            plan: getSubscriptionPeriod(price),
+            currency: 'KES',
+            paymentMethod: "Cashia",
+            reference: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
           });
         } else if (status === 'failed' || status === 'cancelled') {
           clearInterval(pollInterval);
@@ -208,7 +200,7 @@ export default function CashiaPaymentsV2({ setUserData }) {
     }, 5000);
     
     return () => clearInterval(pollInterval);
-  }, [price, currentUser, setUserData]);
+  }, [price, currentUser]);
 
   // Check transaction status using the API
   const checkTransactionStatus = useCallback(async (requestId) => {
@@ -253,16 +245,7 @@ export default function CashiaPaymentsV2({ setUserData }) {
       
       if (type === 'payment_complete' && msgRequestId === requestId) {
         if (status === 'success') {
-          handleUpgrade(currentUser, price, setUserData).then(() => {
-            Swal.fire({
-              title: "Payment Successful! 🎉",
-              text: `${getPlanName(price)} VIP Activated!`,
-              icon: "success",
-              confirmButtonText: "Continue"
-            }).then(() => {
-              window.location.href = "/tips";
-            });
-          });
+          setTransactionData(null);
         } else if (status === 'error') {
           Swal.fire({
             title: "Payment Failed",
@@ -277,7 +260,7 @@ export default function CashiaPaymentsV2({ setUserData }) {
     
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [requestId, currentUser, price, setUserData]);
+  }, [requestId, currentUser, price]);
 
   const handlePlanSelect = (planValue) => {
     setPrice(planValue);
@@ -342,7 +325,7 @@ export default function CashiaPaymentsV2({ setUserData }) {
           <div className="info-row">
             <AccessTime size={18} />
             <span>Service:</span>
-            <strong>{getPlanName(price)} VIP Subscription</strong>
+            <strong>{getSubscriptionPeriod(price)} VIP Subscription</strong>
           </div>
         </div>
 

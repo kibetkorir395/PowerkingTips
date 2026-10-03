@@ -8,9 +8,12 @@ import CashiaPaymentsV2 from "./CashiaPaymentsV2";
 import FlutterwavePayments from "./FlutterwavePayments";
 import AppHelmet from "../../components/AppHelmet";
 import "./Payments.scss";
+import Swal from "sweetalert2";
 import CashiaLogo from '../../assets/cashia-logo.png';
 import GoogleLogo from '../../assets/GPay_Acceptance_Mark_800.png';
 import { useCurrency } from "../../context/CurrencyContext";
+import { useAuth } from '../../context/AuthContext';
+import {handleUpgrade} from "./paymentUtils";
 
 // Simple Error Boundary Component
 class ErrorBoundary extends Component {
@@ -44,7 +47,7 @@ class ErrorBoundary extends Component {
   }
 }
 
-export default function Payments({ setUserData }) {
+export default function Payments() {
   const [paymentType, setPaymentType] = useState("mpesa");
   const { 
     selectedCountry, 
@@ -57,51 +60,82 @@ export default function Payments({ setUserData }) {
     getCountries,
     isLoadingRate,
   } = useCurrency();
+  const { currentUser, isAdmin, refreshUserData } = useAuth();
+  const [transactionData, setTransactionData] = useState(null);
 
   const handlePaymentChange = useCallback((e) => {
     setPaymentType(e.target.value);
   }, []);
+
+
+  useEffect(() => {
+    transactionData && handleUpgrade(currentUser, transactionData)
+      .then((updatedData) => {
+        // If the function returned null due to the login validation error
+        if (!updatedData) return; 
+  
+        // 1. Set the data in the calling file
+        //setUserData(updatedData);
+        refreshUserData();
+  
+        // 2. Call your success Swal alert
+        Swal.fire({
+          title: "Success!",
+          text: "Your account has been upgraded.",
+          icon: "success",
+          onclose: window.location.href = "/"
+        });
+      })
+      .catch((error) => {
+        // Handles any network or server errors thrown by the function
+        Swal.fire({
+          title: "Server Error",
+          text: "Something went wrong processing your request.",
+          icon: "error"
+        });
+      });
+  }, [transactionData]);
 
   const renderPaymentType = useCallback(() => {
     switch (paymentType) {
       case "paypal":
         return (
           <ErrorBoundary key="paypal">
-            <PaypalPayments setUserData={setUserData} />
+            <PaypalPayments setTransactionData={setTransactionData} />
           </ErrorBoundary>
         );
       case "crypto":
         return (
           <ErrorBoundary key="crypto">
-            <CryptoPayments setUserData={setUserData} />
+            <CryptoPayments setTransactionData={setTransactionData}/>
           </ErrorBoundary>
         );
       case "googlepay":
         return (
           <ErrorBoundary key="googlepay">
-            <GooglePayments setUserData={setUserData} />
+            <GooglePayments setTransactionData={setTransactionData}/>
           </ErrorBoundary>
         );
       case "mpesa":
         return (
           <ErrorBoundary key="mpesa">
-            <KoraPaymentsV1 setUserData={setUserData} />{/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setUserData={setUserData} /> : <FlutterwavePayments setUserData={setUserData} />)*/}
+            <KoraPaymentsV1 setTransactionData={setTransactionData}/>{/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setTransactionData={setTransactionData}/> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setTransactionData={setTransactionData}/> : <FlutterwavePayments setTransactionData={setTransactionData}/>)*/}
           </ErrorBoundary>
         );
       case "cashia":
         return (
           <ErrorBoundary key="cashia">
-            <CashiaPaymentsV2 setUserData={setUserData} />
+            <CashiaPaymentsV2 setTransactionData={setTransactionData}/>
           </ErrorBoundary>
         );
       default:
         return (
           <ErrorBoundary key="default">
-            <KoraPaymentsV1 setUserData={setUserData} />{/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setUserData={setUserData} /> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setUserData={setUserData} /> : <FlutterwavePayments setUserData={setUserData} />)*/}
+            <KoraPaymentsV1 setTransactionData={setTransactionData}/>{/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setTransactionData={setTransactionData}/> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setTransactionData={setTransactionData}/> : <FlutterwavePayments setTransactionData={setTransactionData}/>)*/}
           </ErrorBoundary>
         );
     }
-  }, [paymentType, setUserData]);
+  }, [paymentType]);
 
   return (
     <div className="payments">
@@ -118,7 +152,7 @@ export default function Payments({ setUserData }) {
               checked={paymentType === "mpesa"}
               onChange={handlePaymentChange}
             />
-            <label htmlFor="mpesa"><div class="icons8-mpesa"></div> <img width="20" height="20" src="https://img.icons8.com/nolan/64/airtel.png" alt="airtel"/> Mobile/Card/Bank</label>
+            <label htmlFor="mpesa"><div className="icons8-mpesa"></div> <img width="20" height="20" src="https://img.icons8.com/nolan/64/airtel.png" alt="airtel"/> Mobile/Card/Bank</label>
           </fieldset>
           {/*<fieldset>
             <input
@@ -149,7 +183,7 @@ export default function Payments({ setUserData }) {
               checked={paymentType === "paypal"}
               onChange={handlePaymentChange}
             />
-            <label htmlFor="paypal"><div class="icons8-paypal-logo"/>PayPal</label>
+            <label htmlFor="paypal"><div className="icons8-paypal-logo"/>PayPal</label>
           </fieldset>
           <fieldset>
             <input

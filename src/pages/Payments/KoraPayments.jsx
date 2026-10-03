@@ -5,12 +5,10 @@ import { usePrice } from "../../context/PriceContext";
 import { useCurrency } from "../../context/CurrencyContext.jsx";
 import {
   getSubscriptionPeriod,
-  getPlanName,
-  handleUpgrade,
 } from "./paymentUtils";
 import Swal from "sweetalert2";
 
-export default function KoraPayments({ setUserData }) {
+export default function KoraPayments({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const { 
@@ -159,24 +157,24 @@ export default function KoraPayments({ setUserData }) {
         name: currentUser.email?.split("@")[0] || "Customer",
         email: currentUser.email,
       },
-      narration: `${getPlanName(price)} VIP Subscription`,
+      narration: `${getSubscriptionPeriod(price)} VIP Subscription`,
       onClose: () => {
         console.log("Payment modal closed");
         setProcessing(false);
       },
       onSuccess: (data) => {
         console.log("Payment successful:", data);
-        const transactionData = {
+        setProcessing(false);
+        setTransactionData({
           type: 'credit',
           amount: getCurrentConvertedPrice(),
-          description: `${getPlanName(price)} VIP Subscription`,
+          description: `${getSubscriptionPeriod(price)} VIP Subscription`,
           category: 'Subscription',
-          currency: getSymbol(),
-          paymentMethod: "Mobile",
+          plan: getSubscriptionPeriod(price),
+          currency: getCurrencyCode(),
+          paymentMethod: "Kora",
           reference,
-        };
-        setProcessing(false);
-        handleUpgrade(currentUser, transactionData, setUserData);
+        });
       },
       onFailed: (data) => {
         console.error("Payment failed:", data);
@@ -286,7 +284,7 @@ export default function KoraPayments({ setUserData }) {
 
       <div className="kora-payment">
         <h3>
-          GET {getPlanName(price).toUpperCase()} VIP FOR{" "}
+          GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR{" "}
           {isLoadingRate
             ? "Loading..."
             : `${getSymbol()} ${Math.round(getCurrentConvertedPrice())}`}

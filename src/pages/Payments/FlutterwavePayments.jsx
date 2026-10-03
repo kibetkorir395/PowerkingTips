@@ -8,12 +8,10 @@ import Swal from "sweetalert2";
 import {
   SUBSCRIPTION_PLANS,
   getSubscriptionPeriod,
-  getPlanName,
-  handleUpgrade,
 } from "./paymentUtils";
 import "./Payments.scss";
 
-export default function FlutterwavePayments({ setUserData }) {
+export default function FlutterwavePayments({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
   const { 
@@ -95,16 +93,16 @@ export default function FlutterwavePayments({ setUserData }) {
       },
       customizations: {
         title: "VIP Subscription",
-        description: `${getPlanName(price)} VIP Subscription`,
+        description: `${getSubscriptionPeriod(price)} VIP Subscription`,
         logo: "https://assets.piedpiper.com/logo.png",
       },
       meta: {
         user_id: currentUser?.uid || currentUser?.email || "anonymous",
-        plan: getPlanName(price),
+        plan: getSubscriptionPeriod(price),
         subscription_type: "vip_subscription",
       },
     };
-  }, [currentUser, price, getCurrentConvertedPrice, getCurrencyCode, getPlanName]);
+  }, [currentUser, price, getCurrentConvertedPrice, getCurrencyCode, getSubscriptionPeriod]);
 
   // Initialize Flutterwave payment hook at top level
   const handleFlutterPayment = useFlutterwave(flutterwaveConfig);
@@ -144,17 +142,17 @@ export default function FlutterwavePayments({ setUserData }) {
               icon: "success",
               confirmButtonText: "Activate Subscription",
             }).then(() => {
-              const transactionData = {
+              setTransactionData({
                 type: 'credit',
                 amount: getCurrentConvertedPrice(),
-                description: `${getPlanName(price)} VIP Subscription`,
+                description: `${getSubscriptionPeriod(price)} VIP Subscription`,
                 category: 'Subscription',
+                plan: getSubscriptionPeriod(price),
                 currency: getCurrencyCode(),
                 paymentMethod: "Flutterwave",
                 reference: response.transaction_id || response.tx_ref,
                 flutterwave_response: response,
-              };
-              handleUpgrade(currentUser, transactionData, setUserData);
+              });
               setProcessing(false);
             });
           } else if (response.status === "cancelled") {
@@ -272,7 +270,7 @@ export default function FlutterwavePayments({ setUserData }) {
       {/* Payment Section */}
       <div className="kora-payment">
         <h3>
-          GET {getPlanName(price).toUpperCase()} VIP FOR{" "}
+          GET {getSubscriptionPeriod(price).toUpperCase()} VIP FOR{" "}
           {isLoadingRate
             ? "Loading..."
             : `${getSymbol()} ${Math.round(getCurrentConvertedPrice())}`}
