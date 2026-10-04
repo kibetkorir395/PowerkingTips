@@ -77,13 +77,14 @@ export default function Payments() {
         // 1. Set the data in the calling file
         //setUserData(updatedData);
         refreshUserData();
+        Swal.close();
   
         // 2. Call your success Swal alert
         Swal.fire({
           title: "Success!",
           text: "Your account has been upgraded.",
           icon: "success",
-          onclose: window.location.href = "/"
+          close: window.location.href = "/"
         });
       })
       .catch((error) => {

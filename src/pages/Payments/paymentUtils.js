@@ -108,7 +108,7 @@ export const handleUpgrade = async (currentUser, transactionData, setUserData) =
     }
 
     // Add transaction record (non-blocking)
-    addTransaction(currentUser.uid, transactionData).catch((error) => {
+    await addTransaction(currentUser.uid, transactionData).catch((error) => {
       console.warn("Transaction logging failed:", error);
     });
 

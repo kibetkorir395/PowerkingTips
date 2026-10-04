@@ -1,5 +1,5 @@
 // components/Payments/KoraPaymentsV1.js
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect} from "react";
 import { useAuth } from "../../context/AuthContext";
 import { usePrice } from "../../context/PriceContext";
 import { useCurrency } from "../../context/CurrencyContext";
@@ -13,6 +13,8 @@ import "./Payments.scss";
 export default function KoraPaymentsV1({setTransactionData}) {
   const { price, setPrice } = usePrice();
   const { currentUser } = useAuth();
+  const [poll, setPoll] = useState(0);
+ 
   const { 
     selectedCountry, 
     setSelectedCountry,
@@ -87,18 +89,96 @@ export default function KoraPaymentsV1({setTransactionData}) {
     });
 
     try {
-      Swal.close();
-      setTransactionData({
-        type: 'credit',
-        amount: getCurrentConvertedPrice(),
-        description: `${getSubscriptionPeriod(price)} VIP Subscription`,
-        category: 'Subscription',
-        plan: getSubscriptionPeriod(price),
-        currency: getCurrencyCode(),
-        paymentMethod: "Kora",
-        reference
-    });
-      window.history.replaceState({}, document.title, window.location.pathname);
+      //Swal.close();
+      const response = await fetch(
+        `https://api.korapay.com/merchant/api/v1/charges/${reference}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_KORA_SK_KEY}`,
+            "Content-Type": "application/json",
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (result && result.data) {
+        console.log(result)
+        if(result.data.status === 'success' && result.data.amount === result.data.amount_paid) {
+          await setTransactionData({
+            type: 'credit',
+            amount: getCurrentConvertedPrice(),
+            description: `${getSubscriptionPeriod(price)} VIP Subscription`,
+            category: 'Subscription',
+            plan: getSubscriptionPeriod(price),
+            currency: getCurrencyCode(),
+            paymentMethod: "Kora",
+            reference,
+            ...(result.data.mobile_money?.mobile_number && { number: result.data.mobile_money.mobile_number })         
+          });
+        } else if (result.data.status === 'processing') {
+          
+            /*if(poll < 3) {
+              Swal.fire({
+                title: "Payment Verification Pending",
+                text: "Have You Completed the Payment? Click 'Verify Again' if yes",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#00ae58',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Verify Again',
+                cancelButtonText: 'Cancel',
+                preConfirm: async (login) => {
+                  verifyTransaction(reference)
+                  poll += 1 
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+              })
+            } else {
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }*/
+
+            const { isConfirmed, isDismissed, dismiss } = await Swal.fire({
+              title: "Payment Verification Pending",
+              text: "Have You Completed the Payment? Click 'Verify Again' if yes",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#00ae58",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Verify Again",
+              cancelButtonText: "Cancel",
+              allowOutsideClick: () => !Swal.isLoading(),
+            });
+            
+            if (isConfirmed) {
+              // User clicked "Verify Again" → retry
+              return verifyTransaction(reference);
+            }
+            
+            if (isDismissed) {
+              // User clicked "Cancel", pressed ESC, or clicked backdrop
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+          
+        } else {
+          window.history.replaceState({}, document.title, window.location.pathname);
+            Swal.close();
+            Swal.fire({
+              title: "Verification Failed",
+              text: "Please contact support",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+        }
+      } else {
+        throw new Error(result.message);
+        setProcessing(false)
+        Swal.close();
+      }
+ 
+      //‘type’ represents the transaction event type and could be one of the following: ‘success’, ‘failed’, ‘pending’, ‘close’.
     } catch (error) {
       Swal.close();
       Swal.fire({
