@@ -279,7 +279,7 @@ export default function CashiaPayments({setTransactionData}) {
             reference: `VIP-${getSubscriptionPeriod(price)}-${Date.now()}`,
           });
           
-          setTransactionData(null); //price
+          //setTransactionData(null);
         } else if (data.status === 'failed' || data.status === 'declined') {
           clearInterval(pollInterval);
           setPaymentStatus('failed');
