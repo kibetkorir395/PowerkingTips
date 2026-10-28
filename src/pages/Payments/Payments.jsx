@@ -120,7 +120,7 @@ export default function Payments() {
       case "mpesa":
         return (
           <ErrorBoundary key="mpesa">
-            {getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setTransactionData={setTransactionData}/> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setTransactionData={setTransactionData}/> : <FlutterwavePayments setTransactionData={setTransactionData}/>)}
+            {/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setTransactionData={setTransactionData}/> : (getCurrencyCode() === "NGN" ? */<KoraPaymentsV1 setTransactionData={setTransactionData}/> /*: <FlutterwavePayments setTransactionData={setTransactionData}/>)*/}
           </ErrorBoundary>
         );
       case "cashia":
@@ -132,7 +132,7 @@ export default function Payments() {
       default:
         return (
           <ErrorBoundary key="default">/*
-            {getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setTransactionData={setTransactionData}/> : (getCurrencyCode() === "NGN" ? <KoraPaymentsV1 setTransactionData={setTransactionData}/> : <FlutterwavePayments setTransactionData={setTransactionData}/>)}
+            {/*getCurrencyCode() === "KES" ? <PaystackPaymentsV1 setTransactionData={setTransactionData}/> : (getCurrencyCode() === "NGN" ? */<KoraPaymentsV1 setTransactionData={setTransactionData}/> /*: <FlutterwavePayments setTransactionData={setTransactionData}/>)*/}
           </ErrorBoundary>
         );
     }
