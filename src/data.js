@@ -52,9 +52,9 @@ export const faqs = [
 ]
 
 export const socialLinks = {
-    telegramChannel: "https://t.me/powerkingtips",
+    telegramChannel: "https://web.telegram.org/k/#@betikawins",
     whatsappChannel: "https://whatsapp.com/channel/0029Vb3Louu9xVJktevbuZ2K",
-    facebookPage: "https://www.facebook.com/profile.php?id=61565210344614",
+    facebookPage: "https://www.facebook.com/profile.php?id=61595482299939",
     xPage: "https://x.com/ancientpupy",
     instagramPage: "https://www.instagram.com/powerkingtips/",
     affliateLink: "https://spin-to-win.powerking-tips.com/",
